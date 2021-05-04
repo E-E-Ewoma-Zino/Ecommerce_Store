@@ -1,0 +1,86 @@
+<%- include("../partials/_head") %>
+    <%- include("../partials/_header") %>
+        <%- include("../components/breadcrumb") %>
+
+
+
+
+
+            <!-- ================ contact section start ================= -->
+            <section class="contact-section padding_top">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <h2 class="contact-title text-center"><%= name %> </h2>
+                        </div>
+                        <div class="col-lg-8">
+                            <form class="form-contact contact_form" action="/addProduct" method="POST">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <textarea class="form-control w-100" name="description" id="message"
+                                                cols="30" rows="9" placeholder='Product description'></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <input class="form-control" name="name" id="name" value="Chair " type="text"
+                                                placeholder='Product name' required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <input class="form-control" name="brand" id="name" value="Null" type="text"
+                                                placeholder='Brand name' required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <input class="form-control" name="price" type="text"
+                                            placeholder='Product price' required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <input class="form-control" name="category" value="chair" type="text"
+                                                placeholder='Product category' required>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                            <input class="form-control" name="color" type="text"
+                                            placeholder='Product color'>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <input class="form-control" name="totalNo" type="number"
+                                            placeholder='Product Total no'>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <input class="form-control" name="img" value="img/product/product_3.png" type="text"
+                                                placeholder='Product image' required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <button type="submit" class="btn_3 button-contactForm">Add Product</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- ================ contact section end ================= -->
+
+
+
+
+
+
+
+
+            <%- include("../partials/_footer") %>
+                <%- include("../partials/_scripts") %>

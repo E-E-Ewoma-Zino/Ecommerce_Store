@@ -1,0 +1,13 @@
+{
+    "name": "Home",
+    "carousel": [
+        {
+            "h1": "CLoth & Wood Sofa",
+            "p": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae obcaecati repellat ratione qui veritatis ab voluptatum aliquam fugiat aliquid ullam quod sed, reprehenderit ipsam iste perferendis molestias deleniti odio eveniet."
+        },
+        {
+            "h1": "Wood & Cloth Sofa",
+            "p": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae obcaecati repellat ratione qui veritatis ab voluptatum aliquam fugiat aliquid ullam quod sed, reprehenderit ipsam iste perferendis molestias deleniti odio eveniet."
+        }
+    ]
+}

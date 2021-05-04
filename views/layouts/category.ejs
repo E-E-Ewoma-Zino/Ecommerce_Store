@@ -1,0 +1,207 @@
+<%- include("../partials/_head") %>
+
+    <%- include("../partials/_header") %>
+        <%- include("../components/breadcrumb") %>
+
+
+            <!--================Category Product Area =================-->
+            <section class="cat_product_area section_padding">
+                <div class="container">
+                    <% if (products.length===0) {%>
+                        <h1> "<%= search %>" not found 😥</h1>
+                        <%} %>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="left_sidebar_area">
+                                        <aside class="left_widgets p_filter_widgets">
+                                            <div class="l_w_title">
+                                                <h3>Browse Categories</h3>
+                                            </div>
+                                            <div class="widgets_inner">
+                                                <ul class="list">
+                                                    <% categories.forEach(category=> { %>
+                                                        <li>
+                                                            <a href="category?q=<%= category.name %>&type=category">
+                                                                <%= category.name %>
+                                                            </a>
+                                                            <span>(<%= category.length %>)</span>
+                                                        </li>
+                                                        <% }); %>
+                                                </ul>
+                                            </div>
+                                        </aside>
+
+                                        <aside class="left_widgets p_filter_widgets">
+                                            <div class="l_w_title">
+                                                <h3>Product Brands</h3>
+                                            </div>
+                                            <div class="widgets_inner">
+                                                <ul class="list">
+                                                    <% brands.forEach(brand=> { %>
+                                                        <li>
+                                                            <a href="category?q=<%= brand.name %>&type=brand">
+                                                                <%= brand.name %>
+                                                            </a>
+                                                        </li>
+                                                        <% }); %>
+                                                </ul>
+                                            </div>
+                                        </aside>
+
+                                        <aside class="left_widgets p_filter_widgets">
+                                            <div class="l_w_title">
+                                                <h3>Color Filter</h3>
+                                            </div>
+                                            <div class="widgets_inner">
+                                                <ul class="list">
+                                                    <% colors.forEach(color=> { %>
+                                                        <li>
+                                                            <a href="category?q=<%= color.name %>&type=color">
+                                                                <%= color.name %>
+                                                            </a>
+                                                        </li>
+                                                        <% }); %>
+                                                </ul>
+                                            </div>
+                                        </aside>
+
+                                        <aside class="left_widgets p_filter_widgets price_rangs_aside">
+                                            <div class="l_w_title">
+                                                <h3>Price Filter</h3>
+                                            </div>
+                                            <div class="widgets_inner">
+                                                <div class="range_item">
+                                                    <!-- <div id="slider-range"></div> -->
+                                                    <input type="text" class="js-range-slider" value="" />
+                                                    <div class="d-flex">
+                                                        <div class="price_text">
+                                                            <p>Price :</p>
+                                                        </div>
+                                                        <div class="price_value d-flex justify-content-center">
+                                                            <input type="text" class="js-input-from" id="amount"
+                                                                readonly />
+                                                            <span>to</span>
+                                                            <input type="text" class="js-input-to" id="amount"
+                                                                readonly />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </aside>
+                                    </div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div
+                                                class="product_top_bar d-flex justify-content-between align-items-center">
+                                                <div class="single_product_menu">
+                                                    <p><span>
+                                                            <%= products.length %>
+                                                        </span> Product Found</p>
+                                                </div>
+                                                <div class="single_product_menu d-flex">
+                                                    <form action="/category" method="POST">
+                                                        <div class="input-group">
+                                                            <input type="text" name="search" class="form-control"
+                                                                placeholder="search"
+                                                                aria-describedby="inputGroupPrepend">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text" id="inputGroupPrepend"><i
+                                                                        class="ti-search"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row align-items-center latest_product_inner">
+                                        <% products.forEach(product=> { %>
+                                            <div class="col-lg-4 col-sm-6">
+                                                <div class="single_product_item">
+                                                    <div
+                                                        class="total_amount total_amount_left d-flex justify-content-center align-items-center">
+                                                        <%= product.totalNo %>
+                                                    </div>
+                                                    <a href="category/<%= product._id %> " target="_blank">
+                                                        <div
+                                                            class="product-info product-info-right d-flex justify-content-center align-items-center">
+                                                            <i class="fa fa-info"></i>
+                                                        </div>
+                                                    </a>
+                                                    <img src="<%= product.img %>" alt="<%= product.name %>">
+                                                    <div class="single_product_text">
+                                                        <h4>
+                                                            <%= product.name %>
+                                                        </h4>
+                                                        <h3>₦<%= product.price %>
+                                                        </h3>
+                                                        <div
+                                                            class="single_product_function d-flex justify-content-between">
+                                                            <div class="my_product_count my_product_counter">
+                                                                <span class="input-number-decrement"> <i
+                                                                        class="ti-angle-down"></i></span>
+                                                                <input class="input-number" type="text" value="0"
+                                                                    min="0" max="<%= product.totalNo %>" readonly>
+                                                                <span class="input-number-increment"> <i
+                                                                        class="ti-angle-up"></i></span>
+                                                            </div>
+                                                            <div class="cart_love">
+                                                                <a href="#x" class="love">
+                                                                    <i class="ti-heart"></i>
+                                                                </a>
+                                                                <a href="#x" class="add_cart">
+                                                                    <i class="fas fa-cart-plus"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <input class="productID" type="hidden" name="productID" value="<%= product._id %>">
+                                                </div>
+                                            </div>
+                                            <% }); %>
+                                                <div class="col-lg-12">
+                                                    <div class="pageination">
+                                                        <nav aria-label="Page navigation example">
+                                                            <ul class="pagination justify-content-center">
+                                                                <li class="page-item">
+                                                                    <a class="page-link" href="#" aria-label="Previous">
+                                                                        <i class="ti-angle-double-left"></i>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="page-item"><a class="page-link"
+                                                                        href="#">1</a></li>
+                                                                <li class="page-item"><a class="page-link"
+                                                                        href="#">2</a></li>
+                                                                <li class="page-item"><a class="page-link"
+                                                                        href="#">3</a></li>
+                                                                <li class="page-item"><a class="page-link"
+                                                                        href="#">4</a></li>
+                                                                <li class="page-item"><a class="page-link"
+                                                                        href="#">5</a></li>
+                                                                <li class="page-item"><a class="page-link"
+                                                                        href="#">6</a></li>
+                                                                <li class="page-item">
+                                                                    <a class="page-link" href="#" aria-label="Next">
+                                                                        <i class="ti-angle-double-right"></i>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </nav>
+                                                    </div>
+                                                </div>
+                                    </div>
+                                </div>
+                            </div>
+                </div>
+            </section>
+            <!--================End Category Product Area =================-->
+
+
+            <%- include("../partials/_footer") %>
+                <%- include("../partials/_scripts") %>
+                    <script src="js/stellar.js"></script>
+                    <script src="js/price_rangs.js"></script>
