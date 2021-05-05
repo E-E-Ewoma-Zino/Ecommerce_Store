@@ -318,43 +318,47 @@
     // click counter js
 
     let my_product_counter = document.getElementsByClassName("my_product_counter");
-
-
-    for (let i = 0; i < my_product_counter.length; i++) {
-        const element = my_product_counter[i];
-
-        let min = element.children[1].attributes[3].value;
-        let max = element.children[1].attributes[4].value;
-        let val = element.children[1].attributes[2].value;
-
-        let decr = element.children[0];
-        let incr = element.children[2];
-
-        decr.addEventListener("click", (e) => {
-            decrement();
-        });
-        incr.addEventListener("click", (e) => {
-            increment();
-        });
-
-        function decrement() {
-            var value = val;
-            value--;
-            if (!min || value >= min) {
-                val = value;
+    
+    try {
+        for (let i = 0; i < my_product_counter.length; i++) {
+            const element = my_product_counter[i];
+    
+            let min = element.children[1].attributes[3].value;
+            let max = element.children[1].attributes[4].value;
+            let val = element.children[1].attributes[2].value;
+    
+            let decr = element.children[0];
+            let incr = element.children[2];
+    
+            decr.addEventListener("click", (e) => {
+                decrement();
+            });
+            incr.addEventListener("click", (e) => {
+                increment();
+            });
+    
+            function decrement() {
+                var value = val;
+                value--;
+                if (!min || value >= min) {
+                    val = value;
+                }
+                element.children[1].attributes[2].value = val;
             }
-            element.children[1].attributes[2].value = val;
-        }
-
-        function increment() {
-            var value = val;
-            value++;
-            if (!max || value <= max) {
-                val = value++;
+    
+            function increment() {
+                var value = val;
+                value++;
+                if (!max || value <= max) {
+                    val = value++;
+                }
+                element.children[1].attributes[2].value = val;
             }
-            element.children[1].attributes[2].value = val;
         }
+    } catch (err) {
+        console.log(":::", err);
     }
+
 
     // calculate the total for cart
     function getTotal(total, price, val, d) {
@@ -365,27 +369,38 @@
 
             t.innerHTML = "$" + (Number(p.innerHTML.replace(/[$]|[,]/g, "")) * Number(v.attributes[2].value)).toLocaleString();
         }
-        subTotalUpdate();
+        try{
+            subTotalUpdate();
+        }
+        catch(err){
+            console.log(":::", err);
+        }
+    }
+
+    try {
+        for (let i = 0; i < my_product_counter.length; i++) {
+            const element = my_product_counter[i];
+            const price = document.getElementsByClassName("cart_price");
+            const total = document.getElementsByClassName("cart_total");
+            const val = document.getElementsByClassName("cart_value");
+    
+            let decr = element.children[0];
+            let incr = element.children[2];
+    
+            incr.addEventListener("click", () => {
+                getTotal(total, price, val, "+");
+            });
+            
+            decr.addEventListener("click", () => {
+                getTotal(total, price, val, "-");
+            });
+            
+        }
+        
+    } catch (err) {
+        console.log(":::", err);
     }
     
-    for (let i = 0; i < my_product_counter.length; i++) {
-        const element = my_product_counter[i];
-        const price = document.getElementsByClassName("cart_price");
-        const total = document.getElementsByClassName("cart_total");
-        const val = document.getElementsByClassName("cart_value");
-
-        let decr = element.children[0];
-        let incr = element.children[2];
-
-        incr.addEventListener("click", () => {
-            getTotal(total, price, val, "+");
-        });
-        
-        decr.addEventListener("click", () => {
-            getTotal(total, price, val, "-");
-        });
-        
-    }
 
     function subTotalUpdate(){
         const subT = document.getElementById("subTotal");
@@ -403,5 +418,13 @@
         subTotalUpdate();
     } catch (err) {
         console.log(":::::err", err);
+    }
+
+    // if items in cart update the value
+    try {
+        const cartTotal = document.getElementById("cartTotal");
+        console.log(document.querySelector("#cart").style.psudoclass);
+    } catch (err) {
+        
     }
 }(jQuery));

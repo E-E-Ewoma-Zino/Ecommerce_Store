@@ -8765,6 +8765,11 @@ h1, h2, h3, h4, h5, h6 {
   margin-right: 2vmin;
 }
 
+/* for when the cart is clicked */
+.add_cart:active i{
+  color: #dddddd!important;
+}
+
 /* style the images in cart page */
 
 .cart-img {

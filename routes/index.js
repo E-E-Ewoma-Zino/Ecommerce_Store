@@ -23,6 +23,7 @@ router.get("/", async (req, res) => {
         home: _get.Pages().home,
         name: _get.Pages().home.name,
         website: _get.Pages().website,
+        cartTotal: cart.total(),
         products: _get.AllProduct()
     });
 });
@@ -40,6 +41,7 @@ router.get("/category", (req, res) => {
                 product = result;
                 res.render("layouts/category", {
                     website: _get.Pages().website,
+                    cartTotal: cart.total(),
                     name: _get.Pages().category.name,
                     breadcrumb: _get.Pages().category.breadcrumb,
                     products: product,
@@ -54,6 +56,7 @@ router.get("/category", (req, res) => {
                 product = result;
                 res.render("layouts/category", {
                     website: _get.Pages().website,
+                    cartTotal: cart.total(),
                     name: _get.Pages().category.name,
                     breadcrumb: _get.Pages().category.breadcrumb,
                     products: product,
@@ -68,6 +71,7 @@ router.get("/category", (req, res) => {
                 product = result;
                 res.render("layouts/category", {
                     website: _get.Pages().website,
+                    cartTotal: cart.total(),
                     name: _get.Pages().category.name,
                     breadcrumb: _get.Pages().category.breadcrumb,
                     products: product,
@@ -82,6 +86,7 @@ router.get("/category", (req, res) => {
                 product = result;
                 res.render("layouts/category", {
                     website: _get.Pages().website,
+                    cartTotal: cart.total(),
                     name: _get.Pages().category.name,
                     breadcrumb: _get.Pages().category.breadcrumb,
                     products: product,
@@ -95,6 +100,7 @@ router.get("/category", (req, res) => {
             product = _get.AllProduct();
             res.render("layouts/category", {
                 website: _get.Pages().website,
+                cartTotal: cart.total(),
                 name: _get.Pages().category.name,
                 breadcrumb: _get.Pages().category.breadcrumb,
                 products: product,
@@ -140,6 +146,7 @@ router.post("/category", (req, res) => {
         console.log(allSearch);
         res.render("layouts/category", {
             website: _get.Pages().website,
+            cartTotal: cart.total(),
             name: _get.Pages().category.name,
             breadcrumb: _get.Pages().category.breadcrumb,
             products: allSearch,
@@ -163,6 +170,7 @@ router.get("/cart", (req, res) => {
         else {
             res.render("layouts/cart", {
                 website: _get.Pages().website,
+                cartTotal: cart.total(),
                 name: _get.Pages().cart.name,
                 breadcrumb: _get.Pages().cart.breadcrumb,
                 cart: items
@@ -179,12 +187,13 @@ router.post("/cart", (req, res) => {
     // USER, PRODUCT and ORDER
     // first User with _get.CurrentUser()
     // second product:
-    console.log("Request from the ajax post:\n", req.body);
-    const productID = req.body.productID;
+    const productID = req.body.data.productID;
     // this is the total no of products that was ordered for
-    const amount = req.body.amount;
+    const amount = req.body.data.amount;
 
-    // cart.updateCart(productID, amount);
+    console.log(productID, amount);
+
+    cart.updateCart(productID, amount);
     res.redirect("/cart");
 
 });
@@ -205,6 +214,7 @@ router.delete("/cart", (req, res) => {
 router.get("/contact", (req, res) => {
     res.render("layouts/contact", {
         website: _get.Pages().website,
+        cartTotal: cart.total(),
         name: _get.Pages().contact.name,
         breadcrumb: _get.Pages().contact.breadcrumb,
         contact: _get.Pages().contact.contact
@@ -216,6 +226,7 @@ router.get("/contact", (req, res) => {
 router.get("/checkout", (req, res) => {
     res.render("layouts/checkout", {
         website: _get.Pages().website,
+        cartTotal: cart.total(),
         name: _get.Pages().checkout.name,
         breadcrumb: _get.Pages().checkout.breadcrumb
     });
@@ -246,6 +257,7 @@ router.post("/signup", (req, res) => {
 router.get("/404", (req, res) => {
     res.render("layouts/404", {
         website: _get.Pages().website,
+        cartTotal: cart.total(),
         name: `404 - Can't find a page?"`,
         breadcrumb: `home - ❓`,
         product: _get.AllProduct()
@@ -257,6 +269,7 @@ router.get("/404", (req, res) => {
 router.get("/500", (req, res) => {
     res.render("layouts/500", {
         website: _get.Pages().website,
+        cartTotal: cart.total(),
         name: `500 - Internal server error!"`,
         breadcrumb: `❌🤦‍♂️`,
         product: _get.AllProduct()

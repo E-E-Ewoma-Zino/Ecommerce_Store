@@ -9,8 +9,8 @@ const Users = require("../model/Users");
 module.exports = {
     // @desc    THIS SCRIPT GETS THE CART ITEMS
     getItems: (callback) => {
-        Cart.find({}, (err, item) => {
-            callback(err, item);
+        Cart.find({}, (err, items) => {
+            callback(err, items);
         });
     },
     updateCart: (productID, amount) => {
@@ -81,5 +81,20 @@ module.exports = {
                 console.log("::::::::::::", err);
             }
         });
-    }
+    },
+    total: ()=> total
 }
+
+
+let total = 0;
+function getItemsForTotal(items) {
+    total = items.length;
+}
+Cart.find({}, (err, items) => {
+    if(err){
+        console.log("::::", err);
+    }
+    else{
+        getItemsForTotal(items)
+    }
+});
