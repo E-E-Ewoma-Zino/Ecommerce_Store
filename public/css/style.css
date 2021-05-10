@@ -2498,16 +2498,15 @@ ul {
 }
 
 /* line 130, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
-
-.main_menu .cart i:after {
+/* i added the cart alert to give me the alert of the total number of items in cart */
+#cart_alert {
   position: absolute;
   border-radius: 50%;
   background-color: #f13d80;
-  width: 14px;
-  height: 14px;
-  right: -8px;
-  top: -8px;
-  content: "5";
+  width: 3vmin;
+  height: 3vmin;
+  right: -40%;
+  top: -50%;
   text-align: center;
   line-height: 15px;
   font-size: 10px;
@@ -8695,7 +8694,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* style the counter btn in product card */
 
-.my_product_count {
+/* .my_product_count {
   position: relative;
   width: 30%;
   overflow: hidden;
@@ -8706,14 +8705,14 @@ h1, h2, h3, h4, h5, h6 {
   transition: 0.5s;
 }
 
-/* helps makes the product counter to transition */
+helps makes the product counter to transition
 
 .single_product_item:hover .my_product_count {
   opacity: 1;
   visibility: visible;
 }
 
-/* where the numbers will be typed */
+where the numbers will be typed
 
 .my_product_count .input-number {
   width: 100%;
@@ -8724,7 +8723,7 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid #dddddd;
 }
 
-/* for the increase and decrease */
+for the increase and decrease
 
 .my_product_count .input-number-decrement, .my_product_count .input-number-increment {
   text-align: center;
@@ -8736,7 +8735,7 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid #dddddd;
 }
 
-/* for the increase and decrease on click */
+for the increase and decrease on click
 
 .my_product_counter .input-number-decrement:active,
 .my_product_counter .input-number-increment:active,
@@ -8753,7 +8752,7 @@ h1, h2, h3, h4, h5, h6 {
 .my_product_count .input-number-increment {
   top: 0px;
   border-top-right-radius: 5px;
-}
+} */
 
 /* for love and add to cart */
 

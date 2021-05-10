@@ -1,5 +1,6 @@
 // ALL ROUTES GOINT TO THE CATEGORY "/CATEGORY" WILL BE IN THIS PAGE
 const express = require("express");
+const cart = require("../middleware/cart");
 const _get = require("../middleware/get");
 
 // 
@@ -9,7 +10,7 @@ const router = express.Router();
 // @route   GET /category/:id
 router.get("/:id", (req, res) => {
 
-    _get.ProductByID(req.params.id, (err,product) => {
+    _get.ProductByID(req.params.id, (err, product) => {
         if (err) {
             console.error(":::::", err);
             res.redirect("/404");
@@ -19,6 +20,7 @@ router.get("/:id", (req, res) => {
                 website: _get.Pages().website,
                 name: _get.Pages().single.name,
                 breadcrumb: _get.Pages().single.breadcrumb,
+                cartTotal: cart.total(),
                 product: product
             });
         }

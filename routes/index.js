@@ -1,12 +1,12 @@
 // ALL ROUTES GOINT TO THE HOME "/" WILL BE IN THIS PAGE
 const _ = require("lodash");
 const express = require("express");
+const Users = require("../model/Users");
 const _get = require("../middleware/get");
 const cart = require("../middleware/cart");
 const search = require("../middleware/search");
 const tmpUser = require("../middleware/createTempUser");
 const uploadPage = require("../middleware/uploadPages");
-const Users = require("../model/Users");
 
 // This router is for the home / routes
 const router = express.Router();
@@ -23,7 +23,6 @@ router.get("/", async (req, res) => {
         home: _get.Pages().home,
         name: _get.Pages().home.name,
         website: _get.Pages().website,
-        cartTotal: cart.total(),
         products: _get.AllProduct()
     });
 });
@@ -32,16 +31,13 @@ router.get("/", async (req, res) => {
 // @route   GET /category
 router.get("/category", (req, res) => {
     let product;
-    console.log(":::", req.user);
 
-    console.log("query", req.query);
     switch (req.query.type) {
         case "name":
             search.name(req.query.q, (result) => {
                 product = result;
                 res.render("layouts/category", {
                     website: _get.Pages().website,
-                    cartTotal: cart.total(),
                     name: _get.Pages().category.name,
                     breadcrumb: _get.Pages().category.breadcrumb,
                     products: product,
@@ -56,7 +52,6 @@ router.get("/category", (req, res) => {
                 product = result;
                 res.render("layouts/category", {
                     website: _get.Pages().website,
-                    cartTotal: cart.total(),
                     name: _get.Pages().category.name,
                     breadcrumb: _get.Pages().category.breadcrumb,
                     products: product,
@@ -71,7 +66,6 @@ router.get("/category", (req, res) => {
                 product = result;
                 res.render("layouts/category", {
                     website: _get.Pages().website,
-                    cartTotal: cart.total(),
                     name: _get.Pages().category.name,
                     breadcrumb: _get.Pages().category.breadcrumb,
                     products: product,
@@ -86,7 +80,6 @@ router.get("/category", (req, res) => {
                 product = result;
                 res.render("layouts/category", {
                     website: _get.Pages().website,
-                    cartTotal: cart.total(),
                     name: _get.Pages().category.name,
                     breadcrumb: _get.Pages().category.breadcrumb,
                     products: product,
@@ -100,7 +93,6 @@ router.get("/category", (req, res) => {
             product = _get.AllProduct();
             res.render("layouts/category", {
                 website: _get.Pages().website,
-                cartTotal: cart.total(),
                 name: _get.Pages().category.name,
                 breadcrumb: _get.Pages().category.breadcrumb,
                 products: product,
@@ -146,7 +138,6 @@ router.post("/category", (req, res) => {
         console.log(allSearch);
         res.render("layouts/category", {
             website: _get.Pages().website,
-            cartTotal: cart.total(),
             name: _get.Pages().category.name,
             breadcrumb: _get.Pages().category.breadcrumb,
             products: allSearch,
@@ -162,6 +153,9 @@ router.post("/category", (req, res) => {
 // @desc    Cart page
 // @route   GET /cart
 router.get("/cart", (req, res) => {
+    console.log(JSON.parse(req.query));
+
+    // cart.setCart(req.query);
 
     cart.getItems((err, items) => {
         if (err) {
@@ -170,7 +164,6 @@ router.get("/cart", (req, res) => {
         else {
             res.render("layouts/cart", {
                 website: _get.Pages().website,
-                cartTotal: cart.total(),
                 name: _get.Pages().cart.name,
                 breadcrumb: _get.Pages().cart.breadcrumb,
                 cart: items
@@ -214,7 +207,6 @@ router.delete("/cart", (req, res) => {
 router.get("/contact", (req, res) => {
     res.render("layouts/contact", {
         website: _get.Pages().website,
-        cartTotal: cart.total(),
         name: _get.Pages().contact.name,
         breadcrumb: _get.Pages().contact.breadcrumb,
         contact: _get.Pages().contact.contact
@@ -226,7 +218,6 @@ router.get("/contact", (req, res) => {
 router.get("/checkout", (req, res) => {
     res.render("layouts/checkout", {
         website: _get.Pages().website,
-        cartTotal: cart.total(),
         name: _get.Pages().checkout.name,
         breadcrumb: _get.Pages().checkout.breadcrumb
     });
@@ -257,7 +248,6 @@ router.post("/signup", (req, res) => {
 router.get("/404", (req, res) => {
     res.render("layouts/404", {
         website: _get.Pages().website,
-        cartTotal: cart.total(),
         name: `404 - Can't find a page?"`,
         breadcrumb: `home - ❓`,
         product: _get.AllProduct()
@@ -269,7 +259,6 @@ router.get("/404", (req, res) => {
 router.get("/500", (req, res) => {
     res.render("layouts/500", {
         website: _get.Pages().website,
-        cartTotal: cart.total(),
         name: `500 - Internal server error!"`,
         breadcrumb: `❌🤦‍♂️`,
         product: _get.AllProduct()

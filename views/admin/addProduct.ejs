@@ -14,7 +14,7 @@
                             <h2 class="contact-title text-center"><%= name %> </h2>
                         </div>
                         <div class="col-lg-8">
-                            <form class="form-contact contact_form" action="/addProduct" method="POST">
+                            <form class="form-contact contact_form" action="/admin/addProduct" method="POST" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form-group">
@@ -60,10 +60,13 @@
                                     </div>
                                     <div class="col-12">
                                         <div class="form-group">
-                                            <input class="form-control" name="img" value="img/product/product_3.png" type="text"
+                                            <input class="form-control" multiple='multiple' accept='image/*' name="img" type="file"
                                                 placeholder='Product image' required>
                                         </div>
                                     </div>
+                                    <span style="color: red">
+                                        <%= typeof msg != "undefined" ? msg : "" %> 
+                                    </span>
                                 </div>
                                 <div class="form-group mt-3">
                                     <button type="submit" class="btn_3 button-contactForm">Add Product</button>

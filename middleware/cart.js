@@ -2,6 +2,7 @@ const Cart = require("../model/Cart");
 const _get = require("../middleware/get");
 const Orders = require("../model/Orders");
 const Users = require("../model/Users");
+const { ProductByID } = require("../middleware/get");
 
 
 
@@ -82,19 +83,25 @@ module.exports = {
             }
         });
     },
-    total: ()=> total
+    setCart: (arr)=>{
+        console.log("h arr: ", h(arr));
+        return h(arr);
+    }
 }
 
 
-let total = 0;
-function getItemsForTotal(items) {
-    total = items.length;
+function h(arr) {
+
+    let v = [];
+    arr.forEach(item => {
+        ProductByID(item, (err, item) => {
+            if (err) {
+                console.log("::::", err);
+            } else {
+                console.log("item: ", item);
+                v.push(item);
+            }
+        })
+    });
+    return v;
 }
-Cart.find({}, (err, items) => {
-    if(err){
-        console.log("::::", err);
-    }
-    else{
-        getItemsForTotal(items)
-    }
-});

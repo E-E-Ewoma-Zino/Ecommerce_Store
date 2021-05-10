@@ -11,24 +11,25 @@
                         <div class="col-lg-7 col-xl-7">
                             <div class="product_slider_img">
                                 <div id="vertical">
-                                    <div data-thumb="/img/product/single-product/product_1.png">
-                                        <img src="/<%= product.img %>" />
-                                    </div>
+                                        <% product.img.forEach(img=> { %>
+                                            <div class="data_tb" data-thumb="<%= img.path%>">
+                                                <img class="product_img" src="<%= img.path %>" />
+                                            </div>
+                                            <% }); %>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-5 col-xl-4">
                             <div class="s_product_text">
-                                
                                 <h3><%= product.name %></h3>
-                                <h2>$<%= product.price %></h2>
+                                <h2><%= product.price %></h2>
                                 <ul class="list">
                                     <li>
-                                        <a class="active" href="#">
-                                            <span>Category</span> : <%= product.category %></a>
+                                        <a class="active" href="#x" style="cursor: default;">
+                                            <span>Category</span> : Household</a>
                                     </li>
                                     <li>
-                                        <a href="#"> <span>Avaliable</span> : <%= product.isAvaliable == true? "Yes": "No" %></a>
+                                        <a href="#x"> <span>Is Avaliable</span> : <%= product.isAvaliable === false? "No" : "Yes" %></a>
                                     </li>
                                 </ul>
                                 <p>
@@ -474,4 +475,18 @@
 
 
             <%- include("../partials/_footer") %>
+                <!-- extral scripts -->
+                <script>
+                    // Replace the 'public' with '' and allows me show img
+                    const data_tb = document.getElementsByClassName("data_tb");
+                    for (let i = 0; i < data_tb.length; i++) {
+                        const img = data_tb[i];
+                        try {
+                            img.setAttribute("data-thumb", img.attributes[1].value.replace("public", ""));
+                        } catch (err) {
+                            console.log(":::", err);
+                            img.setAttribute("src", "\img\product\product_6.png");
+                        }
+                    }
+                </script>
                 <%- include("../partials/_scripts") %>
