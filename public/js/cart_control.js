@@ -1,7 +1,15 @@
 // 
 
 
-const cartArray = [];
+let cartArray = [];
+
+if (getCartItem() == null || getCartItem() == undefined || getCartItem().length == 0) {
+    cartArray = [];
+    // do nothing
+}
+else {
+    cartArray = getCartItem();
+}
 
 
 // adds items to cart
@@ -12,31 +20,48 @@ try {
     for (let i = 0; i < cartBtn.length; i++) {
         const cart = cartBtn[i];
 
-        console.log();
-
         cart.addEventListener("click", () => {
             const productID = cart.parentElement.parentElement.parentElement.lastElementChild.attributes[3].value;
 
-
-            console.log("click ", i);
             // TODO: MAKE A FUCTION TO ADD TO CART ARRAY
-            addToCart(productID);
-            // toggle 
-            cart.firstElementChild.classList.toggle("fa-check");
+            addToCart(cart, productID);
+            save(cartArray);
+
+            toggle(cart, productID);
+
             // counts the cart item
             cartCounter();
-            save(cartArray);
         });
     }
 } catch (err) {
     console.log(":::", err);
 }
 
+// toggle cart icon\
+function toggle(cart, productID) {
+    for (let i = 0; i < getCartItem().length; i++) {
+        const item = getCartItem()[i];
+
+        if (item == productID) {
+            console.log("item in cart");
+
+            break;
+        }
+        else {
+            console.log("not in cart");
+
+        }
+    }
+}
+
 // function to check if item in cart already exist
-function addToCart(productID) {
+function addToCart(cart, productID) {
     // add first item
     if (cartArray.length == 0) {
         cartArray.push(productID);
+        // toggle 
+        cart.firstElementChild.classList.remove("fa-cart-plus");
+        cart.firstElementChild.classList.add("fa-check");
     }
     else {
         // check if item already in cart
@@ -49,14 +74,18 @@ function addToCart(productID) {
                 // if item already exist remove it
                 removeItem(cartArray, item);
                 console.log("removed");
+                cart.firstElementChild.classList.remove("fa-check");
+                cart.firstElementChild.classList.add("fa-cart-plus");
                 break;
             }
             else {
-                console.log("looking for ", productID);
                 // if search all and item not found add item
                 if (i == cartArray.length - 1) {
                     console.log("added new item");
                     cartArray.push(productID);
+                    // toggle 
+                    cart.firstElementChild.classList.remove("fa-cart-plus");
+                    cart.firstElementChild.classList.add("fa-check");
                     break;
                 }
                 continue;
@@ -89,14 +118,14 @@ function getCartItem() {
 // TODO: MAKE A FUNCTION TO DISPLAY PRODUCTS IN CART
 // when the btn that links to cart is clicked do..
 const cartLink = document.getElementById("cart");
-cartLink.addEventListener("click", ()=>{
+cartLink.addEventListener("click", () => {
     console.log("go to cart");
     getCartData();
 });
 
 // get to the cart using axios
 function getCartData() {
-    axios.get(`http://localhost:3000/cart?data=${JSON.stringify(getCartItem())}`)
+    axios.get(`http://localhost:3000/cart?data=${getCartItem()}`)
         .then(function (res) {
             console.log(res);
             // updates cart counter
@@ -134,13 +163,52 @@ function cartCounter() {
     // if items in cart update the value
     // get the value of items in the cart
     // style the ::after property of the cart icon
-    if (getCartItem().length == 0) {
-            cart_alert.style.display = "none";
+    if (getCartItem() == null || getCartItem() == undefined || getCartItem().length == 0) {
+        cart_alert.style.display = "none";
+        cart_alert.innerHTML = 0;
     }
     else {
-        cart_alert.style.display = "block";
+        cart_alert.style.display = "flex";
         cart_alert.innerHTML = getCartItem().length;
     }
 }
 
 cartCounter();
+
+
+// IF CART HAS BEEN SELECTED MARK IT
+
+try {
+    for (let i = 0; i < cartBtn.length; i++) {
+        const cart = cartBtn[i];
+        // Get all the product id
+        const productID = cart.parentElement.parentElement.parentElement.lastElementChild.attributes[3].value;
+        // check if item already in cart
+        for (let i = 0; i < getCartItem().length; i++) {
+            // get the products in the local storage
+            const item = getCartItem()[i];
+
+            // if its in cart skip
+            if (item == productID) {
+                // toggle 
+                // if the item is in cart then check it
+                cart.firstElementChild.classList.remove("fa-cart-plus");
+                cart.firstElementChild.classList.add("fa-check");
+                break;
+            }
+            else {
+                // if search all and item not found add item
+                if (i == getCartItem().length - 1) {
+                    // if the item is not in cart don't check it
+                    cart.firstElementChild.classList.remove("fa-check");
+                    cart.firstElementChild.classList.add("fa-cart-plus");
+                    break;
+                }
+                continue;
+            }
+        }
+    }
+} catch (err) {
+    console.log(":::", err);
+}
+

@@ -6,8 +6,7 @@ const express = require("express");
 const _get = require("../middleware/get");
 const cart = require("../middleware/cart");
 const Products = require("../model/Products");
-const { error } = require("console");
-const { MulterError } = require("multer");
+
 
 
 // This router is for the home / routes

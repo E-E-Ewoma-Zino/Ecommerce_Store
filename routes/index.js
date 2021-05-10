@@ -153,23 +153,26 @@ router.post("/category", (req, res) => {
 // @desc    Cart page
 // @route   GET /cart
 router.get("/cart", (req, res) => {
-    console.log(JSON.parse(req.query));
 
-    // cart.setCart(req.query);
+    console.log("::::", req.query.data);
 
-    cart.getItems((err, items) => {
-        if (err) {
-            console.log("::::::", err);
-        }
-        else {
-            res.render("layouts/cart", {
-                website: _get.Pages().website,
-                name: _get.Pages().cart.name,
-                breadcrumb: _get.Pages().cart.breadcrumb,
-                cart: items
-            });
-        }
-    });
+    cart.setCart(req.query);
+
+    res.send("OK");
+
+    // cart.getItems((err, items) => {
+    //     if (err) {
+    //         console.log("::::::", err);
+    //     }
+    //     else {
+    //         res.render("layouts/cart", {
+    //             website: _get.Pages().website,
+    //             name: _get.Pages().cart.name,
+    //             breadcrumb: _get.Pages().cart.breadcrumb,
+    //             cart: items
+    //         });
+    //     }
+    // });
 });
 
 

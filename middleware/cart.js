@@ -93,15 +93,18 @@ module.exports = {
 function h(arr) {
 
     let v = [];
-    arr.forEach(item => {
+    for (let i = 0; i < arr.length; i++) {
+        const item = arr[i];
+        
         ProductByID(item, (err, item) => {
             if (err) {
-                console.log("::::", err);
+                console.log("::::err", err);
             } else {
                 console.log("item: ", item);
                 v.push(item);
             }
         })
-    });
+    }
+
     return v;
 }
