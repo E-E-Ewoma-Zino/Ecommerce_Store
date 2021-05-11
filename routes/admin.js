@@ -35,7 +35,6 @@ router.get("/addProduct", (req, res) => {
         website: _get.Pages().website,
         name: _get.Pages().addProduct.name,
         breadcrumb: _get.Pages().addProduct.breadcrumb,
-        cartTotal: cart.total()
     });
 });
 
