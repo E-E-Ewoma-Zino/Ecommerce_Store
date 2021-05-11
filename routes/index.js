@@ -24,8 +24,7 @@ router.get("/", async (req, res) => {
             home: _get.Pages().home,
             name: _get.Pages().home.name,
             website: _get.Pages().website,
-            products: _get.AllProduct(),
-            cartTotal: cart.assignCart()
+            products: _get.AllProduct()
         });
 
     } catch (err) {
@@ -353,7 +352,7 @@ router.post("/signup", (req, res) => {
 
 // @desc    404 page
 // @route   GET /404
-router.get("/404", (req, res) => {
+router.get("*", (req, res) => {
     try {
         res.render("layouts/404", {
             website: _get.Pages().website,
@@ -377,14 +376,14 @@ router.get("/404", (req, res) => {
 // @desc    500 page
 // @route   GET /500
 
-router.get("/500", (req, res) => {
-    res.render("layouts/500", {
-        website: _get.Pages().website,
-        name: `500 - Internal server error!"`,
-        breadcrumb: `❌🤦‍♂️`,
-        product: _get.AllProduct()
-    });
-});
+// router.get("/500", (req, res) => {
+//     res.render("layouts/500", {
+//         website: _get.Pages().website,
+//         name: `500 - Internal server error!"`,
+//         breadcrumb: `❌🤦‍♂️`,
+//         msg: "undefined"
+//     });
+// });
 
 module.exports = router;
 
