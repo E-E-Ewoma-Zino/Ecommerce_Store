@@ -1,6 +1,6 @@
 // ALL ROUTES GOINT TO THE CATEGORY "/CATEGORY" WILL BE IN THIS PAGE
 const express = require("express");
-const cart = require("../middleware/cart");
+const cart = require("../middleware/cart_DBc");
 const _get = require("../middleware/get");
 
 // 

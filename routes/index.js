@@ -3,7 +3,7 @@ const _ = require("lodash");
 const express = require("express");
 const Users = require("../model/Users");
 const _get = require("../middleware/get");
-const cart = require("../middleware/cart");
+const cart = require("../middleware/cart_DBc");
 const search = require("../middleware/search");
 const tmpUser = require("../middleware/createTempUser");
 const uploadPage = require("../middleware/uploadPages");
@@ -188,26 +188,24 @@ router.post("/category", (req, res) => {
 // @route   GET /cart
 router.get("/cart", (req, res) => {
 
-    console.log("::::", req.query.data);
-
     try {
-        cart.setCart(req.query);
+        // cart.setCart(req.query);
 
-    res.send("OK");
+    // res.send("OK");
 
-    // cart.getItems((err, items) => {
-    //     if (err) {
-    //         console.log("::::::", err);
-    //     }
-    //     else {
-    //         res.render("layouts/cart", {
-    //             website: _get.Pages().website,
-    //             name: _get.Pages().cart.name,
-    //             breadcrumb: _get.Pages().cart.breadcrumb,
-    //             cart: items
-    //         });
-    //     }
-    // });
+    cart.getItems((err, items) => {
+        if (err) {
+            console.log("::::::", err);
+        }
+        else {
+            res.render("layouts/cart", {
+                website: _get.Pages().website,
+                name: _get.Pages().cart.name,
+                breadcrumb: _get.Pages().cart.breadcrumb,
+                cart: items
+            });
+        }
+    });
     } catch (err) {
         console.error(":::", err);
         res.render("layouts/500", {
@@ -234,9 +232,9 @@ router.post("/cart", (req, res) => {
     // this is the total no of products that was ordered for
     const amount = req.body.data.amount;
 
-    console.log(productID, amount);
+    // console.log(productID, amount);
 
-    cart.updateCart(productID, amount);
+    // cart.updateCart(productID, amount);
     res.redirect("/cart");
     } catch (err) {
         console.error(":::", err);
@@ -352,11 +350,11 @@ router.post("/signup", (req, res) => {
 
 // @desc    404 page
 // @route   GET /404
-router.get("*", (req, res) => {
+router.get("    ", (req, res) => {
     try {
         res.render("layouts/404", {
             website: _get.Pages().website,
-            name: `404 - Can't find a page?"`,
+            name: `404 - Can't find "${req.originalUrl}"`,
             breadcrumb: `home - ❓`,
             product: _get.AllProduct()
         });

@@ -116,26 +116,13 @@ function getCartItem() {
 }
 
 // TODO: MAKE A FUNCTION TO DISPLAY PRODUCTS IN CART
-// when the btn that links to cart is clicked do..
-const cartLink = document.getElementById("cart");
-cartLink.addEventListener("click", () => {
-    console.log("go to cart");
-    getCartData();
-});
+// when link goes to cart
+if(window.location.pathname == "/cart"){
 
-// get to the cart using axios
-function getCartData() {
-    axios.get(`http://localhost:3000/cart?data=${getCartItem()}`)
-        .then(function (res) {
-            console.log(res);
-            // updates cart counter
-        })
-        .catch(function (err) {
-            console.log("::::::", err);
-        });
+    postCartData(getCartItem());
 }
 
-// 
+
 
 
 // THIS FUNCTION POST CART TO ORDER DB
