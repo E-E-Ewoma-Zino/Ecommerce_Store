@@ -19,12 +19,25 @@ uploadPage();
 // @desc    Landing page
 // @route   GET /
 router.get("/", async (req, res) => {
-    res.render("layouts/index", {
-        home: _get.Pages().home,
-        name: _get.Pages().home.name,
-        website: _get.Pages().website,
-        products: _get.AllProduct()
-    });
+    try {
+        res.render("layouts/index", {
+            home: _get.Pages().home,
+            name: _get.Pages().home.name,
+            website: _get.Pages().website,
+            products: _get.AllProduct(),
+            cartTotal: cart.assignCart()
+        });
+
+    } catch (err) {
+        console.error(":::", err);
+        res.render("layouts/500", {
+            website: _get.Pages().website,
+            name: `500 - Internal server error!"`,
+            breadcrumb: `❌🤦‍♂️`,
+            product: _get.AllProduct(),
+            msg: err
+        });
+    }
 });
 
 // @desc    Category page
@@ -32,10 +45,66 @@ router.get("/", async (req, res) => {
 router.get("/category", (req, res) => {
     let product;
 
-    switch (req.query.type) {
-        case "name":
-            search.name(req.query.q, (result) => {
-                product = result;
+    try {
+        switch (req.query.type) {
+            case "name":
+                search.name(req.query.q, (result) => {
+                    product = result;
+                    res.render("layouts/category", {
+                        website: _get.Pages().website,
+                        name: _get.Pages().category.name,
+                        breadcrumb: _get.Pages().category.breadcrumb,
+                        products: product,
+                        categories: _get.AllCategory(),
+                        colors: _get.AllColor(),
+                        brands: _get.AllBrand()
+                    });
+                });
+                break;
+            case "color":
+                search.color(req.query.q, (result) => {
+                    product = result;
+                    res.render("layouts/category", {
+                        website: _get.Pages().website,
+                        name: _get.Pages().category.name,
+                        breadcrumb: _get.Pages().category.breadcrumb,
+                        products: product,
+                        categories: _get.AllCategory(),
+                        colors: _get.AllColor(),
+                        brands: _get.AllBrand()
+                    });
+                });
+                break;
+            case "brand":
+                search.brand(req.query.q, (result) => {
+                    product = result;
+                    res.render("layouts/category", {
+                        website: _get.Pages().website,
+                        name: _get.Pages().category.name,
+                        breadcrumb: _get.Pages().category.breadcrumb,
+                        products: product,
+                        categories: _get.AllCategory(),
+                        colors: _get.AllColor(),
+                        brands: _get.AllBrand()
+                    });
+                });
+                break;
+            case "category":
+                search.category(req.query.q, (result) => {
+                    product = result;
+                    res.render("layouts/category", {
+                        website: _get.Pages().website,
+                        name: _get.Pages().category.name,
+                        breadcrumb: _get.Pages().category.breadcrumb,
+                        products: product,
+                        categories: _get.AllCategory(),
+                        colors: _get.AllColor(),
+                        brands: _get.AllBrand()
+                    });
+                });
+                break;
+            default:
+                product = _get.AllProduct();
                 res.render("layouts/category", {
                     website: _get.Pages().website,
                     name: _get.Pages().category.name,
@@ -45,62 +114,17 @@ router.get("/category", (req, res) => {
                     colors: _get.AllColor(),
                     brands: _get.AllBrand()
                 });
-            });
-            break;
-        case "color":
-            search.color(req.query.q, (result) => {
-                product = result;
-                res.render("layouts/category", {
-                    website: _get.Pages().website,
-                    name: _get.Pages().category.name,
-                    breadcrumb: _get.Pages().category.breadcrumb,
-                    products: product,
-                    categories: _get.AllCategory(),
-                    colors: _get.AllColor(),
-                    brands: _get.AllBrand()
-                });
-            });
-            break;
-        case "brand":
-            search.brand(req.query.q, (result) => {
-                product = result;
-                res.render("layouts/category", {
-                    website: _get.Pages().website,
-                    name: _get.Pages().category.name,
-                    breadcrumb: _get.Pages().category.breadcrumb,
-                    products: product,
-                    categories: _get.AllCategory(),
-                    colors: _get.AllColor(),
-                    brands: _get.AllBrand()
-                });
-            });
-            break;
-        case "category":
-            search.category(req.query.q, (result) => {
-                product = result;
-                res.render("layouts/category", {
-                    website: _get.Pages().website,
-                    name: _get.Pages().category.name,
-                    breadcrumb: _get.Pages().category.breadcrumb,
-                    products: product,
-                    categories: _get.AllCategory(),
-                    colors: _get.AllColor(),
-                    brands: _get.AllBrand()
-                });
-            });
-            break;
-        default:
-            product = _get.AllProduct();
-            res.render("layouts/category", {
-                website: _get.Pages().website,
-                name: _get.Pages().category.name,
-                breadcrumb: _get.Pages().category.breadcrumb,
-                products: product,
-                categories: _get.AllCategory(),
-                colors: _get.AllColor(),
-                brands: _get.AllBrand()
-            });
-            break;
+                break;
+        }
+    } catch (err) {
+        console.error(":::", err);
+        res.render("layouts/500", {
+            website: _get.Pages().website,
+            name: `500 - Internal server error!"`,
+            breadcrumb: `❌🤦‍♂️`,
+            product: _get.AllProduct(),
+            msg: err
+        });
     }
 });
 
@@ -111,42 +135,53 @@ router.post("/category", (req, res) => {
     console.log(searchTerm);
     let allSearch = [];
 
-    // console.log("my log" + search.color(searchTerm));
-    search.name(searchTerm, (result) => {
-        // console.log("::The result is::" + result);
-        result.forEach(ele => {
-            allSearch.push(ele);
+    try {
+        search.name(searchTerm, (result) => {
+            // console.log("my log" + search.color(searchTerm));
+            // console.log("::The result is::" + result);
+            result.forEach(ele => {
+                allSearch.push(ele);
+            });
         });
-    });
-    search.color(searchTerm, (result) => {
-        // console.log("::The result is::" + result);
-        result.forEach(ele => {
-            allSearch.push(ele);
+        search.color(searchTerm, (result) => {
+            // console.log("::The result is::" + result);
+            result.forEach(ele => {
+                allSearch.push(ele);
+            });
         });
-    });
-    search.brand(searchTerm, (result) => {
-        // console.log("::The result is::" + result);
-        result.forEach(ele => {
-            allSearch.push(ele);
+        search.brand(searchTerm, (result) => {
+            // console.log("::The result is::" + result);
+            result.forEach(ele => {
+                allSearch.push(ele);
+            });
         });
-    });
-    search.category(searchTerm, (result) => {
-        // console.log("::The result is::" + result);
-        result.forEach(ele => {
-            allSearch.push(ele);
+        search.category(searchTerm, (result) => {
+            // console.log("::The result is::" + result);
+            result.forEach(ele => {
+                allSearch.push(ele);
+            });
+            console.log(allSearch);
+            res.render("layouts/category", {
+                website: _get.Pages().website,
+                name: _get.Pages().category.name,
+                breadcrumb: _get.Pages().category.breadcrumb,
+                products: allSearch,
+                categories: _get.AllCategory(),
+                search: searchTerm,
+                colors: _get.AllColor(),
+                brands: _get.AllBrand()
+            });
         });
-        console.log(allSearch);
-        res.render("layouts/category", {
+    } catch (err) {
+        console.error(":::", err);
+        res.render("layouts/500", {
             website: _get.Pages().website,
-            name: _get.Pages().category.name,
-            breadcrumb: _get.Pages().category.breadcrumb,
-            products: allSearch,
-            categories: _get.AllCategory(),
-            search: searchTerm,
-            colors: _get.AllColor(),
-            brands: _get.AllBrand()
+            name: `500 - Internal server error!"`,
+            breadcrumb: `❌🤦‍♂️`,
+            product: _get.AllProduct(),
+            msg: err
         });
-    });
+    }
 });
 
 
@@ -156,7 +191,8 @@ router.get("/cart", (req, res) => {
 
     console.log("::::", req.query.data);
 
-    cart.setCart(req.query);
+    try {
+        cart.setCart(req.query);
 
     res.send("OK");
 
@@ -173,6 +209,17 @@ router.get("/cart", (req, res) => {
     //         });
     //     }
     // });
+    } catch (err) {
+        console.error(":::", err);
+        res.render("layouts/500", {
+            website: _get.Pages().website,
+            name: `500 - Internal server error!"`,
+            breadcrumb: `❌🤦‍♂️`,
+            product: _get.AllProduct(),
+            msg: err
+        });
+    }
+    
 });
 
 
@@ -183,7 +230,8 @@ router.post("/cart", (req, res) => {
     // USER, PRODUCT and ORDER
     // first User with _get.CurrentUser()
     // second product:
-    const productID = req.body.data.productID;
+    try {
+        const productID = req.body.data.productID;
     // this is the total no of products that was ordered for
     const amount = req.body.data.amount;
 
@@ -191,74 +239,144 @@ router.post("/cart", (req, res) => {
 
     cart.updateCart(productID, amount);
     res.redirect("/cart");
-
+    } catch (err) {
+        console.error(":::", err);
+        res.render("layouts/500", {
+            website: _get.Pages().website,
+            name: `500 - Internal server error!"`,
+            breadcrumb: `❌🤦‍♂️`,
+            product: _get.AllProduct(),
+            msg: err
+        });
+    }
 });
 
 
 // @desc    Cart page
 // @route   DELETE /cart
 router.delete("/cart", (req, res) => {
-    const itemId = req.body.itemId;
-
-    cart.delete(itemId);
-
-    res.redirect("/cart");
+    try {
+        const itemId = req.body.itemId;
+    
+        cart.delete(itemId);
+    
+        res.redirect("/cart");
+        
+    } catch (err) {
+        console.error(":::", err);
+        res.render("layouts/500", {
+            website: _get.Pages().website,
+            name: `500 - Internal server error!"`,
+            breadcrumb: `❌🤦‍♂️`,
+            product: _get.AllProduct(),
+            msg: err
+        });
+    }
 });
 
 // @desc    Contact page
 // @route   GET /contact
 router.get("/contact", (req, res) => {
-    res.render("layouts/contact", {
-        website: _get.Pages().website,
-        name: _get.Pages().contact.name,
-        breadcrumb: _get.Pages().contact.breadcrumb,
-        contact: _get.Pages().contact.contact
-    });
+    try {
+        res.render("layouts/contact", {
+            website: _get.Pages().website,
+            name: _get.Pages().contact.name,
+            breadcrumb: _get.Pages().contact.breadcrumb,
+            contact: _get.Pages().contact.contact
+        });
+        
+    } catch (err) {
+        console.error(":::", err);
+        res.render("layouts/500", {
+            website: _get.Pages().website,
+            name: `500 - Internal server error!"`,
+            breadcrumb: `❌🤦‍♂️`,
+            product: _get.AllProduct(),
+            msg: err
+        });
+    }
 });
 
 // @desc    Checkout page
 // @route   GET /checkout
 router.get("/checkout", (req, res) => {
-    res.render("layouts/checkout", {
-        website: _get.Pages().website,
-        name: _get.Pages().checkout.name,
-        breadcrumb: _get.Pages().checkout.breadcrumb
-    });
+    try {
+        res.render("layouts/checkout", {
+            website: _get.Pages().website,
+            name: _get.Pages().checkout.name,
+            breadcrumb: _get.Pages().checkout.breadcrumb
+        });
+        
+    } catch (err) {
+        console.error(":::", err);
+        res.render("layouts/500", {
+            website: _get.Pages().website,
+            name: `500 - Internal server error!"`,
+            breadcrumb: `❌🤦‍♂️`,
+            product: _get.AllProduct(),
+            msg: err
+        });
+    }
 });
 
 // @desc    Checkout page
 // @route   POST /signup
 router.post("/signup", (req, res) => {
 
-    _get.CurrentUser((user) => {
-        // update user 
-        Users.updateOne({ _id: user._id }, req.body, (err) => {
-            if (err) {
-                console.log("::::::::", err);
-            }
-            else if (!err) {
-                console.log("Updated user");
-            }
+    try {
+        _get.CurrentUser((user) => {
+            // update user 
+            Users.updateOne({ _id: user._id }, req.body, (err) => {
+                if (err) {
+                    console.log("::::::::", err);
+                }
+                else if (!err) {
+                    console.log("Updated user");
+                }
+            });
         });
-    });
-
-    cart.assignCart();
-    res.redirect("/checkout");
+    
+        cart.assignCart();
+        res.redirect("/checkout");
+        
+    } catch (err) {
+        console.error(":::", err);
+        res.render("layouts/500", {
+            website: _get.Pages().website,
+            name: `500 - Internal server error!"`,
+            breadcrumb: `❌🤦‍♂️`,
+            product: _get.AllProduct(),
+            msg: err
+        });
+    }
 });
 
 // @desc    404 page
 // @route   GET /404
 router.get("/404", (req, res) => {
-    res.render("layouts/404", {
-        website: _get.Pages().website,
-        name: `404 - Can't find a page?"`,
-        breadcrumb: `home - ❓`,
-        product: _get.AllProduct()
-    });
+    try {
+        res.render("layouts/404", {
+            website: _get.Pages().website,
+            name: `404 - Can't find a page?"`,
+            breadcrumb: `home - ❓`,
+            product: _get.AllProduct()
+        });
+        
+    } catch (err) {
+        console.error(":::", err);
+        res.render("layouts/500", {
+            website: _get.Pages().website,
+            name: `500 - Internal server error!"`,
+            breadcrumb: `❌🤦‍♂️`,
+            product: _get.AllProduct(),
+            msg: err
+        });
+    }
 });
 
 // @desc    500 page
 // @route   GET /500
+
 router.get("/500", (req, res) => {
     res.render("layouts/500", {
         website: _get.Pages().website,

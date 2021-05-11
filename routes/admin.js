@@ -31,11 +31,17 @@ const upload = multer({
 // @desc    AddProduct page
 // @route   GET /admin/AddProduct
 router.get("/addProduct", (req, res) => {
-    res.render("admin/addProduct", {
+    try {
+        res.render("admin/addProduct", {
         website: _get.Pages().website,
         name: _get.Pages().addProduct.name,
         breadcrumb: _get.Pages().addProduct.breadcrumb,
     });
+    } catch (err) {
+        console.error(":::", err);
+        res.redirect("/500");
+    }
+    
 });
 
 
