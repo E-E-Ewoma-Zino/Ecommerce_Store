@@ -10,7 +10,7 @@ const connectDB = async () => {
         
         console.log(`Connected Successfully at ${connected.connection.host}`);
     } catch (err) {
-        console.error(":::::::::::::" + err);
+        console.error(":::::::::::::>" + err);
         process.exit(1);
     }
 }

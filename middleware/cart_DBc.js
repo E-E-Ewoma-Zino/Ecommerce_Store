@@ -1,11 +1,9 @@
+
+// THIS FILE CONTROLES THE MONGOOSE DATABASE FOR CART
 const Cart = require("../model/Cart");
-const _get = require("../middleware/get");
+const _get = require("./get");
 const Orders = require("../model/Orders");
 const Users = require("../model/Users");
-const { ProductByID } = require("../middleware/get");
-
-
-
 
 module.exports = {
     // @desc    THIS SCRIPT GETS THE CART ITEMS
@@ -89,22 +87,3 @@ module.exports = {
     }
 }
 
-
-function h(arr) {
-
-    let v = [];
-    for (let i = 0; i < arr.length; i++) {
-        const item = arr[i];
-        
-        ProductByID(item, (err, item) => {
-            if (err) {
-                console.log("::::err", err);
-            } else {
-                console.log("item: ", item);
-                v.push(item);
-            }
-        })
-    }
-
-    return v;
-}

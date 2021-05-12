@@ -4,7 +4,7 @@ const path = require("path");
 const multer = require("multer");
 const express = require("express");
 const _get = require("../middleware/get");
-const cart = require("../middleware/cart");
+const cart = require("../middleware/cart_DBc");
 const Products = require("../model/Products");
 
 
@@ -31,12 +31,17 @@ const upload = multer({
 // @desc    AddProduct page
 // @route   GET /admin/AddProduct
 router.get("/addProduct", (req, res) => {
-    res.render("admin/addProduct", {
+    try {
+        res.render("admin/addProduct", {
         website: _get.Pages().website,
         name: _get.Pages().addProduct.name,
         breadcrumb: _get.Pages().addProduct.breadcrumb,
-        cartTotal: cart.total()
     });
+    } catch (err) {
+        console.error(":::", err);
+        res.redirect("/500");
+    }
+    
 });
 
 
