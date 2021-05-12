@@ -20,7 +20,6 @@ router.get("/:id", (req, res) => {
                 website: _get.Pages().website,
                 name: _get.Pages().single.name,
                 breadcrumb: _get.Pages().single.breadcrumb,
-                cartTotal: cart.total(),
                 product: product
             });
         }
