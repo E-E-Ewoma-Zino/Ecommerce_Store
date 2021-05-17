@@ -1,0 +1,104 @@
+<%- include("../partials/_head") %>
+    <%- include("../partials/_header") %>
+        <%- include("../components/breadcrumb") %>
+
+
+
+            <!--================login_part Area =================-->
+            <section class="login_part padding_top">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="login_part_text text-center">
+                                <div class="login_part_text_iner">
+                                    <h2>Already have an account?</h2>
+                                    <p>There are advances being made in science and technology
+                                        everyday, and a good example of this is the</p>
+                                    <a href="/login" class="btn_3">Sign in</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <div class="login_part_form">
+                                <div class="login_part_form_iner">
+                                    <h3>Welcome! <br>
+                                        Please Sign up now
+                                    </h3>
+                                    <% if (msg) { %>
+                                        <div class="alert alert-danger alert-dismissible">
+                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                            <%= msg %>
+                                        </div>
+                                    <% } %>
+
+                                            <form class="row contact_form" action="/signup" method="POST">
+                                                <div class="col-md-6 form-group p_star">
+                                                    <input type="text" class="form-control" id="first" name="firstname"
+                                                        placeholder="Firstname" required />
+                                                </div>
+                                                <div class="col-md-6 form-group p_star">
+                                                    <input type="text" class="form-control" id="last" name="lastname"
+                                                        placeholder="Lastname" required />
+                                                </div>
+                                                <div class="col-md-12 form-group">
+                                                    <input type="text" class="form-control" id="company" name="company"
+                                                        placeholder="Company name" />
+                                                </div>
+                                                <div class="col-md-6 form-group p_star">
+                                                    <input type="password" class="form-control" id="password"
+                                                        name="password" placeholder="Password (Don't forget it)"
+                                                        required />
+                                                </div>
+                                                <div class="col-md-6 form-group p_star">
+                                                    <input type="tel" class="form-control" id="number" name="phoneNo"
+                                                        placeholder="Phone no" required />
+                                                </div>
+                                                <div class="col-md-6 form-group p_star">
+                                                    <input type="email" class="form-control" id="email" name="email"
+                                                        placeholder="Email" required />
+                                                </div>
+                                                <div class="col-md-12 form-group p_star">
+                                                    <select name="country" class="country_select" required>
+                                                        <option value="1">Country</option>
+                                                        <option value="2">Country</option>
+                                                        <option value="4">Country</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-12 form-group p_star">
+                                                    <input type="text" class="form-control" id="city" name="city"
+                                                        placeholder="City" required />
+                                                </div>
+                                                <div class="col-md-12 form-group p_star">
+                                                    <input type="text" class="form-control" id="add1" name="address1"
+                                                        placeholder="Address 1" required />
+                                                </div>
+                                                <div class="col-md-12 form-group p_star">
+                                                    <input type="text" class="form-control" id="add2" name="address2"
+                                                        placeholder="Address 2 (Optional)" />
+                                                </div>
+                                                <div class="col-md-12 form-group">
+                                                    <input type="text" class="form-control" id="zip" name="zip"
+                                                        placeholder="Postcode/ZIP" />
+                                                </div>
+
+                                                <div class="col-md-12 form-group">
+                                                    <button type="submit" value="submit" class="btn_3">Send</button>
+                                                </div>
+                                            </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!--================login_part end =================-->
+
+
+
+
+            <%- include("../components/best_seller") %>
+
+
+                <%- include("../components/subscribe_area") %>
+                    <%- include("../partials/_footer") %>
+                        <%- include("../partials/_scripts") %>

@@ -3,7 +3,9 @@
 <%- include("../components/breadcrumb") %> 
     
 <div class="container text-center bg-warning mt-10">
-  <span class="display-4 text-white"><%= msg == "undefined"? "": msg %> </span>
+  <div class="alert alert-danger" role="alert">
+    <%= msg == "undefined"? "": msg %>
+  </div>
 </div>
     
 

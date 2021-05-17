@@ -1,7 +1,8 @@
 require("dotenv").config({path: "./config/config.env"});
-const bodyParser = require("body-parser");
-const connectDB =  require("./config/db");
 const methodOveride = require("method-override");
+const session = require("express-session");
+const connectDB =  require("./config/db");
+const passport = require("passport");
 const express = require("express");
 const path = require("path");
 
@@ -10,9 +11,10 @@ const app = express();
 // Configure the DB
 connectDB();
 
+// app configs
 app.set("view engine", "ejs");
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOveride((req, res)=>{
     if (req.body && typeof req.body === "object" && "_method" in req.body) {
@@ -22,6 +24,17 @@ app.use(methodOveride((req, res)=>{
         return method
     }
 }));
+
+// tell app to use express session
+app.use(session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+
+// passport config
+app.use(passport.initialize());
+app.use(passport.session());
 
 // @route
 // home
