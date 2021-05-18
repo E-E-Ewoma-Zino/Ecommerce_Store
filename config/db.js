@@ -5,7 +5,8 @@ const connectDB = async () => {
         // const connected = await mongoose.connect("mongodb://localhost:27017/e-storeDB", {
         const connected = await mongoose.connect("mongodb+srv://admin-zino:monday27@zinocluster.viyyl.mongodb.net/e-storeDB?retryWrites=true&w=majority", {
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            useCreateIndex: true
         });
         
         console.log(`Connected Successfully at ${connected.connection.host}`);

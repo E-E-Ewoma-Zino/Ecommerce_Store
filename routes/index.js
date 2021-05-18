@@ -386,78 +386,8 @@ router.get("/signup", (req, res) => {
 });
 
 
-// @desc    Checkout page
-// @route   POST /signup
-router.post("/signup", (req, res, next) => {
+//here 
 
-    try {
-        console.log(req.body);
-        Users.register({
-            
-            username: req.body.email,
-            
-        }, req.body.password, (err, user) => {
-            if (err) {
-                console.log("::::>", err);
-                res.render("layouts/signup", {
-                    website: _get.Pages().website,
-                    name: `signup`,
-                    breadcrumb: `Home - signup`,
-                    msg: err
-                });
-            }
-            else {
-                console.log("USer in");
-
-                // call passport authentication passing the "local" strategy name and a callback function
-                passport.authenticate('local', function (error, user, info) {
-                    // this will execute in any case, even if a passport strategy will find an error
-                    // log everything to console
-                    
-                    if (error) {
-                        console.log(":::", error);
-                        res.status(401).send(error);
-                    } else if (!user) {
-                        console.log("::::", info);
-                        res.status(401).send(info);
-                    } else {
-                        next();
-                    }
-                    
-                    console.log(":::>", user);
-                    res.status(401).send(user);
-                })(req, res);
-            }
-        });
-
-
-
-        // _get.CurrentUser((user) => {
-        //     // update user 
-        //     Users.updateOne({ _id: user._id }, req.body, (err) => {
-        //         if (err) {
-        //             console.log("::::::::", err);
-        //         }
-        //         else if (!err) {
-        //             console.log("Updated user");
-        //         }
-        //     });
-        // });
-
-        // cart.assignCart();
-        // res.redirect("/checkout");
-
-    } catch (err) {
-        console.error(":::", err);
-        res.render("layouts/500", {
-            website: _get.Pages().website,
-            name: `500 - Internal server error!`,
-            breadcrumb: `❌🤦‍♂️`,
-            product: _get.AllProduct(),
-            msg: err
-        });
-    }
-});
 
 // @desc    404 page
 // @route   GET /404
