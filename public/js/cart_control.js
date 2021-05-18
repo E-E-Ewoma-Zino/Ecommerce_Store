@@ -1,7 +1,9 @@
 // 
 
-
+// holds productID in array
 let cartArray = [];
+const logIn = document.getElementById("logIn").attributes[3].value;
+
 
 if (getCartItem() == null || getCartItem() == undefined || getCartItem().length == 0) {
     cartArray = [];
@@ -58,7 +60,10 @@ function toggle(cart, productID) {
 function addToCart(cart, productID) {
     // add first item
     if (cartArray.length == 0) {
-        cartArray.push(productID);
+        console.log(logIn);
+        if (isLogin) addToCart2(productID);
+        else cartArray.push(productID);
+
         // toggle 
         cart.firstElementChild.classList.remove("fa-cart-plus");
         cart.firstElementChild.classList.add("fa-check");
@@ -123,12 +128,19 @@ if(window.location.pathname == "/cart"){
 }
 
 
+// if user is loged in
+function addToCart2(productID) {
+    if (logIn) {
+        postCartData(productID)
+    }
+}
+
 
 
 // THIS FUNCTION POST CART TO ORDER DB
 // Post to the cart using axios
 function postCartData(data) {
-    axios.post('http://localhost:3000/cart', { data: data })
+    axios.post('http://localhost:3000/cartitem', { data: data })
         .then(function (res) {
             // console.log(res);
             // updates cart counter

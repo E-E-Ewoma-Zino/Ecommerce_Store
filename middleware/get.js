@@ -1,5 +1,4 @@
 const _ = require("lodash");
-const _get = require("./get");
 const Users = require("../model/Users");
 const Pages = require("../model/Pages");
 const Products = require("../model/Products");
@@ -35,7 +34,7 @@ module.exports = {
                 callback(user);
             }
         });
-    }
+    },
 };
 
 

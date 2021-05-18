@@ -8,6 +8,8 @@ const cart = require("../middleware/cart_DBc");
 const tmpUser = require("../middleware/createTempUser");
 const uploadPage = require("../middleware/uploadPages");
 
+// TODO: FIND A WAY TO HANDLE ERRORS CAUSED BY NETWORK FAILURE
+
 
 // This router is for the home / routes
 const router = express.Router();
@@ -22,17 +24,24 @@ uploadPage();
 // @route   GET /
 router.get("/", async (req, res) => {
     try {
+
+
         res.render("layouts/index", {
             home: _get.Pages().home,
             name: _get.Pages().home.name,
             website: _get.Pages().website,
-            products: _get.AllProduct()
+            products: _get.AllProduct(),
+            login: req.isAuthenticated(),
+            user: req.user,
         });
+
 
     } catch (err) {
         console.error(":::", err);
         res.render("layouts/500", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: `500 - Internal server error!`,
             breadcrumb: `❌🤦‍♂️`,
             product: _get.AllProduct(),
@@ -46,6 +55,7 @@ router.get("/", async (req, res) => {
 router.get("/category", (req, res) => {
     let product;
 
+    console.log(req.user);
     try {
         switch (req.query.type) {
             case "name":
@@ -53,6 +63,8 @@ router.get("/category", (req, res) => {
                     product = result;
                     res.render("layouts/category", {
                         website: _get.Pages().website,
+                        login: req.isAuthenticated(),
+                        user: req.user,
                         name: _get.Pages().category.name,
                         breadcrumb: _get.Pages().category.breadcrumb,
                         products: product,
@@ -67,6 +79,8 @@ router.get("/category", (req, res) => {
                     product = result;
                     res.render("layouts/category", {
                         website: _get.Pages().website,
+                        login: req.isAuthenticated(),
+                        user: req.user,
                         name: _get.Pages().category.name,
                         breadcrumb: _get.Pages().category.breadcrumb,
                         products: product,
@@ -81,6 +95,8 @@ router.get("/category", (req, res) => {
                     product = result;
                     res.render("layouts/category", {
                         website: _get.Pages().website,
+                        login: req.isAuthenticated(),
+                        user: req.user,
                         name: _get.Pages().category.name,
                         breadcrumb: _get.Pages().category.breadcrumb,
                         products: product,
@@ -95,6 +111,8 @@ router.get("/category", (req, res) => {
                     product = result;
                     res.render("layouts/category", {
                         website: _get.Pages().website,
+                        login: req.isAuthenticated(),
+                        user: req.user,
                         name: _get.Pages().category.name,
                         breadcrumb: _get.Pages().category.breadcrumb,
                         products: product,
@@ -108,6 +126,8 @@ router.get("/category", (req, res) => {
                 product = _get.AllProduct();
                 res.render("layouts/category", {
                     website: _get.Pages().website,
+                    login: req.isAuthenticated(),
+                    user: req.user,
                     name: _get.Pages().category.name,
                     breadcrumb: _get.Pages().category.breadcrumb,
                     products: product,
@@ -121,6 +141,8 @@ router.get("/category", (req, res) => {
         console.error(":::", err);
         res.render("layouts/500", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: `500 - Internal server error!`,
             breadcrumb: `❌🤦‍♂️`,
             product: _get.AllProduct(),
@@ -164,6 +186,8 @@ router.post("/category", (req, res) => {
             console.log(allSearch);
             res.render("layouts/category", {
                 website: _get.Pages().website,
+                login: req.isAuthenticated(),
+                user: req.user,
                 name: _get.Pages().category.name,
                 breadcrumb: _get.Pages().category.breadcrumb,
                 products: allSearch,
@@ -177,6 +201,8 @@ router.post("/category", (req, res) => {
         console.error(":::", err);
         res.render("layouts/500", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: `500 - Internal server error!`,
             breadcrumb: `❌🤦‍♂️`,
             product: _get.AllProduct(),
@@ -202,6 +228,8 @@ router.get("/cart", (req, res) => {
             else {
                 res.render("layouts/cart", {
                     website: _get.Pages().website,
+                    login: req.isAuthenticated(),
+                    user: req.user,
                     name: _get.Pages().cart.name,
                     breadcrumb: _get.Pages().cart.breadcrumb,
                     cart: items
@@ -212,6 +240,8 @@ router.get("/cart", (req, res) => {
         console.error(":::", err);
         res.render("layouts/500", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: `500 - Internal server error!`,
             breadcrumb: `❌🤦‍♂️`,
             product: _get.AllProduct(),
@@ -219,6 +249,35 @@ router.get("/cart", (req, res) => {
         });
     }
 
+});
+
+
+
+// @desc    Contact page
+// @route   GET /contact
+router.get("/contact", (req, res) => {
+    try {
+        res.render("layouts/contact", {
+            website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
+            name: _get.Pages().contact.name,
+            breadcrumb: _get.Pages().contact.breadcrumb,
+            contact: _get.Pages().contact.contact
+        });
+
+    } catch (err) {
+        console.error(":::", err);
+        res.render("layouts/500", {
+            website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
+            name: `500 - Internal server error!`,
+            breadcrumb: `❌🤦‍♂️`,
+            product: _get.AllProduct(),
+            msg: err
+        });
+    }
 });
 
 
@@ -229,19 +288,22 @@ router.post("/cart", (req, res) => {
     // USER, PRODUCT and ORDER
     // first User with _get.CurrentUser()
     // second product:
+
     try {
-        const productID = req.body.data.productID;
+        // const productID = req.body.data.productID;
         // this is the total no of products that was ordered for
-        const amount = req.body.data.amount;
+        // const amount = req.body.data.amount;
 
         // console.log(productID, amount);
 
-        // cart.updateCart(productID, amount);
+        cart.updateCart(productID);
         res.redirect("/cart");
     } catch (err) {
         console.error(":::", err);
         res.render("layouts/500", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: `500 - Internal server error!`,
             breadcrumb: `❌🤦‍♂️`,
             product: _get.AllProduct(),
@@ -249,7 +311,6 @@ router.post("/cart", (req, res) => {
         });
     }
 });
-
 
 // @desc    Cart page
 // @route   DELETE /cart
@@ -265,6 +326,8 @@ router.delete("/cart", (req, res) => {
         console.error(":::", err);
         res.render("layouts/500", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: `500 - Internal server error!`,
             breadcrumb: `❌🤦‍♂️`,
             product: _get.AllProduct(),
@@ -273,21 +336,29 @@ router.delete("/cart", (req, res) => {
     }
 });
 
-// @desc    Contact page
-// @route   GET /contact
-router.get("/contact", (req, res) => {
-    try {
-        res.render("layouts/contact", {
-            website: _get.Pages().website,
-            name: _get.Pages().contact.name,
-            breadcrumb: _get.Pages().contact.breadcrumb,
-            contact: _get.Pages().contact.contact
-        });
+// @desc    no-page
+// @route   POST /cartitem
+router.post("/cartitem", (req, res) => {
+    // when a product is added to cart, we will get the 
+    // USER, PRODUCT and ORDER
+    // first User with _get.CurrentUser()
+    // second product:
 
+    try {
+        // const productID = req.body.data.productID;
+        // this is the total no of products that was ordered for
+        // const amount = req.body.data.amount;
+
+        // console.log(productID, amount);
+
+        cart.updateCart(productID);
+        res.redirect("/cart");
     } catch (err) {
         console.error(":::", err);
         res.render("layouts/500", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: `500 - Internal server error!`,
             breadcrumb: `❌🤦‍♂️`,
             product: _get.AllProduct(),
@@ -302,6 +373,8 @@ router.get("/checkout", (req, res) => {
     try {
         res.render("layouts/checkout", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: _get.Pages().checkout.name,
             breadcrumb: _get.Pages().checkout.breadcrumb
         });
@@ -310,6 +383,8 @@ router.get("/checkout", (req, res) => {
         console.error(":::", err);
         res.render("layouts/500", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: `500 - Internal server error!`,
             breadcrumb: `❌🤦‍♂️`,
             product: _get.AllProduct(),
@@ -327,13 +402,18 @@ router.get("/login", (req, res) => {
     try {
         res.render("layouts/login", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: `LogIn`,
             breadcrumb: `Home - Login`,
+            msg: ""
         });
     } catch (err) {
         console.error(":::", err);
         res.render("layouts/500", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: `500 - Internal server error!`,
             breadcrumb: `❌🤦‍♂️`,
             product: _get.AllProduct(),
@@ -345,30 +425,70 @@ router.get("/login", (req, res) => {
 // @desc    login page
 // @route   POST /login
 
-router.post("/login", (req, res) => {
+router.post("/login", (req, res, next) => {
+
     try {
-        console.log(req.body);
-        res.send("Thank you for coming back");
+        const user = new Users({
+            username: req.body.email,
+            password: req.body.password
+        });
+        req.logIn(user, (err) => {
+            if (err) {
+                console.log("::::::::::::: " + err);
+                res.render("layouts/login", {
+                    website: _get.Pages().website,
+                    login: req.isAuthenticated(),
+                    user: req.user,
+                    name: `signup`,
+                    breadcrumb: `Home - signup`,
+                    msg: err
+                });
+            }
+            else {
+                passport.authenticate('local', function (err, user, info) {
+                    if (err) { return next(err); }
+                    if (!user) {
+                        return res.render("layouts/login", {
+                            website: _get.Pages().website,
+                            login: req.isAuthenticated(),
+                            user: req.user,
+                            name: `signup`,
+                            breadcrumb: `Home - signup`,
+                            msg: "Incorrect password or email"
+                        });
+                    }
+                    req.logIn(user, function (err) {
+                        if (err) { return next(err); }
+                        return res.redirect("/");
+                    });
+                })(req, res, next);
+            }
+        });
     } catch (err) {
         console.error(":::", err);
         res.render("layouts/500", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: `500 - Internal server error!`,
             breadcrumb: `❌🤦‍♂️`,
             product: _get.AllProduct(),
             msg: err
         });
     }
+
 });
 
 
-// @desc    signup page
+// @desc    Signup page
 // @route   GET /signup
 
 router.get("/signup", (req, res) => {
     try {
         res.render("layouts/signup", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: `signup`,
             breadcrumb: `Home - signup`,
             msg: ""
@@ -377,6 +497,8 @@ router.get("/signup", (req, res) => {
         console.error(":::", err);
         res.render("layouts/500", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: `500 - Internal server error!`,
             breadcrumb: `❌🤦‍♂️`,
             product: _get.AllProduct(),
@@ -386,8 +508,48 @@ router.get("/signup", (req, res) => {
 });
 
 
-//here 
+// @desc    SignUp page
+// @route   POST /signup
+router.post("/signup", (req, res) => {
+    const newUser = new Users({
+        zip: req.body.zip,
+        city: req.body.city,
+        username: req.body.email,
+        country: req.body.country,
+        address: req.body.address,
+        company: req.body.company,
+        phoneNo: req.body.phoneNo,
+        lastname: req.body.lastname,
+        address2: req.body.address2,
+        firstname: req.body.firstname
+    });
 
+    Users.register(newUser, req.body.password, (err, user) => {
+        if (err) {
+            console.log(":::::::::::::::: " + err);
+            res.render("layouts/signup", {
+                website: _get.Pages().website,
+                login: req.isAuthenticated(),
+                user: req.user,
+                name: `signup`,
+                breadcrumb: `Home - signup`,
+                msg: err
+            });
+        }
+        else {
+            passport.authenticate("local")(req, res, () => {
+                res.redirect("/");
+            })
+        }
+    });
+});
+
+// @desc    Logout page
+// @route   POST /signup
+router.get("/logout", (req, res) => {
+    req.logOut()
+    res.redirect("/");
+})
 
 // @desc    404 page
 // @route   GET /404
@@ -395,6 +557,8 @@ router.get("", (req, res) => {
     try {
         res.render("layouts/404", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: `404 - Can't find "${req.originalUrl}"`,
             breadcrumb: `home - ❓`,
             product: _get.AllProduct()
@@ -404,6 +568,8 @@ router.get("", (req, res) => {
         console.error(":::", err);
         res.render("layouts/500", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: `500 - Internal server error!`,
             breadcrumb: `❌🤦‍♂️`,
             product: _get.AllProduct(),
@@ -418,6 +584,8 @@ router.get("", (req, res) => {
 // router.get("/500", (req, res) => {
 //     res.render("layouts/500", {
 //         website: _get.Pages().website,
+//         login: req.isAuthenticated(),
+//         user: req.user,
 //         name: `500 - Internal server error!`,
 //         breadcrumb: `❌🤦‍♂️`,
 //         msg: "undefined"
