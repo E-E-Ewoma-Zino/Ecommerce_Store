@@ -55,8 +55,9 @@
                             </ul>
                         </div>
                         <!-- check if user is loged in -->
+                        <input type="hidden" id="logIn" name="login" value="<%= login %>">
                         <% if(login){ %>
-                            <input type="hidden" id="logIn" name="login" value="<%= login %>">
+                            <input type="hidden" id="user" name="user" value="<%= user._id %>">
                             <!-- user btn -->
                             <div class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="blog" id="navbarDropdown_3"

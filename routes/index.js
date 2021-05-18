@@ -348,10 +348,11 @@ router.post("/cartitem", (req, res) => {
         // const productID = req.body.data.productID;
         // this is the total no of products that was ordered for
         // const amount = req.body.data.amount;
+        
+        console.log("data: ", req.body.data.productID);
+        console.log("data: ", req.body.data.userID);
 
-        // console.log(productID, amount);
-
-        cart.updateCart(productID);
+        cart.updateCart(req.body.data.productID, req.body.data.userID);
         res.redirect("/cart");
     } catch (err) {
         console.error(":::", err);
@@ -446,7 +447,16 @@ router.post("/login", (req, res, next) => {
             }
             else {
                 passport.authenticate('local', function (err, user, info) {
-                    if (err) { return next(err); }
+                    if (err) {
+                        return res.render("layouts/login", {
+                            website: _get.Pages().website,
+                            login: req.isAuthenticated(),
+                            user: req.user,
+                            name: `signup`,
+                            breadcrumb: `Home - signup`,
+                            msg: "Incorrect password or email"
+                        });
+                    }
                     if (!user) {
                         return res.render("layouts/login", {
                             website: _get.Pages().website,

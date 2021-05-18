@@ -35,6 +35,7 @@ const userSchema = new mongoose.Schema({
     company: {
         type: String
     },
+    cart: Array,
     order: {
         type: []
     },

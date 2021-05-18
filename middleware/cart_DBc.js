@@ -12,66 +12,35 @@ module.exports = {
             callback(err, items);
         });
     },
-    updateCart: (productID, amount) => {
-        Cart.find({}, (err, item) => {
+    updateCart: (productID, user) => {
+        Users.findById({_id: user}, (err, user)=>{
             if (err) {
-                console.log(":::::", err);
-            } else {
-                let i;
-                for (i = 0; i < item.length; i++) {
-                    const order = item[i];
-
-                    if (order.product._id == productID) {
-                        console.log("Update the cart");
-                        order.amount = amount;
-                        order.save();
-                        return;
+                console.log(":::ERR: ", err);
+            }else{
+                _get.ProductByID(productID, (err, product)=>{
+                    if (err) {
+                        console.log(":::err: ", err);
                     }
-                    else {
-                        console.log("next");
-                    }
-                }
-                if (item.length == i) {
-                    console.log("Create new cart item");
-                    _get.ProductByID(productID, (err, product) => {
-                        if (err) {
-                            console.log(":::::", err);
-                        }
-                        else {
-                            const newItem = new Cart({
-                                product: product,
-                                amount: amount
-                            });
+                    else if(!product){
+                        const newCart = new Cart({
+                            product: product._id
+                        });
 
-                            newItem.save();
-                        }
-                    });
-                }
+                        newCart.save((err)=>{
+                            if (err) {
+                                console.log(":::err ", err);
+                            }
+                            else{
+                                user.cart.push(newCart._id);
+                            }
+                        })
+                    }
+                    else{
+                        // figure out how to save the user's cart and if the cart already exist update it
+                        // 
+                    }
+                });
             }
-        })
-    },
-    assignCart: () => {
-        // create the order for the user
-        // update user Cart
-        _get.CurrentUser((user) => {
-
-            Cart.find({}, (err, items) => {
-                if (err) {
-                    console.log("::::::::", err);
-                }
-                else {
-                    const newOrder = new Orders({
-                        user: user._id,
-                        product: items
-                    });
-                    newOrder.save();
-                    Users.updateOne({ _id: user._id }, { order: newOrder._id }, (err) => {
-                        if (err) {
-                            console.log("::::::::", err);
-                        }
-                    });
-                }
-            });
         });
     },
     delete: (itemId) => {
@@ -87,3 +56,41 @@ module.exports = {
     }
 }
 
+
+
+// Cart.find({}, (err, item) => {
+//     if (err) {
+//         console.log(":::::", err);
+//     } else {
+//         let i;
+//         for (i = 0; i < item.length; i++) {
+//             const order = item[i];
+
+//             if (order.product._id == productID) {
+//                 console.log("Update the cart");
+//                 order.amount = amount;
+//                 order.save();
+//                 return;
+//             }
+//             else {
+//                 console.log("next");
+//             }
+//         }
+//         if (item.length == i) {
+//             console.log("Create new cart item");
+//             _get.ProductByID(productID, (err, product) => {
+//                 if (err) {
+//                     console.log(":::::", err);
+//                 }
+//                 else {
+//                     const newItem = new Cart({
+//                         product: product,
+//                         amount: amount
+//                     });
+
+//                     newItem.save();
+//                 }
+//             });
+//         }
+//     }
+// })

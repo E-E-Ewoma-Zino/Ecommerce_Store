@@ -3,6 +3,12 @@
 // holds productID in array
 let cartArray = [];
 const logIn = document.getElementById("logIn").attributes[3].value;
+let user;
+try {
+    user = document.getElementById("user").attributes[3].value;
+} catch (err) {
+    // console.log("err: ", err);
+}
 
 
 if (getCartItem() == null || getCartItem() == undefined || getCartItem().length == 0) {
@@ -29,8 +35,6 @@ try {
             addToCart(cart, productID);
             save(cartArray);
 
-            toggle(cart, productID);
-
             // counts the cart item
             cartCounter();
         });
@@ -39,64 +43,53 @@ try {
     console.log(":::", err);
 }
 
-// toggle cart icon\
-function toggle(cart, productID) {
-    for (let i = 0; i < getCartItem().length; i++) {
-        const item = getCartItem()[i];
-
-        if (item == productID) {
-            console.log("item in cart");
-
-            break;
-        }
-        else {
-            console.log("not in cart");
-
-        }
-    }
-}
-
 // function to check if item in cart already exist
 function addToCart(cart, productID) {
-    // add first item
-    if (cartArray.length == 0) {
+    if (logIn) {
         console.log(logIn);
-        if (isLogin) addToCart2(productID);
-        else cartArray.push(productID);
-
+        addToCart2(productID, user);
         // toggle 
         cart.firstElementChild.classList.remove("fa-cart-plus");
         cart.firstElementChild.classList.add("fa-check");
-    }
-    else {
-        // check if item already in cart
-        for (let i = 0; i < cartArray.length; i++) {
-            const item = cartArray[i];
+    } else {
+        // add first item
+        if (cartArray.length == 0) {
+            cartArray.push(productID);
 
-            // if its in cart skip
-            if (item == productID) {
-                console.log("item already added");
-                // if item already exist remove it
-                removeItem(cartArray, item);
-                console.log("removed");
-                cart.firstElementChild.classList.remove("fa-check");
-                cart.firstElementChild.classList.add("fa-cart-plus");
-                break;
-            }
-            else {
-                // if search all and item not found add item
-                if (i == cartArray.length - 1) {
-                    console.log("added new item");
-                    cartArray.push(productID);
-                    // toggle 
-                    cart.firstElementChild.classList.remove("fa-cart-plus");
-                    cart.firstElementChild.classList.add("fa-check");
+            // toggle 
+            cart.firstElementChild.classList.remove("fa-cart-plus");
+            cart.firstElementChild.classList.add("fa-check");
+        }
+        else {
+            // check if item already in cart
+            for (let i = 0; i < cartArray.length; i++) {
+                const item = cartArray[i];
+
+                // if its in cart skip
+                if (item == productID) {
+                    console.log("item already added");
+                    // if item already exist remove it
+                    removeItem(cartArray, item);
+                    console.log("removed");
+                    cart.firstElementChild.classList.remove("fa-check");
+                    cart.firstElementChild.classList.add("fa-cart-plus");
                     break;
                 }
-                continue;
+                else {
+                    // if search all and item not found add item
+                    if (i == cartArray.length - 1) {
+                        console.log("added new item");
+                        cartArray.push(productID);
+                        // toggle 
+                        cart.firstElementChild.classList.remove("fa-cart-plus");
+                        cart.firstElementChild.classList.add("fa-check");
+                        break;
+                    }
+                    continue;
+                }
             }
-        }
 
+        }
     }
     console.log(cartArray);
 }
@@ -122,30 +115,36 @@ function getCartItem() {
 
 // TODO: MAKE A FUNCTION TO DISPLAY PRODUCTS IN CART
 // when link goes to cart
-if(window.location.pathname == "/cart"){
+if (window.location.pathname == "/cart") {
 
     postCartData(getCartItem());
 }
 
 
 // if user is loged in
-function addToCart2(productID) {
+function addToCart2(productID, user) {
     if (logIn) {
-        postCartData(productID)
+
+        const data = {
+            productID: productID,
+            userID: user
+        }
+
+        postCartData(data);
     }
 }
-
-
 
 // THIS FUNCTION POST CART TO ORDER DB
 // Post to the cart using axios
 function postCartData(data) {
+    console.log("i recived :", data);
     axios.post('http://localhost:3000/cartitem', { data: data })
         .then(function (res) {
             // console.log(res);
             // updates cart counter
         })
         .catch(function (err) {
+            alert("Could not add to cart!");
             console.log("::::::", err);
         });
 }
