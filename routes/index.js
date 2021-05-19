@@ -212,46 +212,6 @@ router.post("/category", (req, res) => {
 });
 
 
-// @desc    Cart page
-// @route   GET /cart
-router.get("/cart", (req, res) => {
-
-    try {
-        // cart.setCart(req.query);
-
-        // res.send("OK");
-
-        cart.getItems((err, items) => {
-            if (err) {
-                console.log("::::::", err);
-            }
-            else {
-                res.render("layouts/cart", {
-                    website: _get.Pages().website,
-                    login: req.isAuthenticated(),
-                    user: req.user,
-                    name: _get.Pages().cart.name,
-                    breadcrumb: _get.Pages().cart.breadcrumb,
-                    cart: items
-                });
-            }
-        });
-    } catch (err) {
-        console.error(":::", err);
-        res.render("layouts/500", {
-            website: _get.Pages().website,
-            login: req.isAuthenticated(),
-            user: req.user,
-            name: `500 - Internal server error!`,
-            breadcrumb: `❌🤦‍♂️`,
-            product: _get.AllProduct(),
-            msg: err
-        });
-    }
-
-});
-
-
 
 // @desc    Contact page
 // @route   GET /contact
@@ -282,6 +242,47 @@ router.get("/contact", (req, res) => {
 
 
 // @desc    Cart page
+// @route   GET /cart
+router.get("/cart", (req, res) => {
+
+    try {
+        // cart.setCart(req.query);
+
+        // res.send("OK");
+
+        cart.getItems((err, items) => {
+            if (err) {
+                console.log("::::::", err);
+            }
+            else {
+                console.log("cart item: ", items[0]);
+                res.render("layouts/cart", {
+                    website: _get.Pages().website,
+                    login: req.isAuthenticated(),
+                    user: req.user,
+                    name: _get.Pages().cart.name,
+                    breadcrumb: _get.Pages().cart.breadcrumb,
+                    cart: items
+                });
+            }
+        });
+    } catch (err) {
+        console.error(":::", err);
+        res.render("layouts/500", {
+            website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
+            name: `500 - Internal server error!`,
+            breadcrumb: `❌🤦‍♂️`,
+            product: _get.AllProduct(),
+            msg: err
+        });
+    }
+
+});
+
+
+// @desc    Cart page
 // @route   POST /cart
 router.post("/cart", (req, res) => {
     // when a product is added to cart, we will get the 
@@ -296,7 +297,7 @@ router.post("/cart", (req, res) => {
 
         // console.log(productID, amount);
 
-        cart.updateCart(productID);
+        // cart.updateCart(productID);
         res.redirect("/cart");
     } catch (err) {
         console.error(":::", err);

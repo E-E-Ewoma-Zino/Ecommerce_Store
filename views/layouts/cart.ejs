@@ -21,28 +21,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% cart.forEach(item=> { %>
+                                    <% cart[0].product.forEach(item=> { %>
                                         <tr>
                                             <td>
                                                 <div class="media">
                                                     <div class="d-flex">
-                                                        <img class="product_img cart-img" src="<%= item.product.img[0].path %>"
-                                                            alt="<%= item.product.name %>" />
+                                                        <img class="product_img cart-img" src="<%= item.img[0].path %>"
+                                                            alt="<%= item.name %>" />
                                                     </div>
                                                     <div class="media-body">
                                                         <p>
-                                                            <%= item.product.name %>
+                                                            <%= item.name %>
                                                         </p>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td>
                                                 <h5>
-                                                    <%= item.product.totalNo %>
+                                                    <%= item.totalNo %>
                                                 </h5>
                                             </td>
                                             <td>
-                                                <h5 class="cart_price">$<%= item.product.price %>
+                                                <h5 class="cart_price">$<%= item.price %>
                                                 </h5>
                                             </td>
                                             <td>
@@ -51,15 +51,15 @@
                                                         <i class="ti-angle-down"></i>
                                                     </span>
                                                     <input class="input-number cart_value" type="text"
-                                                        value="<%= item.amount %>" min="0"
-                                                        max="<%= item.product.totalNo %>" tabindex="-1">
+                                                        value="1" min="0"
+                                                        max="<%= item.totalNo %>" tabindex="-1">
                                                     <span class="input-number-increment">
                                                         <i class="ti-angle-up"></i>
                                                     </span>
                                                 </div>
                                             </td>
                                             <td>
-                                                <h5 class="cart_total">$<%= (Number(item.product.price.replace(/,/g, "")) * Number(item.amount)).toLocaleString(); %>
+                                                <h5 class="cart_total">$<%= (Number(item.price.replace(/,/g, "")) * Number(item.amount)).toLocaleString(); %>
                                                 </h5>
                                             </td>
                                             <td>

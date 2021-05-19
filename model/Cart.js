@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 // @desc    cart Schema
 const cartSchema = new mongoose.Schema({
-    product:  Object,
+    product:  Array,
     amount: String,
     createdAt:{
         type: Date,

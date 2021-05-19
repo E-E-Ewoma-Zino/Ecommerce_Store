@@ -35,9 +35,9 @@ const userSchema = new mongoose.Schema({
     company: {
         type: String
     },
-    cart: Array,
+    cart: String,
     order: {
-        type: []
+        type: Array
     },
     zip: {
         type: String

@@ -21,23 +21,39 @@ module.exports = {
                     if (err) {
                         console.log(":::err: ", err);
                     }
-                    else if(!product){
-                        const newCart = new Cart({
-                            product: product._id
-                        });
-
-                        newCart.save((err)=>{
-                            if (err) {
-                                console.log(":::err ", err);
-                            }
-                            else{
-                                user.cart.push(newCart._id);
-                            }
-                        })
-                    }
                     else{
-                        // figure out how to save the user's cart and if the cart already exist update it
-                        // 
+                        Cart.findById({_id: user.cart}, (err, cart)=>{
+                            if (err) {
+                                console.log("::err ", err);
+                            }else{
+                                cart.product.push(product);
+                                cart.save((err)=>{
+                                    if (err) {
+                                        console.log(":::err ", err);
+                                    }
+                                    else{
+                                        console.log(":::Added cart to user");
+                                        user.cart = newCart._id;
+                                        user.save();
+                                    }
+                                });
+                            }
+                        });
+                        console.log(":::cart ", product);
+                        // const newCart = new Cart({
+                        //     product: product
+                        // });
+
+                        // newCart.save((err)=>{
+                        //     if (err) {
+                        //         console.log(":::err ", err);
+                        //     }
+                        //     else{
+                        //         console.log(":::Added cart to user");
+                        //         user.cart = newCart._id;
+                        //         user.save();
+                        //     }
+                        // });
                     }
                 });
             }
