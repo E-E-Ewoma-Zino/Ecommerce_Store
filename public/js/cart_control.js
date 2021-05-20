@@ -144,7 +144,7 @@ function postCartData(data) {
             // updates cart counter
         })
         .catch(function (err) {
-            alert("Could not add to cart!");
+            console.error("Could not add to cart!");
             console.log("::::::", err);
         });
 }

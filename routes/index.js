@@ -1,14 +1,14 @@
 // ALL ROUTES GOINT TO THE HOME "/" WILL BE IN THIS PAGE
 const express = require("express");
 const passport = require("passport");
-const Users = require("../model/Users");
 const Cart = require("../model/Cart");
+const Users = require("../model/Users");
+const Orders = require("../model/Orders");
 const _get = require("../middleware/get");
 const search = require("../middleware/search");
 const cart = require("../middleware/cart_DBc");
 const tmpUser = require("../middleware/createTempUser");
 const uploadPage = require("../middleware/uploadPages");
-const Orders = require("../model/Orders");
 
 // TODO: FIND A WAY TO HANDLE ERRORS CAUSED BY NETWORK FAILURE
 
@@ -352,10 +352,8 @@ router.post("/cartitem", (req, res) => {
         // this is the total no of products that was ordered for
         // const quantity = req.body.data.quantity;
 
-        console.log("data: ", req.body.data.productID);
-        console.log("data: ", req.body.data.userID);
 
-        cart.updateCart(req.body.data.productID, req.body.data.userID);
+        cart.updateCart(res, req.body.data.productID, req.body.data.userID);
         // res.redirect("/cart");
     } catch (err) {
         console.error(":::", err);
@@ -526,17 +524,20 @@ router.get("/signup", (req, res) => {
 router.post("/signup", (req, res) => {
     const newCart = new Cart();
     newCart.save();
+    const newOrder = new Orders();
+    newOrder.save();
 
     const newUser = new Users({
         zip: req.body.zip,
-        cart: newCart._id,    
+        cart: newCart._id,
         city: req.body.city,
+        order: newOrder._id,
         username: req.body.email,
         country: req.body.country,
-        address1: req.body.address1,
         company: req.body.company,
         phoneNo: req.body.phoneNo,
         lastname: req.body.lastname,
+        address1: req.body.address1,
         address2: req.body.address2,
         firstname: req.body.firstname
     });
