@@ -2,11 +2,13 @@
 const express = require("express");
 const passport = require("passport");
 const Users = require("../model/Users");
+const Cart = require("../model/Cart");
 const _get = require("../middleware/get");
 const search = require("../middleware/search");
 const cart = require("../middleware/cart_DBc");
 const tmpUser = require("../middleware/createTempUser");
 const uploadPage = require("../middleware/uploadPages");
+const Orders = require("../model/Orders");
 
 // TODO: FIND A WAY TO HANDLE ERRORS CAUSED BY NETWORK FAILURE
 
@@ -293,9 +295,9 @@ router.post("/cart", (req, res) => {
     try {
         // const productID = req.body.data.productID;
         // this is the total no of products that was ordered for
-        // const amount = req.body.data.amount;
+        // const quantity = req.body.data.quantity;
 
-        // console.log(productID, amount);
+        // console.log(productID, quantity);
 
         // cart.updateCart(productID);
         res.redirect("/cart");
@@ -348,13 +350,13 @@ router.post("/cartitem", (req, res) => {
     try {
         // const productID = req.body.data.productID;
         // this is the total no of products that was ordered for
-        // const amount = req.body.data.amount;
-        
+        // const quantity = req.body.data.quantity;
+
         console.log("data: ", req.body.data.productID);
         console.log("data: ", req.body.data.userID);
 
         cart.updateCart(req.body.data.productID, req.body.data.userID);
-        res.redirect("/cart");
+        // res.redirect("/cart");
     } catch (err) {
         console.error(":::", err);
         res.render("layouts/500", {
@@ -522,12 +524,16 @@ router.get("/signup", (req, res) => {
 // @desc    SignUp page
 // @route   POST /signup
 router.post("/signup", (req, res) => {
+    const newCart = new Cart();
+    newCart.save();
+
     const newUser = new Users({
         zip: req.body.zip,
+        cart: newCart._id,    
         city: req.body.city,
         username: req.body.email,
         country: req.body.country,
-        address: req.body.address,
+        address1: req.body.address1,
         company: req.body.company,
         phoneNo: req.body.phoneNo,
         lastname: req.body.lastname,
@@ -623,7 +629,7 @@ module.exports = router;
 //     "product" : [ 
 //         {
 //             "product" : ObjectId("6084659c00a2f4083c683ef9"),
-//             "amount" : 4
+//             "quantity" : 4
 //         }
 //     ]
 // }

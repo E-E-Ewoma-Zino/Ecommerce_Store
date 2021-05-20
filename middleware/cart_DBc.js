@@ -2,7 +2,6 @@
 // THIS FILE CONTROLES THE MONGOOSE DATABASE FOR CART
 const Cart = require("../model/Cart");
 const _get = require("./get");
-const Orders = require("../model/Orders");
 const Users = require("../model/Users");
 
 module.exports = {
@@ -13,28 +12,32 @@ module.exports = {
         });
     },
     updateCart: (productID, user) => {
+        // get the user
         Users.findById({_id: user}, (err, user)=>{
             if (err) {
                 console.log(":::ERR: ", err);
             }else{
+                // get the product
                 _get.ProductByID(productID, (err, product)=>{
                     if (err) {
                         console.log(":::err: ", err);
                     }
                     else{
+                        // get the user's cart
+                        console.log("user cart ", user.cart);
                         Cart.findById({_id: user.cart}, (err, cart)=>{
                             if (err) {
                                 console.log("::err ", err);
                             }else{
-                                cart.product.push(product);
+                                // if product not in Cart
+                                
+                                cart.item.push({product: product});
                                 cart.save((err)=>{
                                     if (err) {
                                         console.log(":::err ", err);
                                     }
                                     else{
                                         console.log(":::Added cart to user");
-                                        user.cart = newCart._id;
-                                        user.save();
                                     }
                                 });
                             }
@@ -65,10 +68,6 @@ module.exports = {
                 console.log("::::::::::::", err);
             }
         });
-    },
-    setCart: (arr)=>{
-        console.log("h arr: ", h(arr));
-        return h(arr);
     }
 }
 
@@ -84,7 +83,7 @@ module.exports = {
 
 //             if (order.product._id == productID) {
 //                 console.log("Update the cart");
-//                 order.amount = amount;
+//                 order.quantity = quantity;
 //                 order.save();
 //                 return;
 //             }
@@ -101,7 +100,7 @@ module.exports = {
 //                 else {
 //                     const newItem = new Cart({
 //                         product: product,
-//                         amount: amount
+//                         quantity: quantity
 //                     });
 
 //                     newItem.save();

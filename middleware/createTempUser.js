@@ -1,4 +1,3 @@
-const Orders = require("../model/Orders");
 const Users = require("../model/Users");
 
 

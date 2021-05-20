@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
     },
-    address: {
+    address1: {
         type: String,
     },
     address2: {
@@ -35,7 +35,9 @@ const userSchema = new mongoose.Schema({
     company: {
         type: String
     },
-    cart: String,
+    cart: {
+        type: String
+    },
     order: {
         type: Array
     },
