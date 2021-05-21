@@ -16,10 +16,13 @@ module.exports = {
     // @desc    THIS SCRIPT GETS ALL THE PRODUCTS BRAND NAMES AND THEIR LENGTH
     AllBrand: () => find_duplicate(allBrand),
     // @desc    THIS SCRIPT GETS FROM A CALLBACK FUNCTION ONE PRODUCT BY IT'S ID
-    ProductByID: (id, result) => {
-        Products.findById({ _id: id }, (err, product) => {
-            result(err, product);
-        });
+    ProductByID: async (id, result) => {
+        try{
+            const product = await Products.findById({ _id: id });
+            result(product);
+        }catch(err){
+            console.log(":::err ", err);
+        }
     },
     // @desc    THIS SCRIPT GETS FROM A CALLBACK FUNCTION THE TEMP/CURRENT USER
     CurrentUser: (callback) => {

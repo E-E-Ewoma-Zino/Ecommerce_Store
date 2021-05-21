@@ -10,17 +10,24 @@ const router = express.Router();
 // @route   GET /category/:id
 router.get("/:id", (req, res) => {
 
-    _get.ProductByID(req.params.id, (err, product) => {
-        if (err) {
-            console.error(":::::", err);
-            res.redirect("/404");
-        }
-        else {
+    _get.ProductByID(req.params.id, (product) => {
+        try{
             res.render("layouts/Single-product", {
                 website: _get.Pages().website,
                 name: _get.Pages().single.name,
                 breadcrumb: _get.Pages().single.breadcrumb,
                 product: product
+            });
+        }catch(err) {
+            console.error(":::::", err);
+            res.render("layouts/500", {
+                website: _get.Pages().website,
+                login: req.isAuthenticated(),
+                user: req.user,
+                name: `500 - Internal server error!`,
+                breadcrumb: `❌🤦‍♂️`,
+                product: _get.AllProduct(),
+                msg: err
             });
         }
     });

@@ -12,74 +12,62 @@ module.exports = {
             callback(err, items);
         });
     },
-    updateCart: (res, productID, user) => {
+    updateCart: async (res, productID, userID) => {
         // get the user
-        Users.findById({ _id: user }, (err, user) => {
-            if (err) {
-                console.log(":::ERR: ", err);
-            } else {
-                // get the user's cart
-                // if product not in Cart
-                Cart.findById({ _id: user.cart }, (err, cart) => {
-                    if (err) {
+        try {
+            const user = await Users.findById({ _id: userID });
+            // get the user's cart
+            try {
+                const cart = await Cart.findById({ _id: user.cart });
+                // get the product
+                _get.ProductByID(productID, async (product) => {
+                    try {
+                        if (cart.item.length == 0) {
+                            console.log("ADD NEW PRODUCT");
+                            await cart.item.push({ product: product });
+                        }
+                        // for each elements in cart, check if productID is already in cart
+                        for (let i = 0; i < cart.item.length; i++) {
+                            const item = cart.item[i];
+                            // if it is in cart remove
+                            if (item.product._id == productID) {
+                                console.log("PRODUCT ALREADY EXIST");
+                                // delete an item if it already exist
+                                // cart.item.splice(i, 1);
+                                // console.log("PRODUCT DELETED");
+                                break;
+                            }
+                            // if loop is at the end and productID not found add it
+                            // if product not in Cart
+                            if (cart.item.length - 1 == i) {
+                                console.log("ADD NEW PRODUCT");
+                                await cart.item.push({ product: product });
+                                break;
+                            }
+                            // if (i == cart.item.length) break;
+                        }
+                        // if cart is empty add to cart
+
+                        // save cart
+                        cart.save().then(() => {
+                            console.log("Updated cart");
+                        }).catch((err) => {
+                            console.log(":::err could not save ", err);
+                        });
+                    } catch (err) {
+                        // catch product errors
                         console.log(":::err: ", err);
                     }
-                    else {
-                        // get the product
-                        _get.ProductByID(productID, (err, product) => {
-                            if (err) {
-                                console.log(":::err: ", err);
-                            }
-                            else {
-
-                                // for each elements in cart, check if productID is already in cart
-                                for (let i = 0; i <= cart.item.length; i++) {
-                                    const item = cart.item[i];
-                                    // if it is in cart remove
-                                    try {
-                                        if (item.product._id == productID) {
-                                            console.log("PRODUCT ALREADY EXIST");
-                                            // delete an item if it already exist
-                                            cart.item.splice(i, 1);
-                                            console.log("PRODUCT DELETED");
-                                            break;
-                                        } else {
-                                            // console.log("Next");
-                                            // NEXT
-                                        }
-
-                                    } catch (err) {
-                                        console.log("catch");
-                                    }
-
-                                    // if loop is at the end and productID not found add it
-                                    if (cart.item.length == i) {
-                                        console.log("ADD NEW PRODUCT");
-                                        cart.item.push({ product: product });
-                                        break;
-                                    }
-                                    // if (i == cart.item.length) break;
-                                }
-                                // if cart is empty add to cart
-                                // if (cart.item.length == 0) {
-                                //     console.log("ADD NEW PRODUCT");
-                                //     cart.item.push({ product: product });
-                                // }
-                                // save cart
-                                cart.save((err) => {
-                                    if (err) {
-                                        console.log(":::err ", err);
-                                    }
-                                    else {
-                                        console.log("Updated cart");
-                                    }
-                                });
-                            }
-                        });
-                    }
                 });
+            } catch (err) {
+                // catch cart errors
+                console.log(":::err: ", err);
             }
-        });
+        }
+        catch (err) {
+            // catch user errors
+            console.log(":::ERR: ", err);
+        }
     },
     delete: (itemId) => {
         Cart.deleteOne({ _id: itemId }, (err) => {
