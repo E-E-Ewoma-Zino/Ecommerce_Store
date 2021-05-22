@@ -33,15 +33,17 @@ const upload = multer({
 router.get("/addProduct", (req, res) => {
     try {
         res.render("admin/addProduct", {
-        website: _get.Pages().website,
-        name: _get.Pages().addProduct.name,
-        breadcrumb: _get.Pages().addProduct.breadcrumb,
-    });
+            website: _get.Pages().website,
+            name: _get.Pages().addProduct.name,
+            breadcrumb: _get.Pages().addProduct.breadcrumb,
+            login: req.isAuthenticated(),
+            user: req.user
+        });
     } catch (err) {
         console.error(":::", err);
         res.redirect("/500");
     }
-    
+
 });
 
 
@@ -63,22 +65,23 @@ router.post("/addProduct", upload.array("img"), (req, res) => {
             description: req.body.description,
             totalNo: req.body.totalNo
         });
-    
-    
+
+
         // console.log("::::::::::", req.body.name);
         newProduct.save((err) => {
             if (err) {
                 console.log(":::::", err);
                 res.render("admin/addProduct", {
                     website: _get.Pages().website,
+                    login: req.isAuthenticated(),
+                    user: req.user,
                     name: _get.Pages().addProduct.name,
                     breadcrumb: _get.Pages().addProduct.breadcrumb,
                     cartTotal: cart.total(),
                     msg: err
                 });
             }
-            else{
-
+            else {
                 console.log("Added new product");
                 res.redirect("/admin/addProduct");
             }
@@ -86,6 +89,8 @@ router.post("/addProduct", upload.array("img"), (req, res) => {
     } catch (err) {
         res.render("admin/addProduct", {
             website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
             name: _get.Pages().addProduct.name,
             breadcrumb: _get.Pages().addProduct.breadcrumb,
             cartTotal: cart.total(),

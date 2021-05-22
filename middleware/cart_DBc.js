@@ -7,50 +7,61 @@ const Users = require("../model/Users");
 
 module.exports = {
     // @desc    THIS SCRIPT GETS THE CART ITEMS
-    getItems: (callback) => {
-        Cart.find({}, (err, items) => {
-            callback(err, items);
+    getItems: async (userId, callback) => {
+        const user = await Users.findById({ _id: userId }).exec((err, user)=>{
+            Cart.findById({_id: user.cart}, (err, item) => {
+                if (err) {
+                    console.log(":::Err ", err);
+                }else{
+                    callback(err, item);
+                }
+            });
+
         });
+        
     },
     updateCart: async (res, productID, userID) => {
         // get the user
         try {
-            const user = await Users.findById({ _id: userID });
+            const user = await Users.findById({ _id: userID }).exec();
+            console.log("user.id ", user._id);
             // get the user's cart
             try {
-                const cart = await Cart.findById({ _id: user.cart });
+                const cart = await Cart.findById({ _id: user.cart }).exec();
+                console.log("cart.id ", cart._id);
                 // get the product
                 _get.ProductByID(productID, async (product) => {
                     try {
+                        console.log("Adding process");
+                        // if cart is empty add to cart
                         if (cart.item.length == 0) {
                             console.log("ADD NEW PRODUCT");
                             await cart.item.push({ product: product });
                         }
-                        // for each elements in cart, check if productID is already in cart
-                        for (let i = 0; i < cart.item.length; i++) {
-                            const item = cart.item[i];
-                            // if it is in cart remove
-                            if (item.product._id == productID) {
-                                console.log("PRODUCT ALREADY EXIST");
-                                // delete an item if it already exist
-                                // cart.item.splice(i, 1);
-                                // console.log("PRODUCT DELETED");
-                                break;
+                        else {
+                            // for each elements in cart, check if productID is already in cart
+                            for (let i = 0; i < cart.item.length; i++) {
+                                const item = cart.item[i];
+                                // if it is in cart remove
+                                if (item.product._id == productID) {
+                                    console.log("PRODUCT ALREADY EXIST");
+                                    // delete an item if it already exist
+                                    // cart.item.splice(i, 1);
+                                    // console.log("PRODUCT DELETED");
+                                    break;
+                                }
+                                // if loop is at the end and productID not found add it
+                                // if product not in Cart
+                                if (cart.item.length - 1 == i) {
+                                    console.log("ADD NEW PRODUCT");
+                                    await cart.item.push({ product: product });
+                                    break;
+                                }
                             }
-                            // if loop is at the end and productID not found add it
-                            // if product not in Cart
-                            if (cart.item.length - 1 == i) {
-                                console.log("ADD NEW PRODUCT");
-                                await cart.item.push({ product: product });
-                                break;
-                            }
-                            // if (i == cart.item.length) break;
                         }
-                        // if cart is empty add to cart
-
                         // save cart
                         cart.save().then(() => {
-                            console.log("Updated cart");
+                            console.log("Done");
                         }).catch((err) => {
                             console.log(":::err could not save ", err);
                         });

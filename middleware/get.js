@@ -18,7 +18,7 @@ module.exports = {
     // @desc    THIS SCRIPT GETS FROM A CALLBACK FUNCTION ONE PRODUCT BY IT'S ID
     ProductByID: async (id, result) => {
         try{
-            const product = await Products.findById({ _id: id });
+            const product = await Products.findById({ _id: id }).exec();
             result(product);
         }catch(err){
             console.log(":::err ", err);

@@ -251,22 +251,29 @@ router.get("/cart", (req, res) => {
         // cart.setCart(req.query);
 
         // res.send("OK");
-
-        cart.getItems((err, items) => {
-            if (err) {
-                console.log("::::::", err);
-            }
-            else {
-                console.log("cart item: ", items[0]);
-                res.render("layouts/cart", {
-                    website: _get.Pages().website,
-                    login: req.isAuthenticated(),
-                    user: req.user,
-                    name: _get.Pages().cart.name,
-                    breadcrumb: _get.Pages().cart.breadcrumb,
-                    cart: items
-                });
-            }
+        if (req.isAuthenticated())
+            cart.getItems(req.user._id, (err, item) => {
+                if (err) {
+                    console.log("::::::", err);
+                }
+                else {
+                    // console.log("cart item: ", items[0]);
+                    res.render("layouts/cart", {
+                        website: _get.Pages().website,
+                        login: req.isAuthenticated(),
+                        user: req.user,
+                        name: _get.Pages().cart.name,
+                        breadcrumb: _get.Pages().cart.breadcrumb,
+                        cart: item
+                    });
+                }
+            });
+        else res.render("layouts/cart", {
+            website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
+            name: _get.Pages().cart.name,
+            breadcrumb: _get.Pages().cart.breadcrumb
         });
     } catch (err) {
         console.error(":::", err);
@@ -339,6 +346,42 @@ router.delete("/cart", (req, res) => {
     }
 });
 
+
+
+// @desc    no-page
+// @route   get /cartitem
+router.get("/cartitem", (req, res) => {
+    // when a product is added to cart, we will get the 
+    // USER, PRODUCT and ORDER
+    // first User with _get.CurrentUser()
+    // second product:
+
+    try {
+        if (req.isAuthenticated())
+            cart.getItems(req.user._id, (err, item) => {
+                if (err) {
+                    console.log("::::::", err);
+                }
+                else {
+                    res.send(item)
+                }
+            });
+        else res.send("No user loged in");
+    } catch (err) {
+        console.error(":::", err);
+        res.render("layouts/500", {
+            website: _get.Pages().website,
+            login: req.isAuthenticated(),
+            user: req.user,
+            name: `500 - Internal server error!`,
+            breadcrumb: `❌🤦‍♂️`,
+            product: _get.AllProduct(),
+            msg: err
+        });
+    }
+});
+
+
 // @desc    no-page
 // @route   POST /cartitem
 router.post("/cartitem", (req, res) => {
@@ -351,10 +394,7 @@ router.post("/cartitem", (req, res) => {
         // const productID = req.body.data.productID;
         // this is the total no of products that was ordered for
         // const quantity = req.body.data.quantity;
-
-
         cart.updateCart(res, req.body.data.productID, req.body.data.userID);
-        // res.redirect("/cart");
     } catch (err) {
         console.error(":::", err);
         res.render("layouts/500", {
@@ -455,17 +495,18 @@ router.post("/login", (req, res, next) => {
                             user: req.user,
                             name: `signup`,
                             breadcrumb: `Home - signup`,
-                            msg: "Incorrect password or email"
+                            msg: err
                         });
                     }
                     if (!user) {
+                        req.logOut();
                         return res.render("layouts/login", {
                             website: _get.Pages().website,
                             login: req.isAuthenticated(),
                             user: req.user,
                             name: `signup`,
                             breadcrumb: `Home - signup`,
-                            msg: "Incorrect password or email"
+                            msg: "Incorrect email or password!"
                         });
                     }
                     req.logIn(user, function (err) {

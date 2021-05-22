@@ -14,6 +14,8 @@ router.get("/:id", (req, res) => {
         try{
             res.render("layouts/Single-product", {
                 website: _get.Pages().website,
+                login: req.isAuthenticated(),
+            user: req.user,
                 name: _get.Pages().single.name,
                 breadcrumb: _get.Pages().single.breadcrumb,
                 product: product
