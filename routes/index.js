@@ -257,7 +257,6 @@ router.get("/cart", (req, res) => {
                     console.log("::::::", err);
                 }
                 else {
-                    // console.log("cart item: ", items[0]);
                     res.render("layouts/cart", {
                         website: _get.Pages().website,
                         login: req.isAuthenticated(),
@@ -394,16 +393,30 @@ router.post("/cartitem", (req, res) => {
         // const productID = req.body.data.productID;
         // this is the total no of products that was ordered for
         // const quantity = req.body.data.quantity;
-        cart.updateCart(res, req.body.data.productID, req.body.data.userID);
+        if (req.isAuthenticated())
+            cart.updateCart(res, req.body.productID, req.body.userID);
+        else {
+            console.log(req.body);
+            let arr = [];
+            for (let i = 0; i < req.body.length; i++) {
+                const productId = req.body[i];
+                _get.ProductByID(productId, (result) => {
+                    // console.log(result);
+                    arr.push(result)
+                    console.log("arr::::::::::::::::::::::: ", arr);
+                    if (i == req.body.length -1) yres.send(arr);
+                });
+            }
+        }
     } catch (err) {
         console.error(":::", err);
         res.render("layouts/500", {
-            website: _get.Pages().website,
-            login: req.isAuthenticated(),
             user: req.user,
-            name: `500 - Internal server error!`,
             breadcrumb: `❌🤦‍♂️`,
             product: _get.AllProduct(),
+            login: req.isAuthenticated(),
+            website: _get.Pages().website,
+            name: `500 - Internal server error!`,
             msg: err
         });
     }
@@ -434,7 +447,6 @@ router.get("/checkout", (req, res) => {
         });
     }
 });
-
 
 
 // @desc    login page

@@ -1,7 +1,7 @@
 // 
 // holds productID in array
 let cartArray = [];
-const logIn = document.getElementById("logIn").attributes[3].value == "true"? true: false;
+const logIn = document.getElementById("logIn").attributes[3].value == "true" ? true : false;
 let user;
 
 try {
@@ -63,6 +63,7 @@ function addToCart(cart, productID) {
             // toggle 
             cart.firstElementChild.classList.remove("fa-cart-plus");
             cart.firstElementChild.classList.add("fa-check");
+            cartCounter();
         }
         else {
             // check if item already in cart
@@ -89,11 +90,13 @@ function addToCart(cart, productID) {
                         cart.firstElementChild.classList.add("fa-check");
                         break;
                     }
+                    cartCounter();
                     continue;
                 }
             }
-
+            cartCounter();
         }
+        cartCounter();
     }
     // console.log(cartArray);
     cartCounter();
@@ -120,9 +123,16 @@ function getCartItem() {
 
 // TODO: MAKE A FUNCTION TO DISPLAY PRODUCTS IN CART
 // when link goes to cart
+// get the total cart number
+let cartData;
 if (window.location.pathname == "/cart") {
     getCartData();
-    if(!logIn) cartBody(cartData.items);
+    if (!logIn) {
+        console.log("pp ", getCartItem());
+        // passed in an empty object so cart won't be undefined || null
+        postCartData({}, getCartItem());
+        // cartBody(getCartItem());
+    };
 }
 
 
@@ -140,8 +150,6 @@ function addToCart2(cart, productID, user) {
 
 // To get cart data when the user is loged in
 getCartData();
-// get the total cart number
-let cartData;
 
 
 // Get req to get all cart
@@ -165,30 +173,33 @@ function postCartData(cart, data) {
         alert("You are Offline");
         return;
     }
+    let config = {
+        timeout: 10000
+    }
+
+    console.log(data);
+    // start loading untile the product is added
     cart.innerHTML = `<img class="d-inline-block" src="/img/loader.svg" alt="loading" width="25px" height="25px">`;
-    axios.post("http://localhost:3000/cartitem", { data: data }, { timeout: 10000 })
-        .then(function (res) {
-            console.log(res);
-            // updates cart counter
-            // toggle 
+    axios.post("http://localhost:3000/cartitem", data, config).then(function (res) {
+        console.log(res);
+        // updates cart counter
+        // toggle 
+        getCartData();
+        console.log("Posted to cart");
+        cart.innerHTML = `<i class="fas fa-check text-success"></i>`;
+    }).catch(function (err) {
+        if (err == "Error: timeout of 10000ms exceeded") {
             getCartData();
+            console.log("Time out");
             console.log("Posted to cart");
             cart.innerHTML = `<i class="fas fa-check text-success"></i>`;
-        })
-        .catch(function (err) {
-
-            if (err == "Error: timeout of 10000ms exceeded") {
-                getCartData();
-                console.log("Time out");
-                console.log("Posted to cart");
-                cart.innerHTML = `<i class="fas fa-check text-success"></i>`;
-            } else {
-                // toggle 
-                console.error("Could not add to cart! ", err);
-                cart.innerHTML = `<i class="fas fa-times text-danger"></i>`;
-                cart.firstElementChild.classList.remove("fa-cart-plus");
-            }
-        });
+        } else {
+            // toggle 
+            console.error("Could not add to cart! ", err);
+            cart.innerHTML = `<i class="fas fa-times text-danger"></i>`;
+            cart.firstElementChild.classList.remove("fa-cart-plus");
+        }
+    });
 }
 
 // TODO: Remove item from cart
@@ -199,6 +210,7 @@ function postCartData(cart, data) {
 // update cart counter
 function cartCounter() {
     const cart_alert = document.getElementById("cart_alert");
+    console.log("q1wrgh");
 
     // if items in cart update the value
     // get the value of items in the cart
@@ -225,7 +237,7 @@ function cartCounter() {
     }
 }
 
-if(!logIn) checkedCart(getCartItem());
+if (!logIn) checkedCart(getCartItem());
 // IF CART HAS BEEN SELECTED MARK IT (FOR USER)
 function checkedCart(items) {
 
@@ -240,8 +252,8 @@ function checkedCart(items) {
                 let item;
                 if (logIn) item = items[j].product._id;
                 else item = items[j];
-                
-                
+
+
                 // if its in cart skip
                 if (item == productID) {
                     checked(i);
@@ -273,8 +285,10 @@ function checkedCart(items) {
 
 
 function cartBody(items) {
+    console.log("input");
+    console.log("items ", items);
     const tbody = document.getElementById("tbody");
-    let body =(img,name,total,price,id)=> `<tr>
+    let body = (img, name, total, price, id) => `<tr>
     <td>
         <div class="media">
             <div class="d-flex">
@@ -327,6 +341,7 @@ function cartBody(items) {
 `;
     let concat = "";
     items.forEach(item => {
+        console.log("add ", item);
         concat += body(item.img, item.name, item.total, item.price, item._id);
     });
     tbody.innerHTML = concat;

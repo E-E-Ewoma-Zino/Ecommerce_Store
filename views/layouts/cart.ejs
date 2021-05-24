@@ -21,7 +21,73 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tbody">
-                                    
+                                    <% try{ %> 
+                                    <% if (!cart) console.log("cart empty") %> 
+                                    <% cart.item.forEach(item=> { %>
+                                        <tr>
+                                            <td>
+                                                <div class="media">
+                                                    <div class="d-flex">
+                                                        <img class="product_img cart-img" src="<%= item.product.img[0].path %>"
+                                                            alt="<%= item.product.name %>" />
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <p>
+                                                            <%= item.product.name %>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <h5>
+                                                    <%= item.product.totalNo %>
+                                                </h5>
+                                            </td>
+                                            <td>
+                                                <h5 class="cart_price">$<%= item.product.price %>
+                                                </h5>
+                                            </td>
+                                            <td>
+                                                <div class="product_count my_product_counter">
+                                                    <span class="input-number-decrement">
+                                                        <i class="ti-angle-down"></i>
+                                                    </span>
+                                                    <input class="input-number cart_value" type="text" value="1" min="0"
+                                                        max="<%= item.product.totalNo %>" tabindex="-1">
+                                                    <span class="input-number-increment">
+                                                        <i class="ti-angle-up"></i>
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <h5 class="cart_total">$<%= (Number(item.product.price.replace(/,/g, "" )) *
+                                                        Number(1)).toLocaleString(); %>
+                                                </h5>
+                                            </td>
+                                            <td>
+                                                <form action="/cart" method="POST">
+                                                    <input type="hidden" name="_method" value="DELETE">
+                                                    <input type="hidden" name="itemId" value="<%= item.product._id %>">
+                                                    <button type="submit" class="delete">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                        <% }catch(err){ %>
+                                           <h3>Empty cart</h3>
+                                            <% } %>  
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td>
+                                                    <h5>Subtotal</h5>
+                                                </td>
+                                                <td>
+                                                    <h5 id="subTotal">0</h5>
+                                                </td>
+                                            </tr>       
                                 </tbody>
                             </table>
                             <div class="checkout_btn_inner float-right">
