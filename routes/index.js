@@ -9,6 +9,7 @@ const search = require("../middleware/search");
 const cart = require("../middleware/cart_DBc");
 const tmpUser = require("../middleware/createTempUser");
 const uploadPage = require("../middleware/uploadPages");
+const { reverse } = require("lodash");
 
 // TODO: FIND A WAY TO HANDLE ERRORS CAUSED BY NETWORK FAILURE
 
@@ -252,7 +253,7 @@ router.get("/cart", (req, res) => {
 
         // res.send("OK");
         if (req.isAuthenticated())
-            cart.getItems(req.user._id, (err, item) => {
+            cart.userCart(req.user._id, (err, item) => {
                 if (err) {
                     console.log("::::::", err);
                 }
@@ -326,6 +327,8 @@ router.post("/cart", (req, res) => {
 router.delete("/cart", (req, res) => {
     try {
         const itemId = req.body.itemId;
+        console.log(itemId);
+
 
         cart.delete(itemId);
 
@@ -357,7 +360,7 @@ router.get("/cartitem", (req, res) => {
 
     try {
         if (req.isAuthenticated())
-            cart.getItems(req.user._id, (err, item) => {
+            cart.userCart(req.user._id, (err, item) => {
                 if (err) {
                     console.log("::::::", err);
                 }
@@ -394,17 +397,18 @@ router.post("/cartitem", (req, res) => {
         // this is the total no of products that was ordered for
         // const quantity = req.body.data.quantity;
         if (req.isAuthenticated())
-            cart.updateCart(res, req.body.productID, req.body.userID);
+            cart.updateCart(req.body.productID, req.body.userID);
         else {
-            console.log(req.body);
+            // console.log(req.body);
             let arr = [];
+            // if the postCartData from the cart_control sends an empty array do:
+            if (req.body.length == 0 || undefined || null) res.send([]);
             for (let i = 0; i < req.body.length; i++) {
                 const productId = req.body[i];
                 _get.ProductByID(productId, (result) => {
                     // console.log(result);
                     arr.push(result)
-                    console.log("arr::::::::::::::::::::::: ", arr);
-                    if (i == req.body.length -1) yres.send(arr);
+                    if (i == req.body.length -1) res.send(arr);
                 });
             }
         }

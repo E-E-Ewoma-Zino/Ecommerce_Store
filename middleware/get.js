@@ -17,25 +17,23 @@ module.exports = {
     AllBrand: () => find_duplicate(allBrand),
     // @desc    THIS SCRIPT GETS FROM A CALLBACK FUNCTION ONE PRODUCT BY IT'S ID
     ProductByID: async (id, result) => {
-        try{
+        try {
             const product = await Products.findById({ _id: id }).exec();
             result(product);
-        }catch(err){
+        } catch (err) {
             console.log(":::err ", err);
         }
     },
     // @desc    THIS SCRIPT GETS FROM A CALLBACK FUNCTION THE TEMP/CURRENT USER
-    CurrentUser: (callback) => {
-        Users.findOne({ email: "Tempemail@gmail.com" }, (err, user) => {
-            if (err) {
-                res.status(500).json({
-                    mess: err
-                });
-            }
-            else {
-                // console.log(user);
-                callback(user);
-            }
+    CurrentUser: (userId, callback) => {
+        Users.findOne({ _id: userId }).then((user) => {
+            // console.log(user);
+            callback(user);
+        }).catch((err) => {
+            // catch user errors
+            res.status(500).json({
+                mess: err
+            });
         });
     },
 };

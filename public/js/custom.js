@@ -316,6 +316,7 @@
 
 
     // click counter js
+    //  to increase and decrease product counter
 
     let my_product_counter = document.getElementsByClassName("my_product_counter");
 
@@ -377,6 +378,7 @@
         }
     }
 
+    // to get values to calculate cart product counter
     try {
         for (let i = 0; i < my_product_counter.length; i++) {
             const element = my_product_counter[i];

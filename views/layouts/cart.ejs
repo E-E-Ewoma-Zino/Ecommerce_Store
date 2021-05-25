@@ -22,7 +22,6 @@
                                 </thead>
                                 <tbody id="tbody">
                                     <% try{ %> 
-                                    <% if (!cart) console.log("cart empty") %> 
                                     <% cart.item.forEach(item=> { %>
                                         <tr>
                                             <td>
@@ -76,7 +75,8 @@
                                         </tr>
                                         <% }); %>
                                         <% }catch(err){ %>
-                                           <h3>Empty cart</h3>
+                                           <h6>Sync your cart with your account</h6>
+                                           <a class="btn_4  d-inline" href="/login">LogIn <i class="fa fa-arrow-right"></i></a>
                                             <% } %>  
                                             <tr>
                                                 <td></td>

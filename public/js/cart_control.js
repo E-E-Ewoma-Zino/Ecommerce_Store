@@ -102,6 +102,7 @@ function addToCart(cart, productID) {
     cartCounter();
 }
 
+// TODO: Remove item from cart
 // removes a specific item from the ARRAY
 function removeItem(arr, value) {
     var index = arr.indexOf(value);
@@ -113,7 +114,7 @@ function removeItem(arr, value) {
 
 // TODO: save cart to local storage
 function save(arr) {
-    arr = JSON.stringify(arr)
+    arr = JSON.stringify(arr);
     localStorage.setItem("cart", arr);
 }
 // gets array from local storage
@@ -128,7 +129,6 @@ let cartData;
 if (window.location.pathname == "/cart") {
     getCartData();
     if (!logIn) {
-        console.log("pp ", getCartItem());
         // passed in an empty object so cart won't be undefined || null
         postCartData({}, getCartItem());
         // cartBody(getCartItem());
@@ -166,10 +166,13 @@ function getCartData() {
     });
 }
 
+// Store post data
+let localCart = [];
+
 // THIS FUNCTION POST CART TO ORDER DB
 // Post to the cart using axios
 function postCartData(cart, data) {
-    if (!navigator.onLine) {
+    if (navigator.onLine) {
         alert("You are Offline");
         return;
     }
@@ -177,15 +180,21 @@ function postCartData(cart, data) {
         timeout: 10000
     }
 
-    console.log(data);
     // start loading untile the product is added
     cart.innerHTML = `<img class="d-inline-block" src="/img/loader.svg" alt="loading" width="25px" height="25px">`;
+    // 
+    console.log("data ", data);
     axios.post("http://localhost:3000/cartitem", data, config).then(function (res) {
-        console.log(res);
+        // console.log(res);
+        localCart = res.data;
+
+        // When cart is clicked, postCartData() is called and this
+        //  cartBody is called and in uses data gotten from cart to fill cart table
+        if (localCart.length >= 0) cartBody(localCart);
+
         // updates cart counter
         // toggle 
         getCartData();
-        console.log("Posted to cart");
         cart.innerHTML = `<i class="fas fa-check text-success"></i>`;
     }).catch(function (err) {
         if (err == "Error: timeout of 10000ms exceeded") {
@@ -202,15 +211,10 @@ function postCartData(cart, data) {
     });
 }
 
-// TODO: Remove item from cart
-
-// 
-
 
 // update cart counter
 function cartCounter() {
     const cart_alert = document.getElementById("cart_alert");
-    console.log("q1wrgh");
 
     // if items in cart update the value
     // get the value of items in the cart
@@ -283,17 +287,16 @@ function checkedCart(items) {
 }
 
 
-
+// TODO: display localstorage items in cart
 function cartBody(items) {
-    console.log("input");
-    console.log("items ", items);
+    console.log("Render ", items);
     const tbody = document.getElementById("tbody");
     let body = (img, name, total, price, id) => `<tr>
     <td>
         <div class="media">
             <div class="d-flex">
-                <img class="product_img cart-img" src="${img}"
-                    alt="<%= item.product.name %>" />
+                <img class="product_img cart-img" src="${img.replace("public", "")}"
+                    alt="${name}" />
             </div>
             <div class="media-body">
                 <p>
@@ -325,26 +328,157 @@ function cartBody(items) {
         </div>
     </td>
     <td>
-        <h5 class="cart_total">${(Number(price.replace(/,/g, "")) * Number(1)).toLocaleString()}
+        <h5 class="cart_total">$${(Number(price.replace(/,/g, "")) * Number(1)).toLocaleString()}
         </h5>
     </td>
     <td>
-        <form action="/cart" method="POST">
-            <input type="hidden" name="_method" value="DELETE">
-            <input type="hidden" name="itemId" value="${id}">
-            <button type="submit" class="delete">
-                <i class="fa fa-times"></i>
-            </button>
-        </form>
+    <button type="submit" class="delete">
+    <input type="hidden" name="itemId" value="${id}">
+            <i class="fa fa-times"></i>
+        </button>
     </td>
 </tr>
 `;
     let concat = "";
     items.forEach(item => {
-        console.log("add ", item);
-        concat += body(item.img, item.name, item.total, item.price, item._id);
+        concat += body(item.img[0].path, item.name, item.totalNo, item.price, item._id);
     });
+    concat += `<tr>
+    <td></td>
+    <td></td>
+    <td>
+        <h5>Subtotal</h5>
+    </td>
+    <td>
+        <h5 id="subTotal">0</h5>
+    </td>
+</tr>`;
     tbody.innerHTML = concat;
+    // tedious
+    iWantedToExpoortTheseFunctionButExportDidNotWork();
+
+    const deleteCart = document.getElementsByClassName("delete");
+
+    for (let i = 0; i < deleteCart.length; i++) {
+        const item = deleteCart[i];
+        const val = item.firstElementChild.attributes[2].value;
+        item.addEventListener("click", () => {
+            console.log("Remove ", val);
+            // remove from local cart then save to local cart
+            save(removeItem(cartArray, val));
+            // This will post the new cart date and re-render the cart
+            postCartData({}, getCartItem());
+        });
+    }
 }
 
-// TODO: display localstorage items in cart
+// functions to make the tbody have function
+function iWantedToExpoortTheseFunctionButExportDidNotWork() {
+    // click counter js
+    //  to increase and decrease product counter
+
+    let my_product_counter = document.getElementsByClassName("my_product_counter");
+
+    try {
+        for (let i = 0; i < my_product_counter.length; i++) {
+            const element = my_product_counter[i];
+
+            let min = element.children[1].attributes[3].value;
+            let max = element.children[1].attributes[4].value;
+            let val = element.children[1].attributes[2].value;
+
+            let decr = element.children[0];
+            let incr = element.children[2];
+
+            decr.addEventListener("click", (e) => {
+                decrement();
+            });
+            incr.addEventListener("click", (e) => {
+                increment();
+            });
+
+            function decrement() {
+                var value = val;
+                value--;
+                if (!min || value >= min) {
+                    val = value;
+                }
+                element.children[1].attributes[2].value = val;
+            }
+
+            function increment() {
+                var value = val;
+                value++;
+                if (!max || value <= max) {
+                    val = value++;
+                }
+                element.children[1].attributes[2].value = val;
+            }
+        }
+    } catch (err) {
+        console.log(":::", err);
+    }
+
+
+    // calculate the total for cart
+    function getTotal(total, price, val) {
+        for (let i = 0; i < total.length; i++) {
+            const t = total[i];
+            const p = price[i];
+            const v = val[i];
+
+            t.innerHTML = "$" + (Number(p.innerHTML.replace(/[$]|[,]/g, "")) * Number(v.attributes[2].value)).toLocaleString();
+        }
+        try {
+            subTotalUpdate();
+        }
+        catch (err) {
+            console.log(":::", err);
+        }
+    }
+
+    // to get values to calculate cart product counter
+    try {
+        for (let i = 0; i < my_product_counter.length; i++) {
+            const element = my_product_counter[i];
+            const price = document.getElementsByClassName("cart_price");
+            const total = document.getElementsByClassName("cart_total");
+            const val = document.getElementsByClassName("cart_value");
+
+            let decr = element.children[0];
+            let incr = element.children[2];
+
+            incr.addEventListener("click", () => {
+                getTotal(total, price, val);
+            });
+
+            decr.addEventListener("click", () => {
+                getTotal(total, price, val);
+            });
+
+        }
+
+    } catch (err) {
+        console.log(":::", err);
+    }
+
+
+    function subTotalUpdate() {
+        const subT = document.getElementById("subTotal");
+        const total = document.getElementsByClassName("cart_total");
+        let h = 0;
+        for (let i = 0; i < total.length; i++) {
+            const ele = total[i];
+            h += Number(ele.innerHTML.replace(/[$]|[,]/g, ""));
+        }
+
+        subT.innerHTML = "$" + h.toLocaleString();
+    }
+
+    try {
+        subTotalUpdate();
+    } catch (err) {
+        console.log(":::::err", err);
+    }
+
+}

@@ -7,27 +7,24 @@ const Users = require("../model/Users");
 
 module.exports = {
     // @desc    THIS SCRIPT GETS THE CART ITEMS
-    getItems: async (userId, callback) => {
-        const user = await Users.findById({ _id: userId }).exec((err, user)=>{
-            Cart.findById({_id: user.cart}, (err, item) => {
-                if (err) {
-                    console.log(":::Err ", err);
-                }else{
-                    callback(err, item);
-                }
-            });
+    userCart: (userId, callback) => {
 
+        _get.CurrentUser(userId, (user) => {
+            Cart.findById({ _id: user.cart }).then((cart) => {
+                callback(err, item);
+            }).catch((err) => {
+                // catch cart errors
+                console.log(":::Err ", err);
+            });
         });
-        
+
     },
-    updateCart: async (res, productID, userID) => {
+    updateCart: async (productID, userID) => {
         // get the user
-        try {
-            const user = await Users.findById({ _id: userID }).exec();
+        _get.CurrentUser(userId, (user) => {
             console.log("user.id ", user._id);
             // get the user's cart
-            try {
-                const cart = await Cart.findById({ _id: user.cart }).exec();
+            this.userCart(userId, (cart)=>{
                 console.log("cart.id ", cart._id);
                 // get the product
                 _get.ProductByID(productID, async (product) => {
@@ -70,21 +67,14 @@ module.exports = {
                         console.log(":::err: ", err);
                     }
                 });
-            } catch (err) {
-                // catch cart errors
-                console.log(":::err: ", err);
-            }
-        }
-        catch (err) {
-            // catch user errors
-            console.log(":::ERR: ", err);
-        }
-    },
-    delete: (itemId) => {
-        Cart.deleteOne({ _id: itemId }, (err) => {
-            if (err) {
-                console.log("::::::::::::", err);
-            }
+            });
         });
+    },
+    delete: (userId, itemId) => {
+        console.log("Delete: ", itemId);
+
+        this.userCart(userId, (cart)=>{
+            // delete cart product
+        })
     }
 }
