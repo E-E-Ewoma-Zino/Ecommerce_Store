@@ -253,20 +253,15 @@ router.get("/cart", (req, res) => {
 
         // res.send("OK");
         if (req.isAuthenticated())
-            cart.userCart(req.user._id, (err, item) => {
-                if (err) {
-                    console.log("::::::", err);
-                }
-                else {
-                    res.render("layouts/cart", {
-                        website: _get.Pages().website,
-                        login: req.isAuthenticated(),
-                        user: req.user,
-                        name: _get.Pages().cart.name,
-                        breadcrumb: _get.Pages().cart.breadcrumb,
-                        cart: item
-                    });
-                }
+            cart.userCart(req.user._id, (item) => {
+                res.render("layouts/cart", {
+                    website: _get.Pages().website,
+                    login: req.isAuthenticated(),
+                    user: req.user,
+                    name: _get.Pages().cart.name,
+                    breadcrumb: _get.Pages().cart.breadcrumb,
+                    cart: item
+                });
             });
         else res.render("layouts/cart", {
             website: _get.Pages().website,
@@ -306,7 +301,7 @@ router.post("/cart", (req, res) => {
 
         // console.log(productID, quantity);
 
-        // cart.updateCart(productID);
+        cart.updateCart(productID, req.user._id);
         res.redirect("/cart");
     } catch (err) {
         console.error(":::", err);
@@ -329,8 +324,10 @@ router.delete("/cart", (req, res) => {
         const itemId = req.body.itemId;
         console.log(itemId);
 
-
-        cart.delete(itemId);
+        if (req.isAuthenticated()) cart.delete(req.user._id, itemId, (bool)=>{
+            console.log("console.",bool);
+        });
+        else res.redirect("/login");
 
         res.redirect("/cart");
 
@@ -359,15 +356,9 @@ router.get("/cartitem", (req, res) => {
     // second product:
 
     try {
-        if (req.isAuthenticated())
-            cart.userCart(req.user._id, (err, item) => {
-                if (err) {
-                    console.log("::::::", err);
-                }
-                else {
-                    res.send(item)
-                }
-            });
+        if (req.isAuthenticated()) cart.userCart(req.user._id, (item) => {
+            res.send(item);
+        });
         else res.send("No user loged in");
     } catch (err) {
         console.error(":::", err);
@@ -408,7 +399,7 @@ router.post("/cartitem", (req, res) => {
                 _get.ProductByID(productId, (result) => {
                     // console.log(result);
                     arr.push(result)
-                    if (i == req.body.length -1) res.send(arr);
+                    if (i == req.body.length - 1) res.send(arr);
                 });
             }
         }

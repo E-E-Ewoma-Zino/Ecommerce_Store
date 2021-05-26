@@ -27,13 +27,10 @@ module.exports = {
     // @desc    THIS SCRIPT GETS FROM A CALLBACK FUNCTION THE TEMP/CURRENT USER
     CurrentUser: (userId, callback) => {
         Users.findOne({ _id: userId }).then((user) => {
-            // console.log(user);
             callback(user);
         }).catch((err) => {
             // catch user errors
-            res.status(500).json({
-                mess: err
-            });
+            console.error("::::ERR ", err);
         });
     },
 };

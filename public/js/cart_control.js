@@ -172,7 +172,7 @@ let localCart = [];
 // THIS FUNCTION POST CART TO ORDER DB
 // Post to the cart using axios
 function postCartData(cart, data) {
-    if (navigator.onLine) {
+    if (!navigator.onLine) {
         alert("You are Offline");
         return;
     }
