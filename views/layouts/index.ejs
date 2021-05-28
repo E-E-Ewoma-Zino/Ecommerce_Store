@@ -160,22 +160,27 @@
                                     <% for (let i=0; i < 8; i++) { %>
                                         <% const product=products[i]; %>
                                             <div class="col-lg-3 col-sm-6">
-                                                <div class="single_product_item">                                                    
-                                                    <img class="product_img" src="<%= product.img[0].path %>" alt="<%= product.name %>">
+                                                <div class="single_product_item">
+                                                    <img class="product_img" src="<%= product.img[0].path %>"
+                                                        alt="<%= product.name %>">
                                                     <div class="single_product_text">
                                                         <h4>
                                                             <%= product.name %>
                                                         </h4>
                                                         <h3>₦<%= product.price %>
                                                         </h3>
-                                                        <div class="cart_love d-flex justify-content-around align-items-center">
-                                                            <a href="category/<%= product._id %>" target="_blank"><i class="fa fa-info"></i></a>
-                                                            <a href="#x" class="add_cart"><i class="fas fa-cart-plus"></i></a>
+                                                        <div
+                                                            class="cart_love d-flex justify-content-around align-items-center">
+                                                            <a href="category/<%= product._id %>" target="_blank"><i
+                                                                    class="fa fa-info"></i></a>
+                                                            <a href="#x" class="add_cart"><i
+                                                                    class="fas fa-cart-plus"></i></a>
                                                             <a href="#x" class="add_love"><i class="ti-heart"></i></a>
                                                         </div>
                                                     </div>
                                                     <input class="productID" type="hidden" name="productID"
                                                         value="<%= product._id %>">
+                                                   
                                                 </div>
                                             </div>
                                             <% } %>
@@ -186,25 +191,29 @@
                                 <div class="row align-items-center justify-content-between">
                                     <% for (let i=8; i> 0; i--) { %>
                                         <% const product=products[i]; %>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="single_product_item">                                                    
-                                                <img class="product_img" src="<%= product.img[0].path %>" alt="<%= product.name %>">
-                                                <div class="single_product_text">
-                                                    <h4>
-                                                        <%= product.name %>
-                                                    </h4>
-                                                    <h3>₦<%= product.price %>
-                                                    </h3>
-                                                    <div class="cart_love d-flex justify-content-around align-items-center">
-                                                        <a href="category/<%= product._id %>" target="_blank"><i class="fa fa-info"></i></a>
-                                                        <a href="#x" class="add_cart"><i class="fas fa-cart-plus"></i></a>
-                                                        <a href="#x" class="add_love"><i class="ti-heart"></i></a>
+                                            <div class="col-lg-3 col-sm-6">
+                                                <div class="single_product_item">
+                                                    <img class="product_img" src="<%= product.img[0].path %>"
+                                                        alt="<%= product.name %>">
+                                                    <div class="single_product_text">
+                                                        <h4>
+                                                            <%= product.name %>
+                                                        </h4>
+                                                        <h3>₦<%= product.price %>
+                                                        </h3>
+                                                        <div
+                                                            class="cart_love d-flex justify-content-around align-items-center">
+                                                            <a href="category/<%= product._id %>" target="_blank"><i
+                                                                    class="fa fa-info"></i></a>
+                                                            <a href="#x" class="add_cart"><i
+                                                                    class="fas fa-cart-plus"></i></a>
+                                                            <a href="#x" class="add_love"><i class="ti-heart"></i></a>
+                                                        </div>
                                                     </div>
+                                                    <input class="productID" type="hidden" name="productID"
+                                                        value="<%= product._id %>">
                                                 </div>
-                                                <input class="productID" type="hidden" name="productID"
-                                                    value="<%= product._id %>">
                                             </div>
-                                        </div>
                                             <% } %>
 
                                 </div>

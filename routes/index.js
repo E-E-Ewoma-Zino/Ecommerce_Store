@@ -325,11 +325,16 @@ router.delete("/cart", (req, res) => {
         console.log(itemId);
 
         if (req.isAuthenticated()) cart.delete(req.user._id, itemId, (bool)=>{
-            console.log("console.",bool);
+            if(bool) res.redirect("/cart");
+            else {
+                // so the browser would wait for the item to delete before reloading
+                setTimeout(() => {
+                    res.redirect("/cart");                    
+                }, 7000);
+            }
         });
         else res.redirect("/login");
 
-        res.redirect("/cart");
 
     } catch (err) {
         console.error(":::", err);
@@ -388,14 +393,14 @@ router.post("/cartitem", (req, res) => {
         // this is the total no of products that was ordered for
         // const quantity = req.body.data.quantity;
         if (req.isAuthenticated())
-            cart.updateCart(req.body.productID, req.body.userID);
+            cart.updateCart(req.body.productID, req.body.quantity, req.user._Id);
         else {
             // console.log(req.body);
             let arr = [];
             // if the postCartData from the cart_control sends an empty array do:
             if (req.body.length == 0 || undefined || null) res.send([]);
             for (let i = 0; i < req.body.length; i++) {
-                const productId = req.body[i];
+                const productId = req.body[i].productID;
                 _get.ProductByID(productId, (result) => {
                     // console.log(result);
                     arr.push(result)

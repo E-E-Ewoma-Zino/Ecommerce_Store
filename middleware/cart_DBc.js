@@ -19,7 +19,7 @@ module.exports = {
             });
         });
     },
-    updateCart: async function (productId, userId) {
+    updateCart: async function (productId, quantity, userId) {
         // get the user
         _get.CurrentUser(userId, (user) => {
             console.log("user.id ", user._id);
@@ -33,7 +33,7 @@ module.exports = {
                         // if cart is empty add to cart
                         if (cart.item.length == 0) {
                             console.log("ADD NEW PRODUCT");
-                            await cart.item.push({ product: product });
+                            await cart.item.push({ product: product, quantity: quantity });
                         }
                         else {
                             // for each elements in cart, check if productID is already in cart
@@ -51,7 +51,7 @@ module.exports = {
                                 // if product not in Cart
                                 if (cart.item.length - 1 == i) {
                                     console.log("ADD NEW PRODUCT");
-                                    await cart.item.push({ product: product });
+                                    await cart.item.push({ product: product, quantity: quantity });
                                     break;
                                 }
                             }
@@ -95,6 +95,7 @@ module.exports = {
             cart.save().then(() => {
                 console.log("Done");
                 // reload = true;
+                // am using a callback to return true so i can only reload the page when it finished saving
                 callback(true);
             }).catch((err) => {
                 console.log(":::err could not save ", err);
