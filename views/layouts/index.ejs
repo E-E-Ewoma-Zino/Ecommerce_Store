@@ -173,14 +173,14 @@
                                                             class="cart_love d-flex justify-content-around align-items-center">
                                                             <a href="category/<%= product._id %>" target="_blank"><i
                                                                     class="fa fa-info"></i></a>
-                                                            <a href="#x" class="add_cart"><i
-                                                                    class="fas fa-cart-plus"></i></a>
+                                                            <a href="#x" class="add_cart"><i class="fas fa-cart-plus"></i></a>
                                                             <a href="#x" class="add_love"><i class="ti-heart"></i></a>
                                                         </div>
                                                     </div>
                                                     <input class="productID" type="hidden" name="productID"
                                                         value="<%= product._id %>">
-                                                   
+                                                    <input class="quantity" type="hidden" name="quantity"
+                                                    value="1">                                                   
                                                 </div>
                                             </div>
                                             <% } %>
@@ -212,6 +212,8 @@
                                                     </div>
                                                     <input class="productID" type="hidden" name="productID"
                                                         value="<%= product._id %>">
+                                                        <input class="quantity" type="hidden" name="quantity"
+                                                        value="1">
                                                 </div>
                                             </div>
                                             <% } %>

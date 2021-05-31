@@ -1,69 +1,75 @@
-<%- include("../partials/_head") %> 
-<%- include("../partials/_header") %> 
-<%- include("../components/breadcrumb") %> 
-    
-    
+<%- include("../partials/_head") %>
+    <%- include("../partials/_header") %>
+        <%- include("../components/breadcrumb") %>
 
-    <!--================login_part Area =================-->
-    <section class="login_part padding_top">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-md-6">
-                    <div class="login_part_text text-center">
-                        <div class="login_part_text_iner">
-                            <h2>New to our Shop?</h2>
-                            <p>There are advances being made in science and technology
-                                everyday, and a good example of this is the</p>
-                            <a href="/signup" class="btn_3">Create an Account</a>
+
+
+            <!--================login_part Area =================-->
+            <section class="login_part padding_top">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="login_part_text text-center">
+                                <div class="login_part_text_iner">
+                                    <h2>New to our Shop?</h2>
+                                    <p>There are advances being made in science and technology
+                                        everyday, and a good example of this is the</p>
+                                    <a href="/signup" class="btn_3">Create an Account</a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    <div class="login_part_form">
-                        <div class="login_part_form_iner">
-                            <h3>Welcome Back ! <br>
-                                Please Sign in now</h3>
-                                <% if (msg) { %>
-                                    <div class="alert alert-danger alert-dismissible">
-                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                        <%= msg %>
-                                    </div>
-                                <% } %>
-                            <form class="row contact_form" action="/login" method="POST">
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="email" class="form-control" id="email" name="email"
-                                        placeholder="Email" value="damienking@gmail.com" required>
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="password" class="form-control" id="password" name="password"
-                                        placeholder="Password" value="damienking" required>
-                                </div>
-                                <div class="col-md-12 form-group">
-                                    <!-- <div class="creat_account d-flex align-items-center">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="login_part_form">
+                                <div class="login_part_form_iner">
+                                    <h3>Welcome Back ! <br>
+                                        Please Sign in now</h3>
+                                    <% if (msg) { %>
+                                        <div class="alert alert-danger alert-dismissible">
+                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                            <%= msg %>
+                                        </div>
+                                        <% } %>
+                                            <form class="row contact_form" action="/login" method="POST">
+                                                <div class="col-md-12 form-group p_star">
+                                                    <input type="email" class="form-control" id="email" name="email"
+                                                        placeholder="Email" value="damienking@gmail.com" required>
+                                                </div>
+                                                <div class="col-md-12 form-group p_star">
+                                                    <input type="password" class="form-control" id="password"
+                                                        name="password" placeholder="Password" value="damienking"
+                                                        required>
+                                                </div>
+                                                <div class="col-md-12 form-group">
+                                                    <!-- <div class="creat_account d-flex align-items-center">
                                         <input type="checkbox" id="f-option" name="selector">
                                         <label for="f-option">Remember me</label>
                                     </div> -->
-                                    <button type="submit" value="submit" class="btn_3">
-                                        log in
-                                    </button>
-                                    <a class="lost_pass" href="#">forget password?</a>
+                                                    <input type="hidden" name="cartData" id="cartData" value="">
+                                                    <button type="submit" id="sync" value="submit" class="btn_3">
+                                                        log in
+                                                    </button>
+                                                    <a class="lost_pass" href="#">forget password?</a>
+                                                </div>
+                                            </form>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-    <!--================login_part end =================-->
+            </section>
+            <!--================login_part end =================-->
 
 
 
 
-<%- include("../components/best_seller") %> 
+            <%- include("../components/best_seller") %>
 
 
-<%- include("../components/subscribe_area") %> 
-  <%- include("../partials/_footer") %> 
-  <%- include("../partials/_scripts") %> 
-      
+                <%- include("../components/subscribe_area") %>
+                    <%- include("../partials/_footer") %>
+                        <script>
+                            // TODO: When a user is logging in or signing up, sync cart_DB and cart_LS
+                            // console.log("lol", localStorage.getItem("cart"));
+                            const data = document.getElementById("cartData").setAttribute("value", localStorage.getItem("cart"));
+                        </script>
+                        <%- include("../partials/_scripts") %>

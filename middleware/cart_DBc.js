@@ -4,7 +4,7 @@ const _ = require("lodash");
 const _get = require("./get");
 const Cart = require("../model/Cart");
 const Users = require("../model/Users");
-const { functions } = require("lodash");
+const logger = require("../middleware/logger");
 
 module.exports = {
     // @desc    THIS SCRIPT GETS THE CART ITEMS
@@ -20,19 +20,20 @@ module.exports = {
         });
     },
     updateCart: async function (productId, quantity, userId) {
+        logger.logArg3(":OKOK:", productId, quantity, userId);
         // get the user
         _get.CurrentUser(userId, (user) => {
-            console.log("user.id ", user._id);
+            logger.logArg("user.id ", user._id);
             // get the user's cart
-            this.userCart(userId, (cart)=>{
-                console.log("cart.id ", cart._id);
+            this.userCart(userId, (cart) => {
+                logger.logArg("cart.id ", cart._id);
                 // get the product
                 _get.ProductByID(productId, async (product) => {
                     try {
-                        console.log("Adding process");
+                        logger.log("Adding process");
                         // if cart is empty add to cart
                         if (cart.item.length == 0) {
-                            console.log("ADD NEW PRODUCT");
+                            logger.log("ADD NEW PRODUCT");
                             await cart.item.push({ product: product, quantity: quantity });
                         }
                         else {
@@ -41,16 +42,22 @@ module.exports = {
                                 const item = cart.item[i];
                                 // if it is in cart remove
                                 if (item.product._id == productId) {
-                                    console.log("PRODUCT ALREADY EXIST");
-                                    // delete an item if it already exist
-                                    // cart.item.splice(i, 1);
-                                    // console.log("PRODUCT DELETED");
+                                    logger.log("PRODUCT ALREADY EXIST");
+                                    // updating
+                                    // i am very sorry for doing this. But nothing else was working :(
+                                    // first: delete the product from array
+                                    cart.item.splice(i, 1);
+                                    logger.log("PRODUCT DELETED");
+                                    // then: update it. forgive my bad code :(
+                                    await cart.item.push({ product: product, quantity: quantity });
+                                    // cart.item.quantity = quantity;
+                                    logger.log("PRODUCT UPDATING");
                                     break;
                                 }
                                 // if loop is at the end and productID not found add it
                                 // if product not in Cart
                                 if (cart.item.length - 1 == i) {
-                                    console.log("ADD NEW PRODUCT");
+                                    logger.log("ADD NEW PRODUCT");
                                     await cart.item.push({ product: product, quantity: quantity });
                                     break;
                                 }
@@ -58,7 +65,7 @@ module.exports = {
                         }
                         // save cart
                         cart.save().then(() => {
-                            console.log("Done");
+                            logger.log("Done");
                         }).catch((err) => {
                             console.log(":::err could not save ", err);
                         });
@@ -75,19 +82,19 @@ module.exports = {
         console.log("User: ", userId);
         let reload;
 
-        this.userCart(userId, (cart)=>{
+        this.userCart(userId, (cart) => {
             // delete cart product
             for (let i = 0; i < cart.item.length; i++) {
                 const item = cart.item[i];
-                if(item.product._id == itemId){
-                    console.log("Delete ",item.product._id, itemId);
+                if (item.product._id == itemId) {
+                    console.log("Delete ", item.product._id, itemId);
                     // remove that item from the array
                     cart.item.splice(i, 1);
                     // if you want you can return the deleted cart
                     // return;
                     break;
                 }
-                else{
+                else {
                     console.log("next");
                 }
             }
@@ -104,3 +111,8 @@ module.exports = {
         // return reload;
     }
 }
+
+
+
+// db.carts.update({_id: "60ac51316bf61733b8ab57cf"}, {$set: {"item.0.quantity": 20}})
+// 60b29af5da3b342b08eb0585

@@ -1,5 +1,6 @@
 // 
-// holds productID in array
+
+// holds productID in array ✅
 let cartArray = [];
 const logIn = document.getElementById("logIn").attributes[3].value == "true" ? true : false;
 // not useful
@@ -20,7 +21,7 @@ else {
 }
 
 
-// adds items to cart
+// adds items to cart ✅
 const cartBtn = document.getElementsByClassName("add_cart");
 
 function checked(i) {
@@ -30,18 +31,22 @@ function checked(i) {
     document.querySelectorAll(".cart_love")[i].children[1].classList.add("see");
     document.querySelectorAll(".cart_love")[i].children[2].classList.add("see");
 }
+console.log(":::::MUST PRINTk::");
 
 try {
     for (let i = 0; i < cartBtn.length; i++) {
         const cart = cartBtn[i];
 
         cart.addEventListener("click", () => {
+            // console.log(":::::MUST PRINTl::", productID, quantity);
+
             const productID = cart.parentElement.parentElement.parentElement.children[2].attributes[3].value;
-            const quantity = cart.parentElement.parentElement.parentElement.children[2].attributes[3].value;
+            const quantity = cart.parentElement.parentElement.parentElement.children[3].attributes[3].value;
 
-            checked(i)
+            checked(i);
+            console.log(":::::::", productID, quantity);
 
-            // TODO: MAKE A FUCTION TO ADD TO CART ARRAY            
+            // TODO: MAKE A FUCTION TO ADD TO CART ARRAY    ✅         
             addToCart(cart, productID, quantity);
             save(cartArray);
 
@@ -53,27 +58,30 @@ try {
     console.log(":::", err);
 }
 
-// function to check if item in cart already exist
+// function to check if item in cart already exist ✅
 function addToCart(cart, productID, quantity) {
+    console.log(":::::MUST PRINT::", productID, quantity);
     if (logIn) {
         addToCart2(cart, productID, quantity);
     } else {
         // add first item
         if (cartArray.length == 0) {
-            cartArray.push({productID: productID, quantity: quantity});
+            cartArray.push({ productID: productID, quantity: quantity });
 
             // toggle 
-            cart.firstElementChild.classList.remove("fa-cart-plus");
-            cart.firstElementChild.classList.add("fa-check");
+            // start loading untile the product is added
+            cart.innerHTML = `<img class="d-inline-block" src="/img/loader.svg" alt="loading" width="25px" height="25px">`;
+            cart.innerHTML = `<i class="fas fa-check text-success"></i>`;
             cartCounter();
         }
         else {
+            console.log(":::::::", productID, quantity);
             // check if item already in cart
             for (let i = 0; i < cartArray.length; i++) {
                 const item = cartArray[i];
 
                 // if its in cart skip
-                if (item == productID) {
+                if (item.productID == productID) {
                     console.log("item already added");
                     // if item already exist remove it
                     // removeItem(cartArray, item);
@@ -85,11 +93,13 @@ function addToCart(cart, productID, quantity) {
                 else {
                     // if search all and item not found add item
                     if (i == cartArray.length - 1) {
+                        console.log(":::::::", productID, quantity);
                         console.log("added new item");
-                        cartArray.push({productID: productID, quantity: quantity});
+                        cartArray.push({ productID: productID, quantity: quantity });
                         // toggle 
-                        cart.firstElementChild.classList.remove("fa-cart-plus");
-                        cart.firstElementChild.classList.add("fa-check");
+                        // start loading untile the product is added
+                        cart.innerHTML = `<img class="d-inline-block" src="/img/loader.svg" alt="loading" width="25px" height="25px">`;
+                        cart.innerHTML = `<i class="fas fa-check text-success"></i>`;
                         break;
                     }
                     cartCounter();
@@ -104,27 +114,31 @@ function addToCart(cart, productID, quantity) {
     cartCounter();
 }
 
-// TODO: Remove item from cart
+// TODO: Remove item from cart ✅
 // removes a specific item from the ARRAY
 function removeItem(arr, value) {
-    var index = arr.indexOf(value);
-    if (index > -1) {
-        arr.splice(index, 1);
-    }
+    arr.forEach((item, index) => {
+        if (value.productID == item.productID) {
+            console.log("Deleting... ", item.productID);
+            arr.splice(index, 1);
+            console.log("Done");
+        }
+    });
+    console.log("withIN ", arr);
     return arr;
 }
 
-// TODO: save cart to local storage
+// TODO: save cart to local storage ✅
 function save(arr) {
     arr = JSON.stringify(arr);
     localStorage.setItem("cart", arr);
 }
-// gets array from local storage
+// gets array from local storage ✅
 function getCartItem() {
     return JSON.parse(localStorage.getItem("cart"));
 }
 
-// TODO: MAKE A FUNCTION TO DISPLAY PRODUCTS IN CART
+// TODO: MAKE A FUNCTION TO DISPLAY PRODUCTS IN CART ✅
 // when link goes to cart
 // get the total cart number
 let cartData;
@@ -153,7 +167,7 @@ function addToCart2(cart, productID, quantity) {
 getCartData();
 
 
-// Get req to get all cart
+// Get req to get all cart ✅
 function getCartData() {
     axios.get("http://localhost:3000/cartitem").then((res) => {
         // console.log("res::: ", res.data);
@@ -170,12 +184,12 @@ function getCartData() {
 // Store post data
 let localCart = [];
 
-// THIS FUNCTION POST CART TO ORDER DB
+// THIS FUNCTION POST CART TO ORDER DB ✅
 // Post to the cart using axios
 function postCartData(cart, data) {
     if (navigator.onLine) {
         alert("You are Offline");
-        return;
+
     }
     let config = {
         timeout: 10000
@@ -184,14 +198,14 @@ function postCartData(cart, data) {
     // start loading untile the product is added
     cart.innerHTML = `<img class="d-inline-block" src="/img/loader.svg" alt="loading" width="25px" height="25px">`;
     // 
-    console.log("data ", data);
+    // console.log("data ", data);
     axios.post("http://localhost:3000/cartitem", data, config).then(function (res) {
-        // console.log(res);
+        console.log("data ", res.data);
         localCart = res.data;
 
         // When cart is clicked, postCartData() is called and this
         //  cartBody is called and in uses data gotten from cart to fill cart table
-        if (localCart.length >= 0) cartBody(localCart);
+        if (!logIn && localCart.length >= 0) cartBody(localCart);
 
         // updates cart counter
         // toggle 
@@ -213,7 +227,7 @@ function postCartData(cart, data) {
 }
 
 
-// update cart counter
+// update cart counter ✅
 function cartCounter() {
     const cart_alert = document.getElementById("cart_alert");
 
@@ -243,20 +257,20 @@ function cartCounter() {
 }
 
 if (!logIn) checkedCart(getCartItem());
-// IF CART HAS BEEN SELECTED MARK IT (FOR USER)
+// IF CART HAS BEEN SELECTED MARK IT (FOR USER AND OFFLINE USER) ✅
 function checkedCart(items) {
-
+    console.log(" am here", items);
     try {
         for (let i = 0; i < cartBtn.length; i++) {
             const cart = cartBtn[i];
             // Get all the product id
-            const productID = cart.parentElement.parentElement.parentElement.lastElementChild.attributes[3].value;
+            const productID = cart.parentElement.parentElement.parentElement.children[2].attributes[3].value;
             // check if item already in cart
             for (let j = 0; j < items.length; j++) {
                 // get the products in the local storage
                 let item;
                 if (logIn) item = items[j].product._id;
-                else item = items[j];
+                else item = items[j].productID;
 
 
                 // if its in cart skip
@@ -269,14 +283,7 @@ function checkedCart(items) {
                     break;
                 }
                 else {
-
-                    // if search all and item not found add item
-                    if (j == items.length - 1) {
-                        // if the item is not in cart don't check it
-                        cart.firstElementChild.classList.add("fa-cart-plus");
-                        cart.firstElementChild.classList.remove("fa-check");
-                        break;
-                    }
+                    // Do nothing
                     continue;
                 }
             }
@@ -288,11 +295,11 @@ function checkedCart(items) {
 }
 
 
-// TODO: display localstorage items in cart
+// TODO: display localstorage items in cart ✅
 function cartBody(items) {
     console.log("Render ", items);
     const tbody = document.getElementById("tbody");
-    let body = (img, name, total, price, id) => `<tr>
+    let body = (img, name, quantity, total, price, id) => `<tr>
     <td>
         <div class="media">
             <div class="d-flex">
@@ -321,7 +328,7 @@ function cartBody(items) {
                 <i class="ti-angle-down"></i>
             </span>
             <input class="input-number cart_value" type="text"
-                value="1" min="0"
+                value="${quantity}" min="0"
                 max="${total}" tabindex="-1">
             <span class="input-number-increment">
                 <i class="ti-angle-up"></i>
@@ -338,11 +345,12 @@ function cartBody(items) {
             <i class="fa fa-times"></i>
         </button>
     </td>
-</tr>
-`;
+</tr>`;
+
+    // cancatinate all cart product and put it in html ✅
     let concat = "";
-    items.forEach(item => {
-        concat += body(item.img[0].path, item.name, item.totalNo, item.price, item._id);
+    items.forEach((item, index) => {
+        concat += body(item.img[0].path, item.name, getCartItem()[index].quantity, item.totalNo, item.price, item._id);
     });
     concat += `<tr>
     <td></td>
@@ -355,25 +363,53 @@ function cartBody(items) {
     </td>
 </tr>`;
     tbody.innerHTML = concat;
-    // tedious
+    // tedious :(
     iWantedToExpoortTheseFunctionButExportDidNotWork();
 
     const deleteCart = document.getElementsByClassName("delete");
 
     for (let i = 0; i < deleteCart.length; i++) {
         const item = deleteCart[i];
-        const val = item.firstElementChild.attributes[2].value;
         item.addEventListener("click", () => {
-            console.log("Remove ", val);
-            // remove from local cart then save to local cart
+            const productID = item.firstElementChild.attributes[2].value;
+            // const quantity = item.parentElement.parentElement.children[3].firstElementChild.children[1].attributes[2].value;
+            const quantity = document.getElementsByClassName("cart_value")[i].attributes[2].value;
+            const val = {
+                productID: productID,
+                quantity: quantity
+            };
+            // console.log("value ", val);
+            // It should work now :|
             save(removeItem(cartArray, val));
             // This will post the new cart date and re-render the cart
             postCartData({}, getCartItem());
         });
     }
+
+    // to check if sync btn is clicked
+    const cart_value = document.getElementsByClassName("cart_value");
+    for (let i = 0; i < cart_value.length; i++) {
+        const item = cart_value[i];
+        const increment = item.parentElement.lastElementChild;
+        const decrement = item.parentElement.firstElementChild;
+
+        increment.addEventListener("click", () => {
+            const itemValue = item.attributes[2].value;
+            const productId = item.parentElement.parentElement.parentElement.lastElementChild.firstElementChild.firstElementChild.attributes[2].value;
+
+            updateCart_LS(productId, itemValue);
+        });
+
+        decrement.addEventListener("click", () => {
+            const itemValue = item.attributes[2].value;
+            const productId = item.parentElement.parentElement.parentElement.lastElementChild.firstElementChild.firstElementChild.attributes[2].value;
+
+            updateCart_LS(productId, itemValue);
+        });
+    }
 }
 
-// functions to make the tbody have function
+// functions to make the tbody have function ✅
 function iWantedToExpoortTheseFunctionButExportDidNotWork() {
     // click counter js
     //  to increase and decrease product counter
@@ -483,3 +519,57 @@ function iWantedToExpoortTheseFunctionButExportDidNotWork() {
     }
 
 }
+
+// Update cart quantity for cart_LS✅
+function updateCart_LS(productId, value) {
+    console.log("updating ", productId, value);
+
+    for (let i = 0; i < cartArray.length; i++) {
+        const arr = cartArray[i];
+        if (arr.productID == productId) {
+            // console.log("check ", arr);
+            // console.log("updating ", value);
+            arr.quantity = value;
+            break;
+        }
+    }
+    // console.log(cartArray);
+    save(cartArray);
+}
+
+// Update cart quantity for cart_DB
+function updateCart_DB(productId, value) {
+    // sends new data to database
+    postCartData({}, {
+        productID: productId,
+        quantity: value
+    });
+}
+
+// if cart quantity increase. Update
+const cart_value = document.getElementsByClassName("cart_value");
+
+for (let i = 0; i < cart_value.length; i++) {
+    const item = cart_value[i];
+    const increment = item.parentElement.lastElementChild;
+    const decrement = item.parentElement.firstElementChild;
+
+    increment.addEventListener("click", () => {
+        const itemValue = item.attributes[2].value;
+        const productId = item.parentElement.parentElement.parentElement.lastElementChild.firstElementChild.children[1].attributes[2].value;
+
+        console.log("it ", productId, itemValue);
+        if(logIn) updateCart_DB(productId, itemValue);
+    });
+
+    decrement.addEventListener("click", () => {
+        const itemValue = item.attributes[2].value;
+        const productId = item.parentElement.parentElement.parentElement.lastElementChild.firstElementChild.children[1].attributes[2].value;
+
+        if(logIn) updateCart_LS(productId, itemValue);
+    });
+}
+
+
+// TODO: When a user is logging in or signing up, sync cart_DB and cart_LS
+// this code is in the logIn and signUp pages(go there)

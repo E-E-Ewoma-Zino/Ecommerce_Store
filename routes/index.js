@@ -6,11 +6,10 @@ const Users = require("../model/Users");
 const Orders = require("../model/Orders");
 const _get = require("../middleware/get");
 const search = require("../middleware/search");
+const logger = require("../middleware/logger");
 const cart = require("../middleware/cart_DBc");
 const tmpUser = require("../middleware/createTempUser");
 const uploadPage = require("../middleware/uploadPages");
-const { reverse } = require("lodash");
-
 // TODO: FIND A WAY TO HANDLE ERRORS CAUSED BY NETWORK FAILURE
 
 
@@ -21,7 +20,6 @@ const router = express.Router();
 uploadPage();
 // @desc    create temp user
 // tmpUser();
-
 
 // @desc    Landing page
 // @route   GET /
@@ -392,8 +390,9 @@ router.post("/cartitem", (req, res) => {
         // const productID = req.body.data.productID;
         // this is the total no of products that was ordered for
         // const quantity = req.body.data.quantity;
+         console.log(req.body);
         if (req.isAuthenticated())
-            cart.updateCart(req.body.productID, req.body.quantity, req.user._Id);
+            cart.updateCart(req.body.productID, req.body.quantity, req.user._id);
         else {
             // console.log(req.body);
             let arr = [];
@@ -403,7 +402,7 @@ router.post("/cartitem", (req, res) => {
                 const productId = req.body[i].productID;
                 _get.ProductByID(productId, (result) => {
                     // console.log(result);
-                    arr.push(result)
+                    arr.push(result);
                     if (i == req.body.length - 1) res.send(arr);
                 });
             }
@@ -482,6 +481,9 @@ router.get("/login", (req, res) => {
 router.post("/login", (req, res, next) => {
 
     try {
+        // get the data from the cart_LocalStorage
+        const cart_LS = JSON.parse(req.body.cartData);
+        logger.logArg("post asiox ", cart_LS);
         const user = new Users({
             username: req.body.email,
             password: req.body.password
@@ -501,6 +503,7 @@ router.post("/login", (req, res, next) => {
             else {
                 passport.authenticate('local', function (err, user, info) {
                     if (err) {
+                        req.logOut();
                         return res.render("layouts/login", {
                             website: _get.Pages().website,
                             login: req.isAuthenticated(),
@@ -523,7 +526,15 @@ router.post("/login", (req, res, next) => {
                     }
                     req.logIn(user, function (err) {
                         if (err) { return next(err); }
-                        return res.redirect("/");
+                        else{
+                            // this part updates the cart with the data from the localStorage
+                            for (let i = 0; i < cart_LS.length; i++) {
+                                const item = cart_LS[i];
+                                logger.logArg2("Logging", item.productID, item.quantity);
+                                cart.updateCart(item.productID, item.quantity, req.user._id);
+                            }
+                            return res.redirect("/");
+                        }
                     });
                 })(req, res, next);
             }
