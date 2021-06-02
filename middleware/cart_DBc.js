@@ -1,10 +1,9 @@
 
 // THIS FILE CONTROLES THE MONGOOSE DATABASE FOR CART
-const _ = require("lodash");
 const _get = require("./get");
 const Cart = require("../model/Cart");
-const Users = require("../model/Users");
 const logger = require("../middleware/logger");
+const messageBird = require("./messageBird");
 
 module.exports = {
     // @desc    THIS SCRIPT GETS THE CART ITEMS
@@ -34,6 +33,8 @@ module.exports = {
                         // if cart is empty add to cart
                         if (cart.item.length == 0) {
                             logger.log("ADD NEW PRODUCT");
+                            messageBird.message("success", "Added New Item to Cart");
+                            logger.logArg("mnbv",messageBird.fly);
                             await cart.item.push({ product: product, quantity: quantity });
                         }
                         else {
@@ -43,6 +44,7 @@ module.exports = {
                                 // if it is in cart remove
                                 if (item.product._id == productId) {
                                     logger.log("PRODUCT ALREADY EXIST");
+
                                     // updating
                                     // i am very sorry for doing this. But nothing else was working :(
                                     // first: delete the product from array
@@ -52,12 +54,17 @@ module.exports = {
                                     await cart.item.push({ product: product, quantity: quantity });
                                     // cart.item.quantity = quantity;
                                     logger.log("PRODUCT UPDATING");
+                                    messageBird.message("success", "Updated New Item to Cart");
+                            logger.logArg("mnbv",messageBird.fly);
+
                                     break;
                                 }
                                 // if loop is at the end and productID not found add it
                                 // if product not in Cart
                                 if (cart.item.length - 1 == i) {
                                     logger.log("ADD NEW PRODUCT");
+                                    messageBird.message("success", "Added New Item to Cart");
+                            logger.logArg("mnbv",messageBird.fly);
                                     await cart.item.push({ product: product, quantity: quantity });
                                     break;
                                 }
@@ -71,6 +78,8 @@ module.exports = {
                         });
                     } catch (err) {
                         // catch product errors
+                        messageBird.message("danger", "Failed to Add Item to Cart");
+                        logger.logArg("mnbv",messageBird.fly);
                         console.log(":::err: ", err);
                     }
                 });
@@ -80,7 +89,6 @@ module.exports = {
     delete: function (userId, itemId, callback) {
         console.log("Delete: ", itemId);
         console.log("User: ", userId);
-        let reload;
 
         this.userCart(userId, (cart) => {
             // delete cart product

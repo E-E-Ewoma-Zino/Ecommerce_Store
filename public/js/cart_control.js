@@ -192,7 +192,7 @@ function postCartData(cart, data) {
 
     }
     let config = {
-        timeout: 10000
+        timeout: 4000
     }
 
     // start loading untile the product is added
@@ -200,7 +200,7 @@ function postCartData(cart, data) {
     // 
     // console.log("data ", data);
     axios.post("http://localhost:3000/cartitem", data, config).then(function (res) {
-        console.log("data ", res.data);
+        // console.log("data ", res.data);
         localCart = res.data;
 
         // When cart is clicked, postCartData() is called and this
@@ -212,17 +212,10 @@ function postCartData(cart, data) {
         getCartData();
         cart.innerHTML = `<i class="fas fa-check text-success"></i>`;
     }).catch(function (err) {
-        if (err == "Error: timeout of 10000ms exceeded") {
-            getCartData();
-            console.log("Time out");
-            console.log("Posted to cart");
-            cart.innerHTML = `<i class="fas fa-check text-success"></i>`;
-        } else {
-            // toggle 
-            console.error("Could not add to cart! ", err);
-            cart.innerHTML = `<i class="fas fa-times text-danger"></i>`;
-            cart.firstElementChild.classList.remove("fa-cart-plus");
-        }
+        // toggle 
+        console.error("Could not add to cart! ", err);
+        cart.innerHTML = `<i class="fas fa-times text-danger"></i>`;
+        cart.firstElementChild.classList.remove("fa-cart-plus");
     });
 }
 
@@ -559,17 +552,23 @@ for (let i = 0; i < cart_value.length; i++) {
         const productId = item.parentElement.parentElement.parentElement.lastElementChild.firstElementChild.children[1].attributes[2].value;
 
         console.log("it ", productId, itemValue);
-        if(logIn) updateCart_DB(productId, itemValue);
+        if (logIn) updateCart_DB(productId, itemValue);
     });
 
     decrement.addEventListener("click", () => {
         const itemValue = item.attributes[2].value;
         const productId = item.parentElement.parentElement.parentElement.lastElementChild.firstElementChild.children[1].attributes[2].value;
 
-        if(logIn) updateCart_LS(productId, itemValue);
+        if (logIn) updateCart_LS(productId, itemValue);
     });
 }
 
 
 // TODO: When a user is logging in or signing up, sync cart_DB and cart_LS
 // this code is in the logIn and signUp pages(go there)
+
+// If the user is loged in that means there will be no need for the data in localStorage
+// because the data has been transfered to cart_DB. So we are clearing cart_LS
+console.log("user.", logIn);
+if (logIn) localStorage.clear();
+console.log("LOL ", localStorage.getItem("cart"));

@@ -8825,3 +8825,29 @@ for the increase and decrease on click
   text-align: center;
   border: none
 }
+
+/* I created a message box to store and display messages */
+#messageBird{
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  z-index: 99;
+  max-width: 100%;
+  padding: 5px 2px;
+}
+
+/* .message-close{
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  width: 20px;
+  height: 20px; 
+  border: 1px solid;
+  z-index: 99;
+}
+
+.message-close button{
+  padding: 5px;
+  border: 1px solid;
+  color: #333;
+} */

@@ -66,10 +66,11 @@
 
 
                 <%- include("../components/subscribe_area") %>
-                    <%- include("../partials/_footer") %>
+                            <%- include("../components/messageBird") %>
+<%- include("../partials/_footer") %>
                         <script>
                             // TODO: When a user is logging in or signing up, sync cart_DB and cart_LS
                             // console.log("lol", localStorage.getItem("cart"));
-                            const data = document.getElementById("cartData").setAttribute("value", localStorage.getItem("cart"));
+                            const data = document.getElementById("cartData").setAttribute("value", localStorage.getItem("cart")); 
                         </script>
                         <%- include("../partials/_scripts") %>

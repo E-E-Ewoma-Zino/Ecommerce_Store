@@ -82,6 +82,7 @@
                                                 </div>
 
                                                 <div class="col-md-12 form-group">
+                                                    <input type="hidden" name="cartData" id="cartData" value="">
                                                     <button type="submit" value="submit" class="btn_3">Send</button>
                                                 </div>
                                             </form>
@@ -100,5 +101,11 @@
 
 
                 <%- include("../components/subscribe_area") %>
-                    <%- include("../partials/_footer") %>
+                            <%- include("../components/messageBird") %>
+<%- include("../partials/_footer") %>
+                    <script>
+                        // TODO: When a user is logging in or signing up, sync cart_DB and cart_LS
+                        // console.log("lol", localStorage.getItem("cart"));
+                        const data = document.getElementById("cartData").setAttribute("value", localStorage.getItem("cart")); 
+                    </script>
                         <%- include("../partials/_scripts") %>

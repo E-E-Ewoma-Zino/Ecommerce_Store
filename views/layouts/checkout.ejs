@@ -5,244 +5,215 @@
             <!--================Checkout Area =================-->
             <section class="checkout_area padding_top">
                 <div class="container">
-                    <div class="row">
-                        <div class="col-lg-7">
-                            <div class="returning_customer">
-                                <div class="check_title">
-                                    <h2>
-                                        Returning Customer?
-                                        <span>Login</span>
-                                    </h2>
-                                </div>
-                                <p>
-                                    If you have shopped with us before, please enter your details in the
-                                    boxes below. If you are a new customer, please proceed to the
-                                    Billing & Shipping section.
-                                </p>
-                                <form class="row contact_form" action="/login" method="post">
-                                    <div class="col-md-6 form-group p_star">
-                                        <input type="email" class="form-control" id="name" name="email"
-                                            placeholder="Email" />
-                                    </div>
-                                    <div class="col-md-6 form-group p_star">
-                                        <input type="password" class="form-control" id="password" name="password"
-                                            placeholder="password" />
-                                    </div>
-                                    <div class="col-md-12 form-group">
-                                        <button type="submit" value="submit" class="btn_3">
-                                            Send
-                                        </button>
-                                        <div class="creat_account">
-                                            <input type="checkbox" id="f-option" name="selector" />
-                                            <label for="f-option">Remember me</label>
-                                        </div>
-                                        <a class="lost_pass" href="#">Lost your password?</a>
-                                    </div>
-                                </form>
-                            </div>
-
-                        </div><br>
-                        <div class="col-lg-1 d-flex justify-content-center align-items-center">
-                            <div class="circle d-flex justify-content-center align-items-center">OR</div>
-                        </div><br><br><br><br>
-                        <div class="col-lg-4">
-                            <!-- If the user wants to login with social media -->
-                            <div id="socal_login">
-                                
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-body social_block">
-                                            <a class="btn btn-block btn-social btn-google d-flex justify-content-center" href="/auth/google"
-                                                role="button">
-                                                <i class="fab fa-google"></i>
-                                                Sign In
-                                            </a>
-                                        </div>
-                                        <!--  -->
-                                        <div class="card-body social_block">
-                                            <a class="btn btn-block btn-social btn-facebook d-flex justify-content-center" href="/auth/facebook"
-                                                role="button">
-                                                <i class="fab fa-facebook"></i>
-                                                Sign In
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p>
-                                    Sign in or create an account easily!
-                                </p>
-                            </div>
-                        </div>
-                    </div><br><br><br><br>
-                    <div class="cupon_area">
-                        <div class="check_title">
-                            <h2>
-                                Have a coupon?
-                                <span>Enter your code</span>
-                            </h2>
-                        </div>
-                        <input type="text" placeholder="Enter coupon code" />
-                        <a class="tp_btn" href="#">Apply Coupon</a>
-                    </div>
-                    <div class="billing_details">
+                    <% if(!login){ %>
                         <div class="row">
-                            <div class="col-lg-8">
-
-                                <div id="manual">
-                                    <!-- If the user wants to login manualy -->
-                                    <h3>Billing Details
-                                        <p>- Create an account</p>
-                                    </h3>
-
-                                    <form class="row contact_form" action="/signup" method="POST">
+                            <div class="col-lg-7">
+                                <div class="returning_customer">
+                                    <div class="check_title">
+                                        <h2>
+                                            Returning Customer?
+                                            <span>Login</span>
+                                        </h2>
+                                    </div>
+                                    <p>
+                                        If you have shopped with us before, please enter your details in the
+                                        boxes below. If you are a new customer, please proceed to the
+                                        Billing & Shipping section. <br> Don't have an account? <a class="btn_4"
+                                            href="/signup">SignUp</a>
+                                    </p>
+                                    <form class="row contact_form" action="/login" method="POST">
                                         <div class="col-md-6 form-group p_star">
-                                            <input type="text" class="form-control" id="first" name="firstname"
-                                                placeholder="Firstname" required />
-                                        </div>
-                                        <div class="col-md-6 form-group p_star">
-                                            <input type="text" class="form-control" id="last" name="lastname"
-                                                placeholder="Lastname" required />
-                                        </div>
-                                        <div class="col-md-12 form-group">
-                                            <input type="text" class="form-control" id="company" name="company"
-                                                placeholder="Company name" />
+                                            <input type="email" class="form-control" id="name" name="email"
+                                                placeholder="Email" />
                                         </div>
                                         <div class="col-md-6 form-group p_star">
                                             <input type="password" class="form-control" id="password" name="password"
-                                                placeholder="Password (Don't forget it)" required />
-                                        </div>
-                                        <!-- <div class="col-md-6 form-group p_star">
-                                            <input type="password" class="form-control" id="password" name="password"
-                                                placeholder="Re-Enter Password" required />
-                                        </div> -->
-                                        <div class="col-md-6 form-group p_star">
-                                            <input type="tel" class="form-control" id="number" name="phoneNo"
-                                                placeholder="Phone no" required />
-                                        </div>
-                                        <div class="col-md-6 form-group p_star">
-                                            <input type="email" class="form-control" id="email" name="email"
-                                                placeholder="Email" required />
-                                        </div>
-                                        <div class="col-md-12 form-group p_star">
-                                            <select name="country" class="country_select" required>
-                                                <option value="1">Country</option>
-                                                <option value="2">Country</option>
-                                                <option value="4">Country</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-12 form-group p_star">
-                                            <input type="text" class="form-control" id="city" name="city"
-                                                placeholder="City" required />
-                                        </div>
-                                        <div class="col-md-12 form-group p_star">
-                                            <input type="text" class="form-control" id="add1" name="address1"
-                                                placeholder="Address 1" required />
-                                        </div>
-                                        <div class="col-md-12 form-group p_star">
-                                            <input type="text" class="form-control" id="add2" name="address2"
-                                                placeholder="Address 2 (Optional)" />
+                                                placeholder="password" />
                                         </div>
                                         <div class="col-md-12 form-group">
-                                            <input type="text" class="form-control" id="zip" name="zip"
-                                                placeholder="Postcode/ZIP" />
-                                        </div>
-                                        <div class="col-md-12 form-group">
+                                            <input type="hidden" name="cartData" id="cartData" value="">
+                                            <button type="submit" value="submit" class="btn_3">
+                                                Send
+                                            </button>
                                             <div class="creat_account">
-                                                <h3>Shipping Details</h3>
-                                                <input type="checkbox" id="f-option3" name="selector" checked/>
-                                                <label for="f-option3">Ship to a different address?</label>
+                                                <input type="checkbox" id="f-option" name="selector" />
+                                                <label for="f-option">Remember me</label>
                                             </div>
-                                            <textarea class="form-control" name="note" id="message" rows="1"
-                                                placeholder="Order Notes">Thank you!😁</textarea>
-                                        </div>
-                                        <div class="col-md-12 form-group">
-                                            <button type="submit" value="submit" class="btn_3">Send</button>
+                                            <a class="lost_pass" href="#">Lost your password?</a>
                                         </div>
                                     </form>
                                 </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="order_box">
-                                    <h2>Your Order</h2>
-                                    <ul class="list">
-                                        <li>
-                                            <a href="#">Product
-                                                <span>Total</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Fresh Blackberry
-                                                <span class="middle">x 02</span>
-                                                <span class="last">$720.00</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Fresh Tomatoes
-                                                <span class="middle">x 02</span>
-                                                <span class="last">$720.00</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Fresh Brocoli
-                                                <span class="middle">x 02</span>
-                                                <span class="last">$720.00</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <ul class="list list_2">
-                                        <li>
-                                            <a href="#">Subtotal
-                                                <span>$2160.00</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Shipping
-                                                <span>Flat rate: $50.00</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Total
-                                                <span>$2210.00</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <div class="payment_item">
-                                        <div class="radion_btn">
-                                            <input type="radio" id="f-option5" name="selector" />
-                                            <label for="f-option5">Check payments</label>
-                                            <div class="check"></div>
-                                        </div>
-                                        <p>
-                                            Please send a check to Store Name, Store Street, Store Town,
-                                            Store State / County, Store Postcode.
-                                        </p>
-                                    </div>
-                                    <div class="payment_item active">
-                                        <div class="radion_btn">
-                                            <input type="radio" id="f-option6" name="selector" />
-                                            <label for="f-option6">Paypal </label>
-                                            <img src="img/product/single-product/card.jpg" alt="" />
-                                            <div class="check"></div>
-                                        </div>
-                                        <p>
-                                            Please send a check to Store Name, Store Street, Store Town,
-                                            Store State / County, Store Postcode.
-                                        </p>
-                                    </div>
-                                    <div class="creat_account">
-                                        <input type="checkbox" id="f-option4" name="selector" />
-                                        <label for="f-option4">I’ve read and accept the </label>
-                                        <a href="#">terms & conditions*</a>
-                                    </div>
-                                    <a class="btn_3" href="#">Proceed to Paypal</a>
-                                </div>
+
                             </div>
                         </div>
-                    </div>
+                        <% } %>
+                            <div class="cupon_area">
+                                <div class="check_title">
+                                    <h2>
+                                        Have a coupon?
+                                        <span>Enter your code</span>
+                                    </h2>
+                                </div>
+                                <input type="text" placeholder="Enter coupon code" />
+                                <a class="tp_btn" href="#">Apply Coupon</a>
+                            </div>
+                            <div class="billing_details">
+                                <div class="row">
+                                    <% if(login){ %>
+                                        <div class="col-lg-8">
+
+                                            <div class="check_title">
+                                                <h2>
+                                                    Billing Details
+                                                    <span>Create an account</span>
+                                                </h2>
+                                            </div>
+                                            <form class="row contact_form mt-10" action="/checkout" method="POST">
+                                                <div class="col-md-6 form-group p_star">
+                                                    <input type="text" class="form-control" id="first" name="firstname"
+                                                        value="<%= user.firstname %>" placeholder="Firstname"
+                                                        required />
+                                                </div>
+                                                <div class="col-md-6 form-group p_star">
+                                                    <input type="text" class="form-control" id="last" name="lastname"
+                                                        value="<%= user.lastname %>" placeholder="Lastname" required />
+                                                </div>
+                                                <div class="col-md-6 form-group">
+                                                    <input type="text" class="form-control" id="company" name="company"
+                                                        value="<%= user.company %>" placeholder="Company name" />
+                                                </div>
+                                                <div class="col-md-6 form-group p_star">
+                                                    <input type="tel" class="form-control" id="number" name="phoneNo"
+                                                        value="<%= user.phoneNo %>" placeholder="Phone no" required />
+                                                </div>
+                                                <div class="col-md-6 form-group p_star">
+                                                    <input type="email" class="form-control" id="email" name="email"
+                                                        value="<%= user.username %>" placeholder="Email" required />
+                                                </div>
+                                                <div class="col-md-6 form-group p_star">
+                                                    <input type="text" class="form-control" id="country" name="country"
+                                                        value="<%= user.country %>" placeholder="Country" required />
+                                                </div>
+                                                <div class="col-md-12 form-group p_star">
+                                                    <input type="text" class="form-control" id="city" name="city"
+                                                        value="<%= user.city %>" placeholder="City" required />
+                                                </div>
+                                                <!-- Info I need -->
+                                                <div class="col-md-12 form-group p_star">
+                                                    <div class="creat_account">
+                                                        <h3>Shipping Details</h3>
+                                                    </div>
+                                                    <label for="f-option3">Ship to this address:</label>
+                                                    <input type="text" class="form-control" id="add1" name="address1"
+                                                        value="<%= user.address1 %>" placeholder="Address 1" required />
+                                                </div>
+                                                <div class="col-md-12 form-group">
+                                                    <input type="text" class="form-control" id="zip" name="zip"
+                                                        value="<%= user.zip %>" placeholder="Postcode/ZIP" />
+                                                </div>
+                                                <div class="col-md-12 form-group">
+                                                    <textarea class="form-control" name="note" id="message" rows="1"
+                                                        placeholder="Order Notes">Thank you!😁</textarea>
+                                                </div>
+                                                <div class="col-md-12 form-group">
+                                                    <input type="hidden" name="cartData" id="cartData" value="">
+                                                    <button type="submit" value="submit" class="btn_3">Send</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <% } %>
+                                            <div class="col-lg-4">
+                                                <div class="order_box">
+                                                    <h2>Your Order</h2>
+                                                    <ul class="list">
+                                                        <li>
+                                                            <a href="#">Product
+                                                                <span>Total</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Fresh Blackberry
+                                                                <span class="middle">x 02</span>
+                                                                <span class="last">$720.00</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Fresh Tomatoes
+                                                                <span class="middle">x 02</span>
+                                                                <span class="last">$720.00</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Fresh Brocoli
+                                                                <span class="middle">x 02</span>
+                                                                <span class="last">$720.00</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <ul class="list list_2">
+                                                        <li>
+                                                            <a href="#">Subtotal
+                                                                <span>$2160.00</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Shipping
+                                                                <span>Flat rate: $50.00</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Total
+                                                                <span>$2210.00</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="payment_item">
+                                                        <div class="radion_btn">
+                                                            <input type="radio" id="f-option5" name="selector" />
+                                                            <label for="f-option5">Check payments</label>
+                                                            <div class="check"></div>
+                                                        </div>
+                                                        <p>
+                                                            Please send a check to Store Name, Store Street, Store Town,
+                                                            Store State / County, Store Postcode.
+                                                        </p>
+                                                    </div>
+                                                    <div class="payment_item active">
+                                                        <div class="radion_btn">
+                                                            <input type="radio" id="f-option6" name="selector" />
+                                                            <label for="f-option6">Paypal </label>
+                                                            <img src="img/product/single-product/card.jpg" alt="" />
+                                                            <div class="check"></div>
+                                                        </div>
+                                                        <p>
+                                                            Please send a check to Store Name, Store Street, Store Town,
+                                                            Store State / County, Store Postcode.
+                                                        </p>
+                                                    </div>
+                                                    <div class="creat_account">
+                                                        <input type="checkbox" id="f-option4" name="selector" />
+                                                        <label for="f-option4">I’ve read and accept the </label>
+                                                        <a href="#">terms & conditions*</a>
+                                                    </div>
+                                                    <% if(!login){ %> 
+                                                        <a class="btn_3" href="/login">LogIn To Proceed</a>
+                                                        <% }else{ %> 
+                                                            <a class="btn_3" href="#">Proceed to Paypal</a>
+                                                    <% } %> 
+                                                </div>
+                                            </div>
+                                </div>
+                            </div>
                 </div>
             </section>
             <!--================End Checkout Area =================-->
 
 
-            <%- include("../partials/_footer") %>
-                <%- include("../partials/_scripts") %>
+            <%- include("../components/messageBird") %>
+                <%- include("../partials/_footer") %>
+                    <script>
+                        // TODO: When a user is logging in or signing up, sync cart_DB and cart_LS
+                        // console.log("lol", localStorage.getItem("cart"));
+                        const data = document.getElementById("cartData").setAttribute("value", localStorage.getItem("cart"));
+                    </script>
+                    <%- include("../partials/_scripts") %>

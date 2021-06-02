@@ -37,6 +37,18 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// trying to build my messaging system
+app.use((req, res, next) => {
+    res.messageBird = (alert, message) => {
+        res.fly = {
+            alert: alert,
+            message: message
+        }
+    }
+
+    next();
+});
+
 // Configure the DB
 connectDB();
 
