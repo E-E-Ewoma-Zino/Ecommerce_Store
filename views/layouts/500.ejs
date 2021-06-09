@@ -4,7 +4,7 @@
     
 <div class="container text-center bg-warning mt-10">
   <div class="alert alert-danger" role="alert">
-    <%= msg == "undefined"? "": msg %>
+    <%= bird == "undefined"? "": bird.message %>
   </div>
 </div>
     
@@ -13,7 +13,6 @@
 
 
 <%- include("../components/subscribe_area") %> 
-          <%- include("../components/messageBird") %>
 <%- include("../partials/_footer") %> 
   <%- include("../partials/_scripts") %> 
       

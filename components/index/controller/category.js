@@ -1,16 +1,17 @@
 // all the category route code goes here
-const _get = require("../../../middleware/get");
-const search = require("../../../middleware/search");
-const logger = require("../../../middleware/logger");
-const messageBird = require("../../../middleware/messageBird");
+const _get = require(__dirname + "../../../../middleware/get");
+const search = require(__dirname + "../../../../middleware/search");
+const logger = require(__dirname + "../../../../middleware/logger");
+const _bird = require(__dirname + "../../../../middleware/messageBird");
 
 
 module.exports = {
     get(req, res) {
+
         let product;
 
-        messageBird.message("success", "I am a really big boy");
-        logger.log(messageBird.fly);
+        _bird.message("success", "I am a really big boy");
+        logger.log(_bird.fly);
 
         console.log(req.user);
         try {
@@ -22,7 +23,7 @@ module.exports = {
                             website: _get.Pages().website,
                             login: req.isAuthenticated(),
                             user: req.user,
-                            message: messageBird.fly,
+                            bird: _bird.fly,
                             name: _get.Pages().category.name,
                             breadcrumb: _get.Pages().category.breadcrumb,
                             products: product,
@@ -39,7 +40,7 @@ module.exports = {
                             website: _get.Pages().website,
                             login: req.isAuthenticated(),
                             user: req.user,
-                            message: messageBird.fly,
+                            bird: _bird.fly,
                             name: _get.Pages().category.name,
                             breadcrumb: _get.Pages().category.breadcrumb,
                             products: product,
@@ -56,7 +57,7 @@ module.exports = {
                             website: _get.Pages().website,
                             login: req.isAuthenticated(),
                             user: req.user,
-                            message: messageBird.fly,
+                            bird: _bird.fly,
                             name: _get.Pages().category.name,
                             breadcrumb: _get.Pages().category.breadcrumb,
                             products: product,
@@ -73,7 +74,7 @@ module.exports = {
                             website: _get.Pages().website,
                             login: req.isAuthenticated(),
                             user: req.user,
-                            message: messageBird.fly,
+                            bird: _bird.fly,
                             name: _get.Pages().category.name,
                             breadcrumb: _get.Pages().category.breadcrumb,
                             products: product,
@@ -89,7 +90,7 @@ module.exports = {
                         website: _get.Pages().website,
                         login: req.isAuthenticated(),
                         user: req.user,
-                        message: messageBird.fly,
+                        bird: _bird.fly,
                         name: _get.Pages().category.name,
                         breadcrumb: _get.Pages().category.breadcrumb,
                         products: product,
@@ -99,21 +100,24 @@ module.exports = {
                     });
                     break;
             }
-        } catch (err) {
+        
+         } catch (err) {
             console.error(":::", err);
-            res.render("layouts/500", {
+            _bird.message("danger", err);
+res.render("layouts/500", {
                 website: _get.Pages().website,
                 login: req.isAuthenticated(),
                 user: req.user,
-                message: messageBird.fly,
+                bird: _bird.fly,
                 name: `500 - Internal server error!`,
                 breadcrumb: `❌🤦‍♂️`,
                 product: _get.AllProduct(),
-                msg: err
+                
             });
         }
     },
     post(req, res) {
+
         const searchTerm = req.body.search;
         console.log(searchTerm);
         let allSearch = [];
@@ -148,7 +152,7 @@ module.exports = {
                     website: _get.Pages().website,
                     login: req.isAuthenticated(),
                     user: req.user,
-                    message: messageBird.fly,
+                    bird: _bird.fly,
                     name: _get.Pages().category.name,
                     breadcrumb: _get.Pages().category.breadcrumb,
                     products: allSearch,
@@ -158,17 +162,19 @@ module.exports = {
                     brands: _get.AllBrand()
                 });
             });
-        } catch (err) {
+        
+         } catch (err) {
             console.error(":::", err);
-            res.render("layouts/500", {
+            _bird.message("danger", err);
+res.render("layouts/500", {
                 website: _get.Pages().website,
                 login: req.isAuthenticated(),
                 user: req.user,
-                message: messageBird.fly,
+                bird: _bird.fly,
                 name: `500 - Internal server error!`,
                 breadcrumb: `❌🤦‍♂️`,
                 product: _get.AllProduct(),
-                msg: err
+                
             });
         }
     }

@@ -23,10 +23,10 @@
                                 <div class="login_part_form_iner">
                                     <h3>Welcome Back ! <br>
                                         Please Sign in now</h3>
-                                    <% if (msg) { %>
-                                        <div class="alert alert-danger alert-dismissible">
+                                    <% if (bird) { %>
+                                        <div class="alert alert<%= bird.alert %> alert-dismissible">
                                             <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                            <%= msg %>
+                                            <%= bird.message %>
                                         </div>
                                         <% } %>
                                             <form class="row contact_form" action="/login" method="POST">

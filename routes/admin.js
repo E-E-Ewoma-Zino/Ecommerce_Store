@@ -2,7 +2,7 @@
 const path = require("path");
 const multer = require("multer");
 const express = require("express");
-const addProduct = require("../components/admin/controller/addProduct");
+const addProduct = require(__dirname + "../../components/admin/controller/addProduct");
 
 // This router is for the home / routes
 const router = express.Router();

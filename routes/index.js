@@ -1,16 +1,16 @@
 // ALL ROUTES GOINT TO THE HOME "/" WILL BE IN THIS PAGE
 const express = require("express");
-const uploadPage = require("../middleware/uploadPages");
-const cart_controller = require("../components/index/controller/cart");
-const home_controller = require("../components/index/controller/home");
-const logIn_controller = require("../components/index/controller/login");
-const signUp_controller = require("../components/index/controller/signUp");
-const logOut_controller = require("../components/index/controller/logOut");
-const error_404_controller = require("../components/error/controller/404");
-const contact_controller = require("../components/index/controller/contact");
-const category_controller = require("../components/index/controller/category");
-const cartItem_controller = require("../components/index/controller/cartItem");
-const checkout_controller = require("../components/index/controller/checkout");
+const uploadPage = require(__dirname + "../../middleware/uploadPages");
+const cart_controller = require(__dirname + "../../components/index/controller/cart");
+const home_controller = require(__dirname + "../../components/index/controller/home");
+const logIn_controller = require(__dirname + "../../components/index/controller/login");
+const signUp_controller = require(__dirname + "../../components/index/controller/signUp");
+const logOut_controller = require(__dirname + "../../components/index/controller/logOut");
+const error_404_controller = require(__dirname + "../../components/error/controller/404");
+const contact_controller = require(__dirname + "../../components/index/controller/contact");
+const category_controller = require(__dirname + "../../components/index/controller/category");
+const cartItem_controller = require(__dirname + "../../components/index/controller/cartItem");
+const checkout_controller = require(__dirname + "../../components/index/controller/checkout");
 
 // TODO: FIND A WAY TO HANDLE ERRORS CAUSED BY NETWORK FAILURE ?
 
@@ -23,7 +23,7 @@ uploadPage();
 
 // @desc    Landing page
 // @route   GET /
-router.get("/", async (req, res) => home_controller(req, res))
+router.get("/", async (req, res) => home_controller(req, res));
 
 // @desc    Category page
 // @route   GET /category
@@ -60,6 +60,10 @@ router.post("/cartitem", (req, res) => cartItem_controller.post(req, res));
 // @desc    Checkout page
 // @route   GET /checkout
 router.get("/checkout", (req, res) => checkout_controller.get(req, res));
+
+// @desc    Checkout page
+// @route   POST /checkout
+router.post("/checkout", (req, res) => checkout_controller.post(req, res));
 
 // @desc    login page
 // @route   GET /login

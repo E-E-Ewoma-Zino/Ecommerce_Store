@@ -157,8 +157,10 @@
                         <div class="product_list_slider owl-carousel">
                             <div class="single_product_list_slider">
                                 <div class="row align-items-center justify-content-between">
-                                    <% for (let i=0; i < 8; i++) { %>
-                                        <% const product=products[i]; %>
+                                    <% try { %>
+                                        <% for (let i = 0; i < products.length; i++) { %>
+                                            <% const product = products[i]; %> 
+                                            <% if(i===8) break;%>
                                             <div class="col-lg-3 col-sm-6">
                                                 <div class="single_product_item">
                                                     <img class="product_img" src="<%= product.img[0].path %>"
@@ -183,39 +185,53 @@
                                                     <input class="quantity" type="hidden" name="quantity" value="1">
                                                 </div>
                                             </div>
-                                            <% } %>
-
+                                                <% } %>
+                                                    <% } catch (err) { %>
+                                                        <h3>Opps <%= err %> </h3>
+                                                        <% console.log("err:::",err) %> 
+                                                        <% } %>
                                 </div>
                             </div>
                             <div class="single_product_list_slider">
                                 <div class="row align-items-center justify-content-between">
-                                    <% for (let i=8; i> 0; i--) { %>
-                                        <% const product=products[i]; %>
-                                            <div class="col-lg-3 col-sm-6">
-                                                <div class="single_product_item">
-                                                    <img class="product_img" src="<%= product.img[0].path %>"
-                                                        alt="<%= product.name %>">
-                                                    <div class="single_product_text">
-                                                        <h4>
-                                                            <%= product.name %>
-                                                        </h4>
-                                                        <h3>₦<%= product.price %>
-                                                        </h3>
-                                                        <div
-                                                            class="cart_love d-flex justify-content-around align-items-center">
-                                                            <a href="category/<%= product._id %>" target="_blank"><i
-                                                                    class="fa fa-info"></i></a>
-                                                            <a href="#x" class="add_cart"><i
-                                                                    class="fas fa-cart-plus"></i></a>
-                                                            <a href="#x" class="add_love"><i class="ti-heart"></i></a>
+                                    <% try{ %>                                        
+                                        <% for (let i = 0; i < products.length; i++) { %>
+                                            <% const product = products[i]; %> 
+                                            <%# break %> 
+                                            <% if(i<=8) continue;%>
+                                            <% console.log(i) %> 
+                                            <!-- i need to add more products. Bye -->
+                                                <div class="col-lg-3 col-sm-6">
+                                                    <div class="single_product_item">
+                                                        <img class="product_img" src="<%= product.img[0].path %>"
+                                                            alt="<%= product.name %>">
+                                                        <div class="single_product_text">
+                                                            <h4>
+                                                                <%= product.name %>
+                                                            </h4>
+                                                            <h3>₦<%= product.price %>
+                                                            </h3>
+                                                            <div
+                                                                class="cart_love d-flex justify-content-around align-items-center">
+                                                                <a href="category/<%= product._id %>" target="_blank"><i
+                                                                        class="fa fa-info"></i></a>
+                                                                <a href="#x" class="add_cart"><i
+                                                                        class="fas fa-cart-plus"></i></a>
+                                                                <a href="#x" class="add_love"><i
+                                                                        class="ti-heart"></i></a>
+                                                            </div>
                                                         </div>
+                                                        <input class="productID" type="hidden" name="productID"
+                                                            value="<%= product._id %>">
+                                                        <input class="quantity" type="hidden" name="quantity" value="1">
                                                     </div>
-                                                    <input class="productID" type="hidden" name="productID"
-                                                        value="<%= product._id %>">
-                                                    <input class="quantity" type="hidden" name="quantity" value="1">
                                                 </div>
-                                            </div>
-                                            <% } %>
+                                                <%# if(i===8*2) break;%>
+                                                    <% } %>
+                                                        <% } catch (err) { %>
+                                                            <h3>Opps2 <%= err %> </h3>
+                                                            <% console.log("err:::",err) %> 
+                                                            <% } %>
 
                                 </div>
                             </div>
@@ -226,8 +242,8 @@
         </section>
         <!-- product_list part start-->
 
-        
 
-                <%- include("../components/messageBird") %>
-<%- include("../partials/_footer") %>
-            <%- include("../partials/_scripts") %>
+
+        <%- include("../components/messageBird") %>
+            <%- include("../partials/_footer") %>
+                <%- include("../partials/_scripts") %>

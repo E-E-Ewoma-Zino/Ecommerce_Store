@@ -1,22 +1,22 @@
 // all the cart route code goes here
-const _get = require("../../../middleware/get");
-const messageBird = require("../../../middleware/messageBird");
-const cart = require("../../../middleware/cart_DBc");
+const _get = require(__dirname + "../../../../middleware/get");
+const _bird = require(__dirname + "../../../../middleware/messageBird");
+const cart = require(__dirname + "../../../../middleware/cart_DB");
 
 
 module.exports = {
     get(req, res) {
+        
         try {
             // cart.setCart(req.query);
 
             // res.send("OK");
-            if (req.isAuthenticated())
-                cart.userCart(req.user._id, (item) => {
+            if (req.isAuthenticated()) cart.userCart(req.user._id, (item) => {
                     res.render("layouts/cart", {
                         website: _get.Pages().website,
                         login: req.isAuthenticated(),
                         user: req.user,
-                        message: messageBird.fly,
+                        bird: _bird.fly,
                         name: _get.Pages().cart.name,
                         breadcrumb: _get.Pages().cart.breadcrumb,
                         cart: item
@@ -26,25 +26,28 @@ module.exports = {
                 website: _get.Pages().website,
                 login: req.isAuthenticated(),
                 user: req.user,
-                message: messageBird.fly,
+                bird: _bird.fly,
                 name: _get.Pages().cart.name,
                 breadcrumb: _get.Pages().cart.breadcrumb
             });
-        } catch (err) {
+        
+         } catch (err) {
             console.error(":::", err);
+            _bird.message("danger", err);
             res.render("layouts/500", {
                 website: _get.Pages().website,
                 login: req.isAuthenticated(),
                 user: req.user,
-                message: messageBird.fly,
+                bird: _bird.fly,
                 name: `500 - Internal server error!`,
                 breadcrumb: `❌🤦‍♂️`,
                 product: _get.AllProduct(),
-                msg: err
+
             });
         }
     },
     post(req, res) {
+        
         // when a product is added to cart, we will get the 
         // USER, PRODUCT and ORDER
         // first User with _get.CurrentUser()
@@ -59,21 +62,24 @@ module.exports = {
 
             cart.updateCart(productID, req.user._id);
             res.redirect("/cart");
-        } catch (err) {
+        
+         } catch (err) {
             console.error(":::", err);
+            _bird.message("danger", err);
             res.render("layouts/500", {
                 website: _get.Pages().website,
                 login: req.isAuthenticated(),
                 user: req.user,
-                message: messageBird.fly,
+                bird: _bird.fly,
                 name: `500 - Internal server error!`,
                 breadcrumb: `❌🤦‍♂️`,
                 product: _get.AllProduct(),
-                msg: err
+
             });
         }
     },
     delete(req, res) {
+        
         try {
             const itemId = req.body.itemId;
             console.log(itemId);
@@ -88,17 +94,19 @@ module.exports = {
                 }
             });
             else res.redirect("/login");
-        } catch (err) {
+        
+         } catch (err) {
             console.error(":::", err);
+            _bird.message("danger", err);
             res.render("layouts/500", {
                 website: _get.Pages().website,
                 login: req.isAuthenticated(),
                 user: req.user,
-                message: messageBird.fly,
+                bird: _bird.fly,
                 name: `500 - Internal server error!`,
                 breadcrumb: `❌🤦‍♂️`,
                 product: _get.AllProduct(),
-                msg: err
+
             });
         }
     }

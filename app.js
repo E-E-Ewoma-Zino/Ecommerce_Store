@@ -2,8 +2,8 @@ require("dotenv").config({ path: "./config/config.env" });
 const LocalStrategy = require("passport-local").Strategy;
 const methodOveride = require("method-override");
 const session = require("express-session");
-const connectDB = require("./config/db");
-const Users = require("./model/Users");
+const connectDB = require(__dirname + "/config/db");
+const Users = require(__dirname + "/model/Users");
 const passport = require("passport");
 const express = require("express");
 const path = require("path");
@@ -37,7 +37,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// trying to build my messaging system
+// Building my messaging system
 app.use((req, res, next) => {
     res.messageBird = (alert, message) => {
         res.fly = {
@@ -51,7 +51,6 @@ app.use((req, res, next) => {
 
 // Configure the DB
 connectDB();
-
 passport.use(Users.createStrategy());
 // THIS WAS WHAT I USE IN FIXING THE PASSPORT AUTHENTICATION ISSUE
 passport.use(new LocalStrategy({

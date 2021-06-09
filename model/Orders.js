@@ -2,12 +2,14 @@ const mongoose = require("mongoose");
 
 // @desc    Order Schema
 const orderSchema = new mongoose.Schema({
-    user: {
-        type: String
-    },
-    orders: {
-        type: Array
-    },
+    user: String,
+    cart: Array,
+    total: String,
+    coupon: String,
+    details: Object,
+    shipping: String,
+    subtotal: String,
+    orderMethod: String,
     createdAt: {
         type: Date,
         default: Date.now

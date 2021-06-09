@@ -2,8 +2,8 @@
 // THIS FILE CONTROLES THE MONGOOSE DATABASE FOR CART
 const _get = require("./get");
 const Cart = require("../model/Cart");
-const logger = require("../middleware/logger");
-const messageBird = require("./messageBird");
+const logger = require("./logger");
+const _bird = require("./messageBird");
 
 module.exports = {
     // @desc    THIS SCRIPT GETS THE CART ITEMS
@@ -33,8 +33,8 @@ module.exports = {
                         // if cart is empty add to cart
                         if (cart.item.length == 0) {
                             logger.log("ADD NEW PRODUCT");
-                            messageBird.message("success", "Added New Item to Cart");
-                            logger.logArg("mnbv",messageBird.fly);
+                            _bird.message("success", "Added New Item to Cart");
+                            logger.logArg("mnbv", _bird.fly);
                             await cart.item.push({ product: product, quantity: quantity });
                         }
                         else {
@@ -54,8 +54,8 @@ module.exports = {
                                     await cart.item.push({ product: product, quantity: quantity });
                                     // cart.item.quantity = quantity;
                                     logger.log("PRODUCT UPDATING");
-                                    messageBird.message("success", "Updated New Item to Cart");
-                            logger.logArg("mnbv",messageBird.fly);
+                                    _bird.message("success", "Updated New Item to Cart");
+                                    logger.logArg("mnbv", _bird.fly);
 
                                     break;
                                 }
@@ -63,8 +63,8 @@ module.exports = {
                                 // if product not in Cart
                                 if (cart.item.length - 1 == i) {
                                     logger.log("ADD NEW PRODUCT");
-                                    messageBird.message("success", "Added New Item to Cart");
-                            logger.logArg("mnbv",messageBird.fly);
+                                    _bird.message("success", "Added New Item to Cart");
+                                    logger.logArg("mnbv", _bird.fly);
                                     await cart.item.push({ product: product, quantity: quantity });
                                     break;
                                 }
@@ -78,8 +78,8 @@ module.exports = {
                         });
                     } catch (err) {
                         // catch product errors
-                        messageBird.message("danger", "Failed to Add Item to Cart");
-                        logger.logArg("mnbv",messageBird.fly);
+                        _bird.message("danger", "Failed to Add Item to Cart");
+                        logger.logArg("mnbv", _bird.fly);
                         console.log(":::err: ", err);
                     }
                 });

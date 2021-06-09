@@ -44,9 +44,6 @@ const userSchema = new mongoose.Schema({
     zip: {
         type: String
     },
-    note: {
-        type: String,
-    },
     createdAt: {
         type: Date,
         default: Date.now

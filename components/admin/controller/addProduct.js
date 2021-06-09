@@ -1,13 +1,14 @@
 // all the admin/addProduct code goes here
 const _ = require("lodash");
 
-const _get = require("../../../middleware/get");
-const messageBird = require("../../../middleware/messageBird");
-const cart = require("../../../middleware/cart_DBc");
-const Products = require("../../../model/Products");
+const _get = require(__dirname + "../../../../middleware/get");
+const _bird = require(__dirname + "../../../../middleware/messageBird");
+const cart = require(__dirname + "../../../../middleware/cart_DB");
+const Products = require(__dirname + "../../../../model/Products");
 
 module.exports = {
     get(req, res) {
+
 
         try {
             res.render("admin/addProduct", {
@@ -17,21 +18,24 @@ module.exports = {
                 login: req.isAuthenticated(),
                 user: req.user
             });
-        } catch (err) {
+        
+         } catch (err) {
             console.error(":::::", err);
-            res.render("layouts/500", {
+            _bird.message("danger", err);
+res.render("layouts/500", {
                 website: _get.Pages().website,
                 login: req.isAuthenticated(),
                 user: req.user,
-message: messageBird.fly,
+bird: _bird.fly,
                 name: `500 - Internal server error!`,
                 breadcrumb: `❌🤦‍♂️`,
                 product: _get.AllProduct(),
-                msg: err
+                
             });
         }
     },
     post(req, res) {
+
         // console.log(req.body);
         try {
             // console.log(":::::", req.files);
@@ -55,11 +59,11 @@ message: messageBird.fly,
                         website: _get.Pages().website,
                         login: req.isAuthenticated(),
                         user: req.user,
-message: messageBird.fly,
+bird: _bird.fly,
                         name: _get.Pages().addProduct.name,
                         breadcrumb: _get.Pages().addProduct.breadcrumb,
                         cartTotal: cart.total(),
-                        msg: err
+                        
                     });
                 }
                 else {
@@ -67,16 +71,17 @@ message: messageBird.fly,
                     res.redirect("/admin/addProduct");
                 }
             });
-        } catch (err) {
+        
+         } catch (err) {
             res.render("admin/addProduct", {
                 website: _get.Pages().website,
                 login: req.isAuthenticated(),
                 user: req.user,
-message: messageBird.fly,
+bird: _bird.fly,
                 name: _get.Pages().addProduct.name,
                 breadcrumb: _get.Pages().addProduct.breadcrumb,
                 cartTotal: cart.total(),
-                msg: err
+                
             });
         }
     }

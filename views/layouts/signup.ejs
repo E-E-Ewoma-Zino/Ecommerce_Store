@@ -24,12 +24,12 @@
                                     <h3>Welcome! <br>
                                         Please Sign up now
                                     </h3>
-                                    <% if (msg) { %>
-                                        <div class="alert alert-danger alert-dismissible">
+                                    <% if (bird) { %>
+                                        <div class="alert alert<%= bird.alert %> alert-dismissible">
                                             <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                            <%= msg %>
+                                            <%= bird.message %>
                                         </div>
-                                    <% } %>
+                                        <% } %>
 
                                             <form class="row contact_form" action="/signup" method="POST">
                                                 <div class="col-md-6 form-group p_star">
@@ -101,11 +101,11 @@
 
 
                 <%- include("../components/subscribe_area") %>
-                            <%- include("../components/messageBird") %>
-<%- include("../partials/_footer") %>
-                    <script>
-                        // TODO: When a user is logging in or signing up, sync cart_DB and cart_LS
-                        // console.log("lol", localStorage.getItem("cart"));
-                        const data = document.getElementById("cartData").setAttribute("value", localStorage.getItem("cart")); 
-                    </script>
-                        <%- include("../partials/_scripts") %>
+                    <%- include("../components/messageBird") %>
+                        <%- include("../partials/_footer") %>
+                            <script>
+                                // TODO: When a user is logging in or signing up, sync cart_DB and cart_LS
+                                // console.log("lol", localStorage.getItem("cart"));
+                                const data = document.getElementById("cartData").setAttribute("value", localStorage.getItem("cart"));
+                            </script>
+                            <%- include("../partials/_scripts") %>

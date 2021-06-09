@@ -1,7 +1,7 @@
 // all the category/: code goes here
-const _get = require("../../../middleware/get");
-const messageBird = require("../../../middleware/messageBird");
-const cart = require("../../../middleware/cart_DBc");
+const _get = require(__dirname + "../../../../middleware/get");
+const _bird = require(__dirname + "../../../../middleware/messageBird");
+const cart = require(__dirname + "../../../../middleware/cart_DB");
 
 module.exports = (req, res)=>{
     
@@ -11,22 +11,23 @@ module.exports = (req, res)=>{
                 website: _get.Pages().website,
                 login: req.isAuthenticated(),
             user: req.user,
-message: messageBird.fly,
+bird: _bird.fly,
                 name: _get.Pages().single.name,
                 breadcrumb: _get.Pages().single.breadcrumb,
                 product: product
             });
         }catch(err) {
             console.error(":::::", err);
-            res.render("layouts/500", {
+            _bird.message("danger", err);
+res.render("layouts/500", {
                 website: _get.Pages().website,
                 login: req.isAuthenticated(),
                 user: req.user,
-message: messageBird.fly,
+bird: _bird.fly,
                 name: `500 - Internal server error!`,
                 breadcrumb: `❌🤦‍♂️`,
                 product: _get.AllProduct(),
-                msg: err
+                
             });
         }
     });

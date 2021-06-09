@@ -1,5 +1,8 @@
 // 
 
+// url for the axios.get and post method
+const hostURL = "http://localhost:3000";
+
 // holds productID in array ✅
 let cartArray = [];
 const logIn = document.getElementById("logIn").attributes[3].value == "true" ? true : false;
@@ -169,7 +172,7 @@ getCartData();
 
 // Get req to get all cart ✅
 function getCartData() {
-    axios.get("http://localhost:3000/cartitem").then((res) => {
+    axios.get(hostURL + "/cartitem").then((res) => {
         // console.log("res::: ", res.data);
         cartData = res.data;
 
@@ -187,10 +190,10 @@ let localCart = [];
 // THIS FUNCTION POST CART TO ORDER DB ✅
 // Post to the cart using axios
 function postCartData(cart, data) {
-    if (navigator.onLine) {
-        alert("You are Offline");
+    // if (!navigator.onLine) {
+    //     alert("You are Offline");
 
-    }
+    // }
     let config = {
         timeout: 4000
     }
@@ -199,7 +202,7 @@ function postCartData(cart, data) {
     cart.innerHTML = `<img class="d-inline-block" src="/img/loader.svg" alt="loading" width="25px" height="25px">`;
     // 
     // console.log("data ", data);
-    axios.post("http://localhost:3000/cartitem", data, config).then(function (res) {
+    axios.post(hostURL + "/cartitem", data, config).then(function (res) {
         // console.log("data ", res.data);
         localCart = res.data;
 
@@ -547,19 +550,19 @@ for (let i = 0; i < cart_value.length; i++) {
     const increment = item.parentElement.lastElementChild;
     const decrement = item.parentElement.firstElementChild;
 
+
+    decrement.addEventListener("click", () => {
+        const itemValue = item.attributes[2].value;
+        const productId = item.parentElement.parentElement.parentElement.lastElementChild.firstElementChild.children[1].attributes[2].value;
+
+        if (logIn) updateCart_DB(productId, itemValue);
+    });
     increment.addEventListener("click", () => {
         const itemValue = item.attributes[2].value;
         const productId = item.parentElement.parentElement.parentElement.lastElementChild.firstElementChild.children[1].attributes[2].value;
 
         console.log("it ", productId, itemValue);
         if (logIn) updateCart_DB(productId, itemValue);
-    });
-
-    decrement.addEventListener("click", () => {
-        const itemValue = item.attributes[2].value;
-        const productId = item.parentElement.parentElement.parentElement.lastElementChild.firstElementChild.children[1].attributes[2].value;
-
-        if (logIn) updateCart_LS(productId, itemValue);
     });
 }
 

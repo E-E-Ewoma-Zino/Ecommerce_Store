@@ -1,6 +1,6 @@
 // all the contact route code goes here
-const _get = require("../../../middleware/get");
-const messageBird = require("../../../middleware/messageBird");
+const _get = require(__dirname + "../../../../middleware/get");
+const _bird = require(__dirname + "../../../../middleware/messageBird");
 
 
 module.exports = (req, res)=>{
@@ -9,23 +9,25 @@ module.exports = (req, res)=>{
             website: _get.Pages().website,
             login: req.isAuthenticated(),
             user: req.user,
-message: messageBird.fly,
+bird: _bird.fly,
             name: _get.Pages().contact.name,
             breadcrumb: _get.Pages().contact.breadcrumb,
             contact: _get.Pages().contact.contact
         });
 
-    } catch (err) {
+    
+         } catch (err) {
         console.error(":::", err);
-        res.render("layouts/500", {
+        _bird.message("danger", err);
+res.render("layouts/500", {
             website: _get.Pages().website,
             login: req.isAuthenticated(),
             user: req.user,
-message: messageBird.fly,
+bird: _bird.fly,
             name: `500 - Internal server error!`,
             breadcrumb: `❌🤦‍♂️`,
             product: _get.AllProduct(),
-            msg: err
+            
         });
     }
 }

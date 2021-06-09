@@ -1,39 +1,42 @@
 // all the logIn route code goes here
 const passport = require("passport");
-const Users = require("../../../model/Users");
-const _get = require("../../../middleware/get");
-const messageBird = require("../../../middleware/messageBird");
-const logger = require("../../../middleware/logger");
-const cart = require("../../../middleware/cart_DBc");
+const Users = require(__dirname + "../../../../model/Users");
+const _get = require(__dirname + "../../../../middleware/get");
+const _bird = require(__dirname + "../../../../middleware/messageBird");
+const logger = require(__dirname + "../../../../middleware/logger");
+const cart = require(__dirname + "../../../../middleware/cart_DB");
 
-
+// to know from where the get req came from to get to login
+let referer = "/";
 
 module.exports = {
     get(req, res) {
-        try {
-            messageBird.message("success", "Entered LogIn");
-            logger.logArg("mnbv", messageBird.fly);
 
+        logger.logArg("1", req.headers.referer);
+        // to make sure that the login and signUp always take you back to where you came from
+        referer = req.headers.referer == "http://localhost:3000/login" ? referer : req.headers.referer;
+        logger.log(referer);
+        try {
             res.render("layouts/login", {
                 website: _get.Pages().website,
                 login: req.isAuthenticated(),
                 user: req.user,
-                message: messageBird.fly,
+                bird: _bird.fly,
                 name: `LogIn`,
-                breadcrumb: `Home - Login`,
-                msg: ""
+                breadcrumb: `Home - Login`
             });
         } catch (err) {
+            
+            _bird.message("danger", err);
             console.error(":::", err);
             res.render("layouts/500", {
                 website: _get.Pages().website,
                 login: req.isAuthenticated(),
                 user: req.user,
-                message: messageBird.fly,
                 name: `500 - Internal server error!`,
                 breadcrumb: `❌🤦‍♂️`,
                 product: _get.AllProduct(),
-                msg: err
+                bird: _bird.fly
             });
         }
     },
@@ -51,41 +54,20 @@ module.exports = {
             req.logIn(user, (err) => {
                 if (err) {
                     console.log("::::::::::::: " + err);
-                    res.render("layouts/login", {
-                        website: _get.Pages().website,
-                        login: req.isAuthenticated(),
-                        user: req.user,
-                        message: messageBird.fly,
-                        name: `signup`,
-                        breadcrumb: `Home - signup`,
-                        msg: err
-                    });
+                    _bird.message("danger", err);
+                    res.redirect("back");
                 }
                 else {
                     passport.authenticate('local', function (err, user, info) {
                         if (err) {
                             req.logOut();
-                            return res.render("layouts/login", {
-                                website: _get.Pages().website,
-                                login: req.isAuthenticated(),
-                                user: req.user,
-                                message: messageBird.fly,
-                                name: `signup`,
-                                breadcrumb: `Home - signup`,
-                                msg: err
-                            });
+                            _bird.message("danger", err);
+                            return res.redirect("back");
                         }
                         if (!user) {
                             req.logOut();
-                            return res.render("layouts/login", {
-                                website: _get.Pages().website,
-                                login: req.isAuthenticated(),
-                                user: req.user,
-                                message: messageBird.fly,
-                                name: `signup`,
-                                breadcrumb: `Home - signup`,
-                                msg: "Incorrect email or password!"
-                            });
+                            _bird.message("danger", "Incorrect email or password!");
+                            return res.redirect("back");
                         }
                         req.logIn(user, function (err) {
                             if (err) { return next(err); }
@@ -96,8 +78,9 @@ module.exports = {
                                     logger.logArg2("Logging", item.productID, item.quantity);
                                     cart.updateCart(item.productID, item.quantity, req.user._id);
                                 }
-                                messageBird.message("success", "Finished LogIn");
-                                return res.redirect("back");
+                                logger.log(req.headers.referer);
+                                if (req.headers.referer == "http://localhost:3000/checkout") return res.redirect("back");
+                                return res.redirect(referer);
                             }
                         });
                     })(req, res, next);
@@ -105,15 +88,15 @@ module.exports = {
             });
         } catch (err) {
             console.error(":::", err);
+            _bird.message("danger", err);
             res.render("layouts/500", {
                 website: _get.Pages().website,
                 login: req.isAuthenticated(),
                 user: req.user,
-                message: messageBird.fly,
+                bird: _bird.fly,
                 name: `500 - Internal server error!`,
                 breadcrumb: `❌🤦‍♂️`,
-                product: _get.AllProduct(),
-                msg: err
+                product: _get.AllProduct()
             });
         }
     }
