@@ -1,7 +1,7 @@
 // 
 
 // url for the axios.get and post method
-const hostURL = "http://localhost:3000";
+const hostURL = window.location.origin;
 
 // holds productID in array ✅
 let cartArray = [];
