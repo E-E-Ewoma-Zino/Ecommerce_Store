@@ -28,8 +28,8 @@ app.use(methodOveride((req, res) => {
 // tell app to use express session
 app.use(session({
     secret: process.env.SECRET,
-    saveUninitialized: false,
-    resave: false
+    resave: false,
+    saveUninitialized: false
 }));
 
 
