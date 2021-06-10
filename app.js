@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "./config/config.env" });
+require("dotenv").config();
 const LocalStrategy = require("passport-local").Strategy;
 const connectDB = require(__dirname + "/config/db");
 const Users = require(__dirname + "/model/Users");
