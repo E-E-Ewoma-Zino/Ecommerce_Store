@@ -187,7 +187,7 @@
                                             </div>
                                                 <% } %>
                                                     <% } catch (err) { %>
-                                                        <h3>Opps <%= err %> </h3>
+                                                        <h3>You dont have enough products</h3>
                                                         <% console.log("err:::",err) %> 
                                                         <% } %>
                                 </div>
@@ -197,7 +197,6 @@
                                     <% try{ %>                                        
                                         <% for (let i = 0; i < products.length; i++) { %>
                                             <% const product = products[i]; %> 
-                                            <%# break %> 
                                             <% if(i<=8) continue;%>
                                             <% console.log(i) %> 
                                             <!-- i need to add more products. Bye -->
@@ -211,8 +210,7 @@
                                                             </h4>
                                                             <h3>₦<%= product.price %>
                                                             </h3>
-                                                            <div
-                                                                class="cart_love d-flex justify-content-around align-items-center">
+                                                            <div class="cart_love d-flex justify-content-around align-items-center">
                                                                 <a href="category/<%= product._id %>" target="_blank"><i
                                                                         class="fa fa-info"></i></a>
                                                                 <a href="#x" class="add_cart"><i
@@ -226,10 +224,10 @@
                                                         <input class="quantity" type="hidden" name="quantity" value="1">
                                                     </div>
                                                 </div>
-                                                <%# if(i===8*2) break;%>
+                                                <% if(i===8*2) break;%>
                                                     <% } %>
                                                         <% } catch (err) { %>
-                                                            <h3>Opps2 <%= err %> </h3>
+                                                            <h3>You dont have enough products</h3>
                                                             <% console.log("err:::",err) %> 
                                                             <% } %>
 

@@ -1,9 +1,9 @@
 require("dotenv").config({ path: "./config/config.env" });
 const LocalStrategy = require("passport-local").Strategy;
-const methodOveride = require("method-override");
-const session = require("express-session");
 const connectDB = require(__dirname + "/config/db");
 const Users = require(__dirname + "/model/Users");
+const methodOveride = require("method-override");
+const session = require("express-session");
 const passport = require("passport");
 const express = require("express");
 const path = require("path");
@@ -28,8 +28,8 @@ app.use(methodOveride((req, res) => {
 // tell app to use express session
 app.use(session({
     secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    resave: false
 }));
 
 

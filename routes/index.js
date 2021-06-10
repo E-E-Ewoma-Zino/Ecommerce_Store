@@ -5,7 +5,7 @@ const cart_controller = require(__dirname + "../../components/index/controller/c
 const home_controller = require(__dirname + "../../components/index/controller/home");
 const logIn_controller = require(__dirname + "../../components/index/controller/login");
 const signUp_controller = require(__dirname + "../../components/index/controller/signUp");
-const logOut_controller = require(__dirname + "../../components/index/controller/logOut");
+const logout_controller = require(__dirname + "../../components/index/controller/logout");
 const error_404_controller = require(__dirname + "../../components/error/controller/404");
 const contact_controller = require(__dirname + "../../components/index/controller/contact");
 const category_controller = require(__dirname + "../../components/index/controller/category");
@@ -83,7 +83,7 @@ router.post("/signup", (req, res) => signUp_controller.post(req, res));
 
 // @desc    Logout page
 // @route   POST /signup
-router.get("/logout", (req, res) => logOut_controller(req, res));
+router.get("/logout", (req, res) => logout_controller(req, res));
 
 // @desc    404 page
 // @route   GET /404
