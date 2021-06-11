@@ -5,8 +5,8 @@ const _bird = require(__dirname + "../../../../middleware/messageBird");
 
 
 module.exports = (req, res) => {
-    
-    
+
+
     try {
         logger.logArg("wedfda", _bird.fly);
         res.render("layouts/index", {
@@ -19,8 +19,8 @@ module.exports = (req, res) => {
             bird: _bird.fly
         });
 
-    
-         } catch (err) {
+
+    } catch (err) {
         console.error(":::", err);
         _bird.message("danger", err);
         res.render("layouts/500", {

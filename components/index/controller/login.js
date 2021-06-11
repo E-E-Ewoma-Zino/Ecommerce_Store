@@ -11,11 +11,14 @@ let referer = "/";
 
 module.exports = {
     get(req, res) {
-
-        logger.logArg("1", req.headers.referer);
+        req.flash("error", "error messsage");
+        req.flash("error", "error messsage 1");
+        req.flash("key", "key messsage");
+        const message = req.flash;
+        logger.log(message);
+        logger.log(req);
         // to make sure that the login and signUp always take you back to where you came from
-        referer = req.headers.referer == "http://localhost:3000/login" ? referer : req.headers.referer;
-        logger.log(referer);
+        referer = req.headers.referer == req.originUrl + "/login" ? referer : req.headers.referer;
         try {
             res.render("layouts/login", {
                 website: _get.Pages().website,
@@ -25,8 +28,7 @@ module.exports = {
                 name: `LogIn`,
                 breadcrumb: `Home - Login`
             });
-        } catch (err) {
-            
+        } catch (err) { 
             _bird.message("danger", err);
             console.error(":::", err);
             res.render("layouts/500", {
@@ -66,7 +68,8 @@ module.exports = {
                         }
                         if (!user) {
                             req.logOut();
-                            _bird.message("danger", "Incorrect email or password!");
+                            // _bird.message("danger", "Incorrect email or password!");
+
                             return res.redirect("back");
                         }
                         req.logIn(user, function (err) {

@@ -1,9 +1,8 @@
 require("dotenv").config();
-const LocalStrategy = require("passport-local").Strategy;
-const connectDB = require(__dirname + "/config/db");
-const Users = require(__dirname + "/model/Users");
 const methodOveride = require("method-override");
+const connectFlash = require("connect-flash");
 const session = require("express-session");
+const mongoose = require("mongoose");
 const passport = require("passport");
 const express = require("express");
 const path = require("path");
@@ -26,7 +25,6 @@ app.use(methodOveride((req, res) => {
 }));
 
 // tell app to use express session
-console.log(process.env.SECRET);
 app.use(session({
     secret: process.env.SECRET,
     resave: false,
@@ -34,9 +32,12 @@ app.use(session({
 }));
 
 
-// passport config
+// passport initialization
 app.use(passport.initialize());
 app.use(passport.session());
+
+// connect flash 
+app.use(connectFlash);
 
 // Building my messaging system
 app.use((req, res, next) => {
@@ -51,15 +52,10 @@ app.use((req, res, next) => {
 });
 
 // Configure the DB
-connectDB();
-passport.use(Users.createStrategy());
-// THIS WAS WHAT I USE IN FIXING THE PASSPORT AUTHENTICATION ISSUE
-passport.use(new LocalStrategy({
-    usernameField: 'email',
-}, Users.authenticate()));
+require(__dirname + "/config/db")(mongoose);
 
-passport.serializeUser(Users.serializeUser());
-passport.deserializeUser(Users.deserializeUser());
+// configute passport
+require(__dirname + "/config/passport")(passport);
 
 
 // @route
@@ -69,12 +65,6 @@ app.use("/", require("./routes/index"));
 app.use("/category", require("./routes/category"));
 // admin
 app.use("/admin", require("./routes/admin"));
-
-
-
-
-
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
