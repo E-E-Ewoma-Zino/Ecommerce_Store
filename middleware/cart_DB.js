@@ -19,22 +19,20 @@ module.exports = {
         });
     },
     updateCart: async function (productId, quantity, userId) {
-        logger.logArg3(":OKOK:", productId, quantity, userId);
+        logger.log(":OKOK:", productId, quantity, userId);
         // get the user
         _get.CurrentUser(userId, (user) => {
-            logger.logArg("user.id ", user._id);
+            logger.log("user.id ", user._id);
             // get the user's cart
             this.userCart(userId, (cart) => {
-                logger.logArg("cart.id ", cart._id);
+                logger.log("cart.id ", cart._id);
                 // get the product
                 _get.ProductByID(productId, async (product) => {
                     try {
                         logger.log("Adding process");
                         // if cart is empty add to cart
                         if (cart.item.length == 0) {
-                            logger.log("ADD NEW PRODUCT");
-                            _bird.message("success", "Added New Item to Cart");
-                            logger.logArg("mnbv", _bird.fly);
+                            logger.log("ADD NEW PRODUCT");                           
                             await cart.item.push({ product: product, quantity: quantity });
                         }
                         else {
@@ -53,18 +51,13 @@ module.exports = {
                                     // then: update it. forgive my bad code :(
                                     await cart.item.push({ product: product, quantity: quantity });
                                     // cart.item.quantity = quantity;
-                                    logger.log("PRODUCT UPDATING");
-                                    _bird.message("success", "Updated New Item to Cart");
-                                    logger.logArg("mnbv", _bird.fly);
-
+                                    logger.log("PRODUCT UPDATING");                                   
                                     break;
                                 }
                                 // if loop is at the end and productID not found add it
                                 // if product not in Cart
                                 if (cart.item.length - 1 == i) {
-                                    logger.log("ADD NEW PRODUCT");
-                                    _bird.message("success", "Added New Item to Cart");
-                                    logger.logArg("mnbv", _bird.fly);
+                                    logger.log("ADD NEW PRODUCT");                                    
                                     await cart.item.push({ product: product, quantity: quantity });
                                     break;
                                 }
@@ -78,8 +71,6 @@ module.exports = {
                         });
                     } catch (err) {
                         // catch product errors
-                        _bird.message("danger", "Failed to Add Item to Cart");
-                        logger.logArg("mnbv", _bird.fly);
                         console.log(":::err: ", err);
                     }
                 });

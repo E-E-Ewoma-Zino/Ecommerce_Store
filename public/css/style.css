@@ -2498,7 +2498,9 @@ ul {
 }
 
 /* line 130, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
+
 /* my code ewoma: i added the cart alert in the header.ejs to give me the alert of the total number of items in cart */
+
 #cart_alert {
   position: absolute;
   border-radius: 50%;
@@ -3208,7 +3210,7 @@ ul {
 /* line 105, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product_list.scss */
 
 .single_product_item:hover .single_product_text {
-  padding: 32px 32px; 
+  padding: 32px 32px;
 }
 
 /* line 109, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product_list.scss */
@@ -3218,7 +3220,7 @@ ul {
   visibility: visible;
 }
 
-.see{
+.see {
   opacity: 1!important;
   visibility: visible!important;
 }
@@ -8770,7 +8772,8 @@ for the increase and decrease on click
 }
 
 /* for when the cart is clicked */
-.add_cart:active i{
+
+.add_cart:active i {
   color: #dddddd!important;
 }
 
@@ -8782,7 +8785,8 @@ for the increase and decrease on click
 }
 
 /* style the delete option in cart page */
-.delete{
+
+.delete {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8795,18 +8799,19 @@ for the increase and decrease on click
   box-shadow: none; */
 }
 
-.delete:active{
+.delete:active {
   box-shadow: inset 11px 8px 18px 8px rgba(238, 174, 182, 0.99)
 }
 
-.delete i{
+.delete i {
   color: white;
 }
 
 /* this is for the checkout page */
 
 /* get circle shape */
-.circle{
+
+.circle {
   width: 30px;
   height: 30px;
   border: 1px solid #dddddd;
@@ -8814,6 +8819,7 @@ for the increase and decrease on click
 }
 
 /* style the auth scial btn */
+
 .btn-social>:first-child {
   position: absolute;
   left: 0;
@@ -8827,7 +8833,8 @@ for the increase and decrease on click
 }
 
 /* I created a message box to store and display messages */
-#messageBird{
+
+#messageBird {
   position: fixed;
   bottom: 0px;
   right: 0px;
@@ -8836,18 +8843,19 @@ for the increase and decrease on click
   padding: 5px 2px;
 }
 
-/* .message-close{
-  position: absolute;
-  top: 0px;
-  right: 5px;
-  width: 20px;
-  height: 20px; 
-  border: 1px solid;
-  z-index: 99;
+/* for the message i will send from the cart_control.js */
+
+#littleMessageBox {
+  display: none
 }
 
-.message-close button{
-  padding: 5px;
-  border: 1px solid;
-  color: #333;
-} */
+.loading {
+  position: fixed;
+  top: 0%;
+  width: 100%;
+  height: 100%;
+  opacity: 0.6;
+  z-index: 9;
+  display: flex!important;
+  background-color: #000000;
+}

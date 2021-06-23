@@ -6,15 +6,6 @@ const hostURL = window.location.origin;
 // holds productID in array ✅
 let cartArray = [];
 const logIn = document.getElementById("logIn").attributes[3].value == "true" ? true : false;
-// not useful
-// let user;
-
-// try {
-//     user = document.getElementById("user").attributes[3].value;
-// } catch (err) {
-//     console.log("err: ", err);
-// }
-
 
 if (getCartItem() == null || getCartItem() == undefined || getCartItem().length == 0) {
     cartArray = [];
@@ -63,7 +54,6 @@ try {
 
 // function to check if item in cart already exist ✅
 function addToCart(cart, productID, quantity) {
-    console.log(":::::MUST PRINT::", productID, quantity);
     if (logIn) {
         addToCart2(cart, productID, quantity);
     } else {
@@ -76,33 +66,42 @@ function addToCart(cart, productID, quantity) {
             cart.innerHTML = `<img class="d-inline-block" src="/img/loader.svg" alt="loading" width="25px" height="25px">`;
             cart.innerHTML = `<i class="fas fa-check text-success"></i>`;
             cartCounter();
+            // using messageBird to send message to user
+            messager({
+                replace: ["danger", "success"],
+                message: "Added ",
+                productID: productID
+            });
         }
         else {
-            console.log(":::::::", productID, quantity);
             // check if item already in cart
             for (let i = 0; i < cartArray.length; i++) {
                 const item = cartArray[i];
 
                 // if its in cart skip
                 if (item.productID == productID) {
-                    console.log("item already added");
-                    // if item already exist remove it
-                    // removeItem(cartArray, item);
-                    // console.log("removed");
-                    // cart.firstElementChild.classList.remove("fa-check");
-                    // cart.firstElementChild.classList.add("fa-cart-plus");
+                    // using messageBird to send message to user
+                    messager({
+                        replace: ["success", "primary"],
+                        message: "Item already exist ",
+                        productID: productID
+                    });
                     break;
                 }
                 else {
                     // if search all and item not found add item
                     if (i == cartArray.length - 1) {
-                        console.log(":::::::", productID, quantity);
-                        console.log("added new item");
                         cartArray.push({ productID: productID, quantity: quantity });
                         // toggle 
                         // start loading untile the product is added
                         cart.innerHTML = `<img class="d-inline-block" src="/img/loader.svg" alt="loading" width="25px" height="25px">`;
                         cart.innerHTML = `<i class="fas fa-check text-success"></i>`;
+                        // using messageBird to send message to user
+                        messager({
+                            replace: ["danger", "success"],
+                            message: "Added ",
+                            productID: productID
+                        });
                         break;
                     }
                     cartCounter();
@@ -184,6 +183,10 @@ function getCartData() {
     });
 }
 
+// using messageBird
+const messageBox = document.getElementById("littleMessageBox");
+const messageBird = document.getElementById("littleMessage");
+
 // Store post data
 let localCart = [];
 
@@ -214,14 +217,35 @@ function postCartData(cart, data) {
         // toggle 
         getCartData();
         cart.innerHTML = `<i class="fas fa-check text-success"></i>`;
+        // using messageBird to send message to user
+        messager({
+            replace: ["danger", "success"],
+            message: "Added ",
+            productID: data.productID
+        });
     }).catch(function (err) {
         // toggle 
         console.error("Could not add to cart! ", err);
         cart.innerHTML = `<i class="fas fa-times text-danger"></i>`;
-        cart.firstElementChild.classList.remove("fa-cart-plus");
+        // using messageBird to send message to user
+        messager({
+            replace: ["success", "danger"],
+            message: "Failed to add product ",
+            productID: data.productID
+        });
     });
 }
 
+// message sender
+function messager(data) {
+    $("#littleMessageBox").fadeIn(() => {
+        setTimeout(() => {
+            $("#littleMessageBox").fadeOut();
+        }, 7000);
+    });
+    messageBox.classList.replace(`alert-${data.replace[0]}`, `alert-${data.replace[1]}`);
+    if (logIn) messageBird.innerHTML = data.message + data.productID;
+}
 
 // update cart counter ✅
 function cartCounter() {

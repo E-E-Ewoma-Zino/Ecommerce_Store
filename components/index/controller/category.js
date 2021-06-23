@@ -9,11 +9,6 @@ module.exports = {
     get(req, res) {
 
         let product;
-
-        _bird.message("success", "I am a really big boy");
-        logger.log(_bird.fly);
-
-        console.log(req.user);
         try {
             switch (req.query.type) {
                 case "name":
@@ -100,11 +95,11 @@ module.exports = {
                     });
                     break;
             }
-        
-         } catch (err) {
+
+        } catch (err) {
             console.error(":::", err);
             _bird.message("danger", err);
-res.render("layouts/500", {
+            res.render("layouts/500", {
                 website: _get.Pages().website,
                 login: req.isAuthenticated(),
                 user: req.user,
@@ -112,7 +107,7 @@ res.render("layouts/500", {
                 name: `500 - Internal server error!`,
                 breadcrumb: `❌🤦‍♂️`,
                 product: _get.AllProduct(),
-                
+
             });
         }
     },
@@ -162,11 +157,11 @@ res.render("layouts/500", {
                     brands: _get.AllBrand()
                 });
             });
-        
-         } catch (err) {
+
+        } catch (err) {
             console.error(":::", err);
             _bird.message("danger", err);
-res.render("layouts/500", {
+            res.render("layouts/500", {
                 website: _get.Pages().website,
                 login: req.isAuthenticated(),
                 user: req.user,
@@ -174,7 +169,7 @@ res.render("layouts/500", {
                 name: `500 - Internal server error!`,
                 breadcrumb: `❌🤦‍♂️`,
                 product: _get.AllProduct(),
-                
+
             });
         }
     }

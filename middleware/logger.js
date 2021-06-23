@@ -3,16 +3,10 @@
 
 
 module.exports = {
-    log: (str)=>{
-        if(process.env.NODE_ENV == "Development") console.log(str);
+    log: (...All)=>{
+        if(process.env.NODE_ENV == "Development") console.log(All);
     },
-    logArg: (str,arg)=>{
-        if(process.env.NODE_ENV == "Development") console.log(str, arg);
-    },
-    logArg2: (str,arg, arg2)=>{
-        if(process.env.NODE_ENV == "Development") console.log(str, arg, arg2);
-    },
-    logArg3: (str,arg, arg2, arg3)=>{
-        if(process.env.NODE_ENV == "Development") console.log(str, arg, arg2, arg3);
-    },
+    err: (...All)=>{
+        if(process.env.NODE_ENV == "Development") console.log("Unexpected Error: ", All);
+    }
 } 

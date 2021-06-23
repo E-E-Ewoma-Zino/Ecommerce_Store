@@ -27,11 +27,11 @@
                                         <form class="row contact_form" action="/login" method="POST">
                                             <div class="col-md-6 form-group p_star">
                                                 <input type="email" class="form-control" id="name" name="email"
-                                                    placeholder="Email" />
+                                                    placeholder="Email" required />
                                             </div>
                                             <div class="col-md-6 form-group p_star">
                                                 <input type="password" class="form-control" id="password"
-                                                    name="password" placeholder="password" />
+                                                    name="password" placeholder="password" required />
                                             </div>
                                             <div class="col-md-12 form-group">
                                                 <!-- cartData helps me send the cart_LS to the server and sync it -->
@@ -52,20 +52,6 @@
                             </div>
                             <% } %>
                                 <% if(login){ %>
-                                    <div class="cupon_area">
-                                        <div class="check_title">
-                                            <h2>
-                                                Have a coupon?
-                                                <span>Enter your code</span>
-                                            </h2>
-                                        </div>
-
-                                        <!-- So it turns out that i will have to send this form separatly -->
-                                        <form action="/checkout" id="couponForm" method="post">
-                                            <input type="text" placeholder="Enter coupon code" />
-                                            <button class="btn_1 tp_btn" >Apply Coupon</button>
-                                        </form>
-                                    </div>
                                     <div class="billing_details">
                                         <div class="row">
                                             <div class="col-lg-8">
@@ -76,17 +62,16 @@
                                                         <span>Create an account</span>
                                                     </h2>
                                                 </div>
-                                                <form id="orderForm" class="row contact_form mt-10" action="/checkout"
-                                                    method="POST">
+                                                <form action="/checkout" id="orderForm" class="row contact_form mt-10" method="POST">
                                                     <div class="col-md-6 form-group p_star">
                                                         <label for="f-option3 firstname">Firstname:</label>
-                                                        <input type="text" class="form-control" id="first"
+                                                        <input type="text" class="form-control" id="firstname"
                                                             name="firstname" value="<%= user.firstname %>"
                                                             placeholder="Firstname" required />
                                                     </div>
                                                     <div class="col-md-6 form-group p_star">
                                                         <label for="f-option3 lastname">Lastname:</label>
-                                                        <input type="text" class="form-control" id="last"
+                                                        <input type="text" class="form-control" id="lastname"
                                                             name="lastname" value="<%= user.lastname %>"
                                                             placeholder="Lastname" required />
                                                     </div>
@@ -141,11 +126,22 @@
                                                     </div>
                                                     <div class="col-md-12 form-group">
                                                         <input type="hidden" name="cartData" id="cartData">
-                                                        <input type="checkbox" id="confirmForm" />
+                                                        <input type="checkbox" id="confirmForm" style="cursor: pointer;"/>
                                                         <label class="text-danger" for="f-option3"
-                                                            style="color: green;"> Check if details in this form are
+                                                            style="color: green; cursor: pointer;">Please confirm if the details in this form are
                                                             correct.</label>
                                                     </div>
+                                                    <div class="cupon_area">
+                                                        <div class="check_title">
+                                                            <h2>
+                                                                Have a coupon?
+                                                                <span>Enter your code</span>
+                                                            </h2>
+                                                        </div>
+
+                                                        <input type="text" name="coupon" placeholder="Enter coupon code" />
+                                                    </div>
+
                                                     <!-- this is the calculation for the variables -->
                                                     <% cart.item.forEach(item=> { %>
                                                         <% subTotal +=Number(item.product.price.replace(/,/g, "" )) *
@@ -154,13 +150,18 @@
                                                                 <% total=subTotal + shipping %>
                                                                     <!-- I will be sending this values to the server -->
                                                                     <input type="hidden" name="orderMethod"
-                                                                        value="PayPal">
-                                                                    <input type="hidden" name="total"
+                                                                        value="flutterwave">
+                                                                    <input type="hidden" id="total" name="total"
                                                                         value="<%= total %>">
                                                                     <input type="hidden" name="shipping"
                                                                         value="<%= shipping %>">
                                                                     <input type="hidden" name="subtotal"
                                                                         value="<%= subTotal %>">
+                                                </form>
+                                                <form>
+                                                    <!-- FLUTTERWAVE SCRIPT FOR PAYMENT -->
+                                                    <script src="https://checkout.flutterwave.com/v3.js"></script>
+                                                    <button class="btn_4" onclick="makePayment()">FLUTTERWAVE</button>
                                                 </form>
                                             </div>
                                             <div class="col-lg-4">
@@ -177,7 +178,7 @@
                                                                 <a href="#">
                                                                     <%= item.product.name %>
                                                                         <span class="middle">x <%= item.quantity %>
-                                                                                </span>
+                                                                        </span>
                                                                         <span class="last">$<%=
                                                                                 (Number(item.product.price.replace(/,/g, ""
                                                                                 )) *
@@ -223,7 +224,7 @@
                                                     <div class="payment_item active">
                                                         <div class="radion_btn">
                                                             <input type="radio" id="f-option6" name="selector" />
-                                                            <label for="f-option6">Paypal </label>
+                                                            <label for="f-option6">Flutterwave</label>
                                                             <img src="img/product/single-product/card.jpg" alt="" />
                                                             <div class="check"></div>
                                                         </div>
@@ -241,7 +242,7 @@
                                                     </div>
                                                     <a id="proceed" class="btn_3" href="#x" data-toggle="tooltip"
                                                         title="Make sure you confirm your details then check the box">Proceed
-                                                        to Paypal</a>
+                                                        to Flutterwave</a>
                                                 </div>
                                             </div>
                                             <% }else{ %>
@@ -260,52 +261,4 @@
                 <%- include("../components/messageBird") %>
                     <%- include("../partials/_footer") %>
                         <%- include("../partials/_scripts") %>
-                            <script>
-                                // TODO: When a user is logging in or signing up, sync cart_DB and cart_LS
-                                // console.log("lol", localStorage.getItem("cart"));
-                                const data = document.getElementById("cartData").setAttribute("value", localStorage.getItem("cart"));
-
-                                const confirmForm = document.getElementById("confirmForm");
-                                const proceed = document.getElementById("proceed");
-
-                                console.log("lol", confirmForm.checked);
-
-                                confirmForm.addEventListener("click", () => {
-                                    confirmForm.parentElement.lastElementChild.classList.toggle("text-danger");
-                                });
-
-                                proceed.addEventListener("mouseenter", () => {
-                                    console.log("enter");
-                                    if (!confirmForm.checked) {
-                                        console.log("enter2");
-                                        proceed.style.cursor = "no-drop";
-                                        proceed.style.backgroundColor = "#cdcdcd";
-                                        proceed.style.borderColor = "#cdcdcd";
-                                        // 
-
-                                    } else {
-                                        proceed.style.cursor = "pointer";
-                                        proceed.style.backgroundColor = "#ff3368";
-                                        proceed.style.borderColor = "#ff3368";
-                                        // proceed.setAttribute("title data-original-title", "");
-                                        // set the href to link to something when it is checked
-                                        // and do the payment methods check config
-                                    }
-                                });
-
-                                // To post the form
-                                const orderForm = document.getElementById("orderForm");
-                                const couponForm = document.getElementById("couponForm");
-                                // is this if() even working?? Opps :| i forget to add .checked :|
-                                proceed.addEventListener("click", () => {
-                                    if (confirmForm.checked) orderForm.submit();
-                                    else alert("Form not confirmed!");
-                                    // i think this should work :|
-                                });
-
-                                // for bootstraps tooltip
-                                $(document).ready(function () {
-                                    console.log("wertyui");
-                                    $('[data-toggle="tooltip"]').tooltip();
-                                });
-                            </script>
+                            <script src="/js/checkout.js"></script>

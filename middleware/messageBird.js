@@ -1,13 +1,18 @@
 // this file recieves and sends message from and to any route
 
 module.exports = {
-    fly: {},
+    fly: [],
     kill(){
-        this.fly = {};
+        setTimeout(() => {
+            this.fly.shift();            
+        }, 13000);
     },
     message(alert, message){
+        this.fly.push({
+            alert: alert,
+            message: JSON.stringify(message)
+        })
+        
         this.kill();
-        this.fly.alert = alert;
-        this.fly.message = message;
     }
 }

@@ -5,10 +5,7 @@ const _bird = require(__dirname + "../../../../middleware/messageBird");
 
 
 module.exports = (req, res) => {
-
-
     try {
-        logger.logArg("wedfda", _bird.fly);
         res.render("layouts/index", {
             home: _get.Pages().home,
             name: _get.Pages().home.name,

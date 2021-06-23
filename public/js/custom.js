@@ -433,4 +433,16 @@
             img.setAttribute("src", "\img\product\product_6.png");
         }
     }
+
+    // for loading screen
+    const load = document.getElementById("loading");
+    window.loading = loading;
+    function loading() {
+        console.log("loading");
+        load.classList.add("loading");
+    }
+    try {
+    } catch (err) {
+        console.log(":::err", err);
+    }
 }(jQuery));

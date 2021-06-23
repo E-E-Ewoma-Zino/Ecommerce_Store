@@ -8,13 +8,25 @@ const _bird = require(__dirname + "../../../../middleware/messageBird");
 const logger = require(__dirname + "../../../../middleware/logger");
 const cart = require(__dirname + "../../../../middleware/cart_DB");
 
-// to know from where the get req came from to get to login
+// to know from where the get req came from to get to signup
 let referer = "/";
 
 module.exports = {
     get(req, res) {
 
-        referer = req.headers.referer;
+        // to make sure that the login and signUp always take you back to where you came from
+        let prev = req.headers.referer == undefined ? "/" : req.headers.referer;
+        if (prev.slice(prev.search("/login")) === "/login" || prev.slice(prev.search("/signup")) === "/signup") {
+            referer = referer;
+        }
+        else {
+            referer = prev;
+        }
+        // so the user cant come back to the login route after signing in
+        if (req.isAuthenticated()) {
+            logger.log("2", referer);
+            return res.redirect(referer);
+        }
         try {
             res.render("layouts/signup", {
                 website: _get.Pages().website,
@@ -24,7 +36,7 @@ module.exports = {
                 name: `signup`,
                 breadcrumb: `Home - signup`,
             });
-            
+
         } catch (err) {
             console.error(":::", err);
             _bird.message("danger", err);
@@ -44,13 +56,9 @@ module.exports = {
         try {
             const newCart = new Cart();
             newCart.save();
-            // to make sure that the login and signUp always take you back to where you came from
-            referer = req.headers.referer == "http://localhost:3000/signup" ? referer : req.headers.referer;
 
             // get the data from the cart_LocalStorage
             const cart_LS = req.body.cartData == "null" ? [] : JSON.parse(req.body.cartData);
-            logger.logArg("something", cart_LS);
-            logger.logArg("something Again", typeof cart_LS);
 
             const newUser = new Users({
                 zip: req.body.zip,
@@ -77,7 +85,7 @@ module.exports = {
                         // this part updates the cart with the data from the localStorage
                         for (let i = 0; i < cart_LS.length; i++) {
                             const item = cart_LS[i];
-                            logger.logArg2("Logging", item.productID, item.quantity);
+                            logger.log("Logging", item.productID, item.quantity);
                             cart.updateCart(item.productID, item.quantity, req.user._id);
                         }
                         _bird.message("success", "Welcome " + req.user.firstname);
@@ -85,7 +93,7 @@ module.exports = {
                     });
                 }
             });
-            
+
         } catch (err) {
             console.error(":::", err);
             _bird.message("danger", err);

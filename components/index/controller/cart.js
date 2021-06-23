@@ -92,6 +92,7 @@ module.exports = {
                         res.redirect("/cart");
                     }, 7000);
                 }
+                _bird.message("success", "Deleted item " + itemId);
             });
             else res.redirect("/login");
         

@@ -1,26 +1,11 @@
 // ALL ROUTES GOINT TO THE ADMIN "/admin" WILL BE IN THIS PAGE
-const path = require("path");
-const multer = require("multer");
+
 const express = require("express");
 const addProduct = require(__dirname + "../../components/admin/controller/addProduct");
+const upload = require(__dirname + "../../config/multer");
 
 // This router is for the home / routes
 const router = express.Router();
-
-// @desc    Setup storage engine 
-const storage = multer.diskStorage({
-    destination: "./public/uploads",
-    filename: (req, file, cb) => {
-        cb(null, file.fieldname +
-            "-" + Date.now() +
-            path.extname(file.originalname));
-    }
-});
-
-// @desc    init upload
-const upload = multer({
-    storage: storage
-});
 
 
 // @desc    AddProduct page

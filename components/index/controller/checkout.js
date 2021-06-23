@@ -8,7 +8,6 @@ const _bird = require(__dirname + "../../../../middleware/messageBird");
 
 module.exports = {
     get(req, res) {
-
         try {
             if (req.isAuthenticated()) cart.userCart(req.user._id, (cart) => {
                 res.render("layouts/checkout", {
@@ -22,7 +21,6 @@ module.exports = {
                 });
             });
             else {
-                _bird.message("warning", "Please LogIn!");
                 res.render("layouts/checkout", {
                     website: _get.Pages().website,
                     login: req.isAuthenticated(),
@@ -58,7 +56,7 @@ module.exports = {
         // 2. Save the order
         // 3. Done😁
 
-        logger.logArg("Order >", req.body);
+        logger.log("Order >", req.body);
         const details = {
             firstname: req.body.firstname,
             lastname: req.body.lastname,

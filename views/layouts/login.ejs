@@ -22,21 +22,20 @@
                             <div class="login_part_form">
                                 <div class="login_part_form_iner">
                                     <h3>Welcome Back ! <br>
-                                        Please Sign in now</h3>
-                                    <% if (bird) { %>
-                                        <div class="alert alert<%= bird.alert %> alert-dismissible">
-                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                            <%= bird.message %>
-                                        </div>
-                                        <% } %>
+                                        Please Sign in now</h3>                                    
                                             <form class="row contact_form" action="/login" method="POST">
                                                 <div class="col-md-12 form-group p_star">
-                                                    <input type="email" class="form-control" id="email" name="email"
-                                                        placeholder="Email" value="damienking@gmail.com" required>
+                                                    <% if(userEmail){ %>
+                                                        <input type="email" class="form-control" id="email" name="email"
+                                                        placeholder="Email" value="<%= userEmail %>" required>
+                                                    <% }else{ %>
+                                                        <input type="email" class="form-control" id="email" name="email"
+                                                        placeholder="Email" required>
+                                                        <% } %> 
                                                 </div>
                                                 <div class="col-md-12 form-group p_star">
                                                     <input type="password" class="form-control" id="password"
-                                                        name="password" placeholder="Password" value="damienking"
+                                                        name="password" placeholder="Password"
                                                         required>
                                                 </div>
                                                 <div class="col-md-12 form-group">

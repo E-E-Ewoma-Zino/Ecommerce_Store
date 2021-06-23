@@ -1,8 +1,8 @@
 require("dotenv").config();
 const methodOveride = require("method-override");
-const connectFlash = require("connect-flash");
 const session = require("express-session");
 const mongoose = require("mongoose");
+const connectFlash = require("connect-flash");
 const passport = require("passport");
 const express = require("express");
 const path = require("path");
@@ -11,6 +11,7 @@ const path = require("path");
 const app = express();
 
 // app configs
+app.use(connectFlash());
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,12 +33,9 @@ app.use(session({
 }));
 
 
-// passport initialization
+// passport config
 app.use(passport.initialize());
 app.use(passport.session());
-
-// connect flash 
-app.use(connectFlash);
 
 // Building my messaging system
 app.use((req, res, next) => {
@@ -54,9 +52,8 @@ app.use((req, res, next) => {
 // Configure the DB
 require(__dirname + "/config/db")(mongoose);
 
-// configute passport
+// configure passport
 require(__dirname + "/config/passport")(passport);
-
 
 // @route
 // home

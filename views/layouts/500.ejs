@@ -2,10 +2,20 @@
 <%- include("../partials/_header") %> 
 <%- include("../components/breadcrumb") %> 
     
-<div class="container text-center bg-warning mt-10">
-  <div class="alert alert-danger" role="alert">
-    <%= bird == "undefined"? "": bird.message %>
-  </div>
+<div class="container text-center mt-10">
+  <% try{ %>
+    <% bird.forEach(cry=> { %>
+        <% if(cry.message){ %>
+            <div class="fadeOut alert alert-<%= cry.alert %>">
+                <%= cry.message %>
+            </div>
+            <% }else{ %>
+                No Message
+                <%} %>
+                    <% }); %>
+                        <% }catch(err){ %>
+                            Error from try
+                            <% } %>
 </div>
     
 
