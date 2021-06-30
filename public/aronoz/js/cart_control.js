@@ -63,7 +63,7 @@ function addToCart(cart, productID, quantity) {
 
             // toggle 
             // start loading untile the product is added
-            cart.innerHTML = `<img class="d-inline-block" src="/img/loader.svg" alt="loading" width="25px" height="25px">`;
+            cart.innerHTML = `<img class="d-inline-block" src="/aronoz/img/loader.svg" alt="loading" width="25px" height="25px">`;
             cart.innerHTML = `<i class="fas fa-check text-success"></i>`;
             cartCounter();
             // using messageBird to send message to user
@@ -94,7 +94,7 @@ function addToCart(cart, productID, quantity) {
                         cartArray.push({ productID: productID, quantity: quantity });
                         // toggle 
                         // start loading untile the product is added
-                        cart.innerHTML = `<img class="d-inline-block" src="/img/loader.svg" alt="loading" width="25px" height="25px">`;
+                        cart.innerHTML = `<img class="d-inline-block" src="/aronoz/img/loader.svg" alt="loading" width="25px" height="25px">`;
                         cart.innerHTML = `<i class="fas fa-check text-success"></i>`;
                         // using messageBird to send message to user
                         messager({
@@ -202,7 +202,7 @@ function postCartData(cart, data) {
     }
 
     // start loading untile the product is added
-    cart.innerHTML = `<img class="d-inline-block" src="/img/loader.svg" alt="loading" width="25px" height="25px">`;
+    cart.innerHTML = `<img class="d-inline-block" src="/aronoz/img/loader.svg" alt="loading" width="25px" height="25px">`;
     // 
     // console.log("data ", data);
     axios.post(hostURL + "/cartitem", data, config).then(function (res) {

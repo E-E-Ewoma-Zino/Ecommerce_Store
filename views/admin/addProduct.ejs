@@ -1,88 +1,120 @@
-<%- include("../partials/_head") %>
-    <%- include("../partials/_header") %>
-        <%- include("../components/breadcrumb") %>
+<%- include("../partials/admin/_head") %>
 
 
+    <div class="container-scroller">
+        <!-- nav -->
+        <%- include("../partials/admin/_header") %>
 
+            <div class="container-fluid page-body-wrapper">
 
+                <!-- sidebar -->
+                <%- include("../partials/admin/_sidebar") %>
 
-            <!-- ================ contact section start ================= -->
-            <section class="contact-section padding_top">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-12">
-                            <h2 class="contact-title text-center"><%= name %> </h2>
-                        </div>
-                        <div class="col-lg-8">
-                            <form class="form-contact contact_form" action="/admin/addProduct" method="POST" enctype="multipart/form-data">
+                    <!-- partial main-->
+                    <div class="main-panel">
+                        <div class="content-wrapper">
+                            <div class="row">
+                                <div class="col-md-12 grid-margin">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h4 class="font-weight-bold mb-0">Add New Product</h4>
+                                        </div>
+                                        <div>
+                                            <a href="/admin/products" class="btn btn-primary btn-icon-text btn-rounded">
+                                                <i class="ti-arrow-left btn-icon-prepend"></i>Back
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <form class="forms-sample" action="/admin/addProduct" method="POST"
+                                enctype="multipart/form-data">
                                 <div class="row">
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <textarea class="form-control w-100" name="description" id="message"
-                                                cols="30" rows="9" placeholder='Product description'></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <input class="form-control" name="name" id="name" value="Chair " type="text"
-                                                placeholder='Product name' required>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <input class="form-control" name="brand" id="name" value="Null" type="text"
-                                                placeholder='Brand name' required>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <input class="form-control" name="price" type="text"
-                                            placeholder='Product price' required>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <input class="form-control" name="category" value="chair" type="text"
-                                                placeholder='Product category' required>
+                                    <div class="col-md-6 grid-margin stretch-card">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title">Naming</h4>
+                                                <p class="card-description">
+                                                    Give your product a nameing
+                                                </p>
+                                                <!--  -->
+                                                <div class="form-group">
+                                                    <label for="exampleInputName1">Product Name</label>
+                                                    <input type="text" name="name" class="form-control" placeholder="Product Name" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputName1">Brand Name</label>
+                                                    <input type="text" name="brand" class="form-control" placeholder="Brand Name" required>
+                                                </div>                                                
+                                                <!--  -->
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                            <input class="form-control" name="color" type="text"
-                                            placeholder='Product color'>
+                                    </div>
+                                    <div class="col-md-6 grid-margin stretch-card">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title">Pricing</h4>
+                                                <p class="card-description">
+                                                    Set a value and quantity for your product
+                                                </p>
+                                                <!--  -->
+                                                <div class="form-group">
+                                                    <label for="exampleInputName1">Price</label>
+                                                    <input type="text" name="price" class="form-control" placeholder="Price" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputName1">Total Avalable Products</label>
+                                                    <input type="number" name="totalNo" class="form-control" placeholder="Total Product" required>
+                                                </div>
+                                                
+                                                <!--  -->
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <input class="form-control" name="totalNo" type="number"
-                                            placeholder='Product Total no'>
+                                    <div class="col-12 grid-margin stretch-card">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title">Description</h4>
+                                                <p class="card-description">
+                                                    Describe your product here
+                                                </p>
+                                                <!--  -->
+                                                <div class="form-group">
+                                                    <label for="exampleInputName1">Product Category</label>
+                                                    <input type="text" name="category" class="form-control" placeholder="Category">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputName1">Color</label>
+                                                    <input type="text" name="color" class="form-control" placeholder="Product Color" required>
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label>Choose one or more images for your product</label>
+                                                    <div class="input-group col-xs-12">
+                                                        <input class="form-control" multiple="multiple" accept="image/*"
+                                                            name="img" type="file" placeholder="Product image" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleTextarea1">Description</label>
+                                                    <textarea name="description" class="form-control" id="exampleTextarea1"
+                                                        rows="7"></textarea>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                                <a href="/admin/products" class="btn btn-light">Cancel</a>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <input class="form-control" multiple='multiple' accept='image/*' name="img" type="file"
-                                                placeholder='Product image' required>
-                                        </div>
-                                    </div>
-                                    <span style="color: red">
-                                        <%= typeof bird != "undefined" ? bird.message : "" %> 
-                                    </span>
                                 </div>
-                                <div class="form-group mt-3">
-                                    <button type="submit" class="btn_3 button-contactForm" onclick="loading()">Add Product</button>
-                                </div>
+
                             </form>
                         </div>
+                        <!-- content-wrapper ends -->
+                        <%- include("../partials/admin/_footer") %>
                     </div>
-                </div>
-            </section>
-            <!-- ================ contact section end ================= -->
+                    <!-- main-panel ends -->
+            </div>
+            <!-- page-body-wrapper ends -->
+    </div>
 
-
-
-
-
-                    <%- include("../components/messageBird") %>
-                    <%- include("../components/loading") %>
-<%- include("../partials/_footer") %>
-                <%- include("../partials/_scripts") %>
+    <%- include("../partials/admin/_scripts") %>

@@ -18,7 +18,7 @@ module.exports = (req, res) => {
 
 
     } catch (err) {
-        console.error(":::", err);
+        console.error("::::::>>:", err);
         _bird.message("danger", err);
         res.render("layouts/500", {
             website: _get.Pages().website,

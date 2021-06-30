@@ -10,7 +10,7 @@ module.exports = {
     message(alert, message){
         this.fly.push({
             alert: alert,
-            message: JSON.stringify(message)
+            message: message
         })
         
         this.kill();

@@ -1,12 +1,41 @@
 // ALL ROUTES GOINT TO THE ADMIN "/admin" WILL BE IN THIS PAGE
 
 const express = require("express");
-const addProduct = require(__dirname + "../../components/admin/controller/addProduct");
 const upload = require(__dirname + "../../config/multer");
+const login = require(__dirname + "../../components/admin/controller/login");
+const dashboard = require(__dirname + "../../components/admin/controller/dashboard");
+const orders = require(__dirname + "../../components/admin/controller/orderTracking");
+const products = require(__dirname + "../../components/admin/controller/products");
+const settings = require(__dirname + "../../components/admin/controller/settings");
+const addProduct = require(__dirname + "../../components/admin/controller/addProduct");
 
 // This router is for the home / routes
 const router = express.Router();
 
+
+// @desc    login page
+// @route   GET /admin/login
+router.get("/login", (req, res) => login.get(req, res));
+
+// @desc    login page
+// @route   POST admin/login
+router.post("/login", upload.array("img"), (req, res) => login.post(req, res));
+
+// @desc    dashboard page
+// @route   GET /admin/dashboard
+router.get("/dashboard", (req, res) => dashboard.get(req, res));
+
+// @desc    products page
+// @route   GET /admin/products
+router.get("/products", (req, res) => products.get(req, res));
+
+// @desc    orders page
+// @route   GET /admin/orders
+router.get("/orders", (req, res) => orders.get(req, res));
+
+// @desc    settings page
+// @route   GET /admin/settings
+router.get("/settings", (req, res) => settings.get(req, res));
 
 // @desc    AddProduct page
 // @route   GET /admin/AddProduct

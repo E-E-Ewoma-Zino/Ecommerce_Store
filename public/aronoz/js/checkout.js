@@ -6,13 +6,13 @@ const data = document.getElementById("cartData").setAttribute("value", localStor
 const confirmForm = document.getElementById("confirmForm");
 const proceed = document.getElementById("proceed");
 
-confirmForm.addEventListener("click", function(){
+confirmForm.addEventListener("click", function () {
     this.parentElement.lastElementChild.classList.toggle("text-danger");
 });
 
-confirmForm.nextElementSibling.addEventListener("click", function(){
+confirmForm.nextElementSibling.addEventListener("click", function () {
     this.classList.toggle("text-danger");
-    this.previousElementSibling.checked = this.previousElementSibling.checked == true? false : true;
+    this.previousElementSibling.checked = this.previousElementSibling.checked == true ? false : true;
 });
 
 proceed.addEventListener("mouseenter", () => {
@@ -61,32 +61,38 @@ const email = document.getElementById("email").value;
 const price = document.getElementById("total").value;
 
 function makePayment() {
+    console.log("Making Payment");
     FlutterwaveCheckout({
-        public_key: "FLWPUBK_TEST-88cd4a7dc50e807c5da141b586b3a656-X",
+        public_key: "FLWPUBK-d54c06fe9df198dc11c99978d6ec1c7b-X",
         tx_ref: "RX1" + Math.floor(Math.random() * 9999999) + 1,
         amount: price,
         currency: "NG",
+        country: "US",
         payment_options: " ",
         redirect_url: // specified redirect URL
-            "http://localhost:3000/",
+            window.location.origin,
+        meta: {
+            consumer_id: 23,
+            consumer_mac: "92a3-912ba-1192a",
+        },
         customer: {
             email: email,
             phone_number: number,
-            name: firstname,
+            name: firstname
         },
-        callback: function (data) {
-            console.log("my dataaa:", data);
-        },
+        // callback: function (data) {
+        //     console.log(data);
+        // },
         onclose: function () {
             // close modal
-            console.log("clossing flutterwave...");
+            console.log("closed function");
         },
         customizations: {
-            title: "Zino",
+            title: "Aronoz",
             description: "Payment for items in cart",
-            logo: "https://assets.piedpiper.com/logo.png",
         },
     });
+    console.log("Done Making Payment");
 }
 // check the data from callback
 // fix modal

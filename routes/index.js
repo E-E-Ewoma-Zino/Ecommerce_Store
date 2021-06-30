@@ -4,6 +4,7 @@ const uploadPage = require(__dirname + "../../middleware/uploadPages");
 const cart_controller = require(__dirname + "../../components/index/controller/cart");
 const home_controller = require(__dirname + "../../components/index/controller/home");
 const logIn_controller = require(__dirname + "../../components/index/controller/login");
+const admin_controller = require(__dirname + "../../components/admin/controller/admin");
 const signUp_controller = require(__dirname + "../../components/index/controller/signUp");
 const logout_controller = require(__dirname + "../../components/index/controller/logout");
 const error_404_controller = require(__dirname + "../../components/error/controller/404");
@@ -84,6 +85,10 @@ router.post("/signup", (req, res) => signUp_controller.post(req, res));
 // @desc    Logout page
 // @route   POST /signup
 router.get("/logout", (req, res) => logout_controller(req, res));
+
+// @desc    admin page
+// @route   GET /admin
+router.get("/admin", (req, res) => admin_controller(req, res));
 
 // @desc    404 page
 // @route   GET /404

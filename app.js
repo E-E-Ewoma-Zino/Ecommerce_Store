@@ -58,10 +58,10 @@ require(__dirname + "/config/passport")(passport);
 // @route
 // home
 app.use("/", require("./routes/index"));
-// category
-app.use("/category", require("./routes/category"));
 // admin
 app.use("/admin", require("./routes/admin"));
+// category
+app.use("/category", require("./routes/category"));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
