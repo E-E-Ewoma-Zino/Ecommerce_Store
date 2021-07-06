@@ -1,41 +1,41 @@
 <!-- message birg sends message for me -->
 <section>
-    <div id="messageBird">
-        <% try{ %>
-            <% bird.forEach(cry=> { %>
-                <% if(cry.message){ %>
-                    <div class="fadeOut alert alert-<%= cry.alert %> alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <%= cry.message %>
-                    </div>
-                    <% }else{ %>
-                        No Message
-                        <%} %>
-                            <% }); %>
-                                <% }catch(err){ %>
-                                    Error from try
-                                    <% } %>
+	<div id="messageBird">
+		<% try{ %>
+			<% bird.forEach(cry=> { %>
+				<% if(cry.message){ %>
+					<div class="fadeOut alert alert-<%= cry.alert %> alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+						<%= cry.message %>
+					</div>
+					<% }else{ %>
+						No Message
+						<%} %>
+							<% }); %>
+								<% }catch(err){ %>
+									Error from try
+									<% } %>
 
-                                        <div id="littleMessageBox" class="alert alert-danger alert-dismissible">
-                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                            <div id="littleMessage"></div>
-                                        </div>
-    </div>
+										<div id="littleMessageBox" class="alert alert-danger alert-dismissible">
+											<button type="button" class="close" data-dismiss="alert">&times;</button>
+											<div id="littleMessage"></div>
+										</div>
+	</div>
 </section>
 
 <script>
-    const out = document.getElementsByClassName("fadeOut");
-    // get each message created and after 7s disable it
-    console.log("out", out.length);
-    for (let i = 0; i < out.length; i++) {
-        const fade = out[i];
-        setTimeout(() => {
-            console.log("waiting...");
-            fade.style.display = "none";
-        }, 7000);
-    }
+	const out = document.getElementsByClassName("fadeOut");
+	// get each message created and after 7s disable it
+	console.log("out", out.length);
+	for (let i = 0; i < out.length; i++) {
+		const fade = out[i];
+		setTimeout(() => {
+			console.log("waiting...");
+			fade.style.display = "none";
+		}, 7000);
+	}
 
-    // function wait(u) {
-        
-    // }
+	// function wait(u) {
+
+	// }
 </script>

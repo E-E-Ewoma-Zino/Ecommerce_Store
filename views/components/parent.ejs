@@ -1,0 +1,27 @@
+<section id="parent">
+	<div class="col-md-6 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">Add a parent</h4>
+				<p class="card-description">
+					Choose a parent for your product </p>
+				<!--  -->
+				<div>
+					<ul class="list-group">
+						<% category.forEach(list=> { %>
+							<li
+								class="children list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+								<%= list.parents[0] %> -> <%= list.name %>
+										<span class="badge badge-primary badge-pill">
+											<%= list.products.length %>
+										</span>
+										<input type="hidden" name="id" value="<%= list._id %>">
+										<input type="hidden" name="id" value="<%= list.name %>">
+							</li>
+							<% }); %>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

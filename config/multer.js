@@ -4,7 +4,7 @@ const multer = require("multer");
 
 // @desc    Setup storage engine 
 const storage = multer.diskStorage({
-    destination: "./public/uploads",
+    destination: "./uploads",
     filename: (req, file, cb) => {
         cb(null, file.fieldname +
             "-" + Date.now() +

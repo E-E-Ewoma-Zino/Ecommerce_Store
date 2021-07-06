@@ -1,11 +1,11 @@
 // ALL ROUTES GOINT TO THE ADMIN "/admin" WILL BE IN THIS PAGE
-
 const express = require("express");
 const upload = require(__dirname + "../../config/multer");
 const login = require(__dirname + "../../components/admin/controller/login");
 const dashboard = require(__dirname + "../../components/admin/controller/dashboard");
 const orders = require(__dirname + "../../components/admin/controller/orderTracking");
 const products = require(__dirname + "../../components/admin/controller/products");
+const category = require(__dirname + "../../components/admin/controller/category");
 const settings = require(__dirname + "../../components/admin/controller/settings");
 const addProduct = require(__dirname + "../../components/admin/controller/addProduct");
 
@@ -32,6 +32,14 @@ router.get("/products", (req, res) => products.get(req, res));
 // @desc    orders page
 // @route   GET /admin/orders
 router.get("/orders", (req, res) => orders.get(req, res));
+
+// @desc    category page
+// @route   GET /admin/category
+router.get("/category", (req, res) => category.get(req, res));
+
+// @desc    category page
+// @route   POST /admin/category
+router.post("/category", (req, res) => category.post(req, res));
 
 // @desc    settings page
 // @route   GET /admin/settings

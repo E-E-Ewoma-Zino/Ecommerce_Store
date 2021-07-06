@@ -16,6 +16,7 @@ app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "./uploads")));
 app.use(methodOveride((req, res) => {
     if (req.body && typeof req.body === "object" && "_method" in req.body) {
         // looks in url post bodies and delete it
