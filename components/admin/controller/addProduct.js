@@ -37,15 +37,15 @@ module.exports = {
 	},
 	post: async function (req, res) {
 
-		// console.log(req.body);
+		// console.log(req.files);
+		console.log("::::::::::", req.body.category);
 		try {
-			// console.log("::::::::::", req.body);
 				const newProduct = new Products({
-					name: _.toLower(req.body.name),
+					name: _.toLower(req.body.name[0]),
 					brand: _.toLower(req.body.brand),
 					img: req.files,
 					color: _.toLower(req.body.color),
-					category: req.body.category,
+					categories: req.body.category,
 					price: req.body.price,
 					description: req.body.description,
 					totalNo: req.body.totalNo
@@ -61,6 +61,7 @@ module.exports = {
 					else {
 						_bird.message("success", "Successfully Added New Product");
 						console.log("Added new product");
+						_cat.addProduct(newCategory._id, newCategory.category)
 						res.redirect("back");
 					}
 				});

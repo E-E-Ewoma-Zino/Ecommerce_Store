@@ -20631,3 +20631,11 @@ ul li, ol li, dl li {
 	justify-content: center;
 	align-items: center;
 }
+
+/* make caterogy body scrollable */
+.scroll{
+	max-height: 200px;
+	overflow-y: scroll;
+	border-radius: 0.25rem;
+	border: 1px solid rgba(0, 0, 0, 0.125);
+}

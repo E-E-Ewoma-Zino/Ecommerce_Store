@@ -76,6 +76,15 @@ module.exports = {
 		})
 		// cb(null, sort(adams));
 
+	},
+	// Add product to category
+	addProduct(productID, categoryList){
+		categoryList.forEach(category => {
+			this.ById(category, (cat)=>{
+				cat.products.push(productID);
+				cat.save();
+			})
+		});
 	}
 }
 
