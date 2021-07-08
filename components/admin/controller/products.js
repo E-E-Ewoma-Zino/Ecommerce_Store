@@ -11,6 +11,7 @@ module.exports = {
                 login: req.isAuthenticated(),
                 user: req.user,
                 bird: _bird.fly,
+                products: _get.AllProduct(),
                 name: `Admin LogIn`,
                 breadcrumb: `Home - Admin - Login`,
                 userEmail: ""

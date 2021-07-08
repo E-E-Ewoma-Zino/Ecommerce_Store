@@ -143,7 +143,7 @@ function displayCategory(category) {
 			}else{
 				addToCategory(child.firstElementChild.firstElementChild, child.children[2].value);
 				formCategoryName.value = myCategory.names.toString();
-				formCategoryId.value = myCategory.id;
+				formCategoryId.value = JSON.stringify(myCategory.id);
 			}
 
 		});

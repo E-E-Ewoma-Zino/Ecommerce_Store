@@ -1,5 +1,6 @@
 // get the Category
 const Category = require(__dirname + "../../model/Category");
+const mongoose = require("mongoose");
 
 module.exports = {
 	All: (callback) => {
@@ -80,9 +81,14 @@ module.exports = {
 	// Add product to category
 	addProduct(productID, categoryList){
 		categoryList.forEach(category => {
-			this.ById(category, (cat)=>{
-				cat.products.push(productID);
-				cat.save();
+			this.ById(mongoose.Types.ObjectId(category), (err, cat)=>{
+				if (err) {
+					console.log(err);
+				}
+				else{
+					cat.products.push(productID);
+					cat.save();
+				}
 			})
 		});
 	}

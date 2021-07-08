@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 // children: a list of id that represent all the children of a category. The children also ref to the category schema so it can populate the children with the actual data
 const categorySchema = new mongoose.Schema({
 	name: String,
-	products: [String],
+	products: [{type: mongoose.Schema.Types.ObjectId, ref: "Product"}],
 	parents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }],
 	children: [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }]
 });

@@ -16,7 +16,7 @@ app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, "./uploads")));
+app.use(express.static(path.join(__dirname, "uploads")));
 app.use(methodOveride((req, res) => {
     if (req.body && typeof req.body === "object" && "_method" in req.body) {
         // looks in url post bodies and delete it
@@ -63,6 +63,9 @@ app.use("/", require("./routes/index"));
 app.use("/admin", require("./routes/admin"));
 // category
 app.use("/category", require("./routes/category"));
+// error 404
+app.use(require(__dirname + "/components/error/controller/404"));
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
