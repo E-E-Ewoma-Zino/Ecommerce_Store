@@ -2,7 +2,6 @@ require("dotenv").config();
 const methodOveride = require("method-override");
 const session = require("express-session");
 const mongoose = require("mongoose");
-const connectFlash = require("connect-flash");
 const passport = require("passport");
 const express = require("express");
 const path = require("path");
@@ -11,12 +10,11 @@ const path = require("path");
 const app = express();
 
 // app configs
-app.use(connectFlash());
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, "uploads")));
+app.use('/uploads', express.static(path.join(__dirname + '/uploads'))); 
 app.use(methodOveride((req, res) => {
     if (req.body && typeof req.body === "object" && "_method" in req.body) {
         // looks in url post bodies and delete it
@@ -33,22 +31,9 @@ app.use(session({
     saveUninitialized: false
 }));
 
-
 // passport config
 app.use(passport.initialize());
 app.use(passport.session());
-
-// Building my messaging system
-app.use((req, res, next) => {
-    res.messageBird = (alert, message) => {
-        res.fly = {
-            alert: alert,
-            message: message
-        }
-    }
-
-    next();
-});
 
 // Configure the DB
 require(__dirname + "/config/db")(mongoose);

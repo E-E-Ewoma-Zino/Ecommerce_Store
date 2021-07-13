@@ -1,5 +1,5 @@
 // all the 404 errors route code goes here
-
+const error500 = require(__dirname + "/500");
 const _get = require(__dirname + "../../../../middleware/get");
 const _bird = require(__dirname + "../../../../middleware/messageBird");
 
@@ -15,20 +15,9 @@ module.exports = (req, res) => {
             breadcrumb: `home - ❓`,
             product: _get.AllProduct()
         });
-
-
     } catch (err) {
         console.error(":::", err);
         _bird.message("danger", err);
-        res.render("layouts/500", {
-            website: _get.Pages().website,
-            login: req.isAuthenticated(),
-            user: req.user,
-            bird: _bird.fly,
-            name: `500 - Internal server error!`,
-            breadcrumb: `❌🤦‍♂️`,
-            product: _get.AllProduct(),
-
-        });
+        error500(req, res);
     }
 }

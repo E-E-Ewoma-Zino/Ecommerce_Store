@@ -1,5 +1,6 @@
 // all the category/: code goes here
 const _get = require(__dirname + "../../../../middleware/get");
+const error500 = require(__dirname + "../../../error/controller/500");
 const _bird = require(__dirname + "../../../../middleware/messageBird");
 const cart = require(__dirname + "../../../../middleware/cart_DB");
 

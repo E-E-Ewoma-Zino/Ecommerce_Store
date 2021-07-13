@@ -20633,9 +20633,130 @@ ul li, ol li, dl li {
 }
 
 /* make caterogy body scrollable */
-.scroll{
-	max-height: 200px;
+
+.scroll {
+	max-height: 50vh;
 	overflow-y: scroll;
 	border-radius: 0.25rem;
 	border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+/* make create new category section hidden */
+
+#category_control {
+	display: none;
+	height: 0%;
+	overflow: hidden;
+}
+
+/* make category_control animate */
+
+.smooth-close {
+	animation: close 1.3s ease-out forwards;
+}
+
+.smooth-open {
+	animation: open 1.3s ease-out forwards;
+}
+
+@keyframes open {
+	from {
+		height: 0%;
+	}
+	to {
+		height: 100%;
+	}
+}
+
+@keyframes close {
+	from {
+		height: 100%;
+	}
+	to {
+		height: 0%;
+	}
+}
+
+/* tool-tip */
+
+.tool-tip {
+	position: relative;
+	display: inline;
+}
+
+.tool-tip:hover::after {
+	content: attr(gloss);
+	position: absolute;
+	bottom: -34px;
+	color: #fff;
+	width: auto;
+	z-index: 98;
+	padding: 5px 15px;
+	font-style: initial;
+	white-space: nowrap;
+	border-radius: 5px;
+	background: rgba(0, 0, 0, .8);
+	cursor: pointer;
+}
+
+.tool-tip-left:hover::after{
+	right: 20%;
+}
+
+.tool-tip:hover:before {
+	position: absolute;
+	left: 30%;
+	bottom: -4px;
+	content: "";
+	z-index: 99;
+	border: solid;
+	border-width: 0 6px 6px 6px;
+	border-color: #333 transparent;
+}
+
+/* make options for product and category list */
+.option-container{
+	position: relative;
+	height: 15vh;
+}
+
+.option-container:hover .option{
+	visibility: visible;
+	opacity: 1;
+	transform: scale(1);
+}
+
+.option{
+	position: absolute;
+	top: 10%;
+	left: 50%;
+	opacity: 0;
+	visibility: hidden;
+	transform: scale(.4);
+	transition: all .4s ease-out;
+}
+
+/* make style for the image gallery in product edit page */
+.image-gallery{
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+}
+.img-content{
+	position: relative;
+	max-width: 35%;
+}
+.img-content:hover .delete-btn{
+	visibility: visible;
+	transform: scale(1);
+}
+
+.img-content{
+	margin: 4% 0%;
+}
+.delete-btn{
+	position: absolute;
+	top: 0px;
+	visibility: hidden;
+	transform: scale(.1);
+	transition: all .4s;
 }

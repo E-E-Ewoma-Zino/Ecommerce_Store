@@ -1,10 +1,9 @@
 // all the admin/addProduct code goes here
 const _ = require("lodash");
-const mongoose = require("mongoose");
-const _get = require(__dirname + "../../../../middleware/get");
-const _cat = require(__dirname + "../../../../middleware/category");
 const Products = require(__dirname + "../../../../model/Products");
+const _cat = require(__dirname + "../../../../middleware/category");
 const logger = require(__dirname + "../../../../middleware/logger");
+const error500 = require(__dirname + "../../../error/controller/500");
 const _bird = require(__dirname + "../../../../middleware/messageBird");
 
 
@@ -25,15 +24,7 @@ module.exports = {
 		} catch (err) {
 			console.error(":::::", err);
 			_bird.message("danger", err);
-			res.render("layouts/500", {
-				website: _get.Pages().website,
-				login: req.isAuthenticated(),
-				user: req.user,
-				bird: _bird.fly,
-				name: `500 - Internal server error!`,
-				breadcrumb: `❌🤦‍♂️`,
-				product: _get.AllProduct()
-			});
+			error500(req, res);
 		}
 	},
 	post: async function (req, res) {
@@ -42,19 +33,15 @@ module.exports = {
 		// console.log("::::::::::", req.body);
 
 		try {
-			// JSON.parse(req.body.category).forEach(cate => {
-			// 	console.log(cate);
-			// 	console.log(mongoose.Types.ObjectId(cate));
-			// });
 			const newProduct = new Products({
-				name: _.toLower(req.body.name[0]),
-				brand: _.toLower(req.body.brand),
 				img: req.files,
-				categories: JSON.parse(req.body.category),
-				color: _.toLower(req.body.color),
 				price: req.body.price,
+				totalNo: req.body.totalNo,
+				brand: _.toLower(req.body.brand),
+				color: _.toLower(req.body.color),
+				name: _.toLower(req.body.name[0]),
 				description: req.body.description,
-				totalNo: req.body.totalNo
+				categories: JSON.parse(req.body.category)
 			});
 
 			newProduct.save((err) => {
@@ -74,15 +61,7 @@ module.exports = {
 		} catch (err) {
 			console.error(":::::", err);
 			_bird.message("danger", err);
-			res.render("layouts/500", {
-				website: _get.Pages().website,
-				login: req.isAuthenticated(),
-				user: req.user,
-				bird: _bird.fly,
-				name: `500 - Internal server error!`,
-				breadcrumb: `❌🤦‍♂️`,
-				product: _get.AllProduct()
-			});
+			error500(req, res);
 		}
 	}
 }

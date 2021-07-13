@@ -1,5 +1,6 @@
 // all the cartItem route code goes here
 const _get = require(__dirname + "../../../../middleware/get");
+const error500 = require(__dirname + "../../../error/controller/500");
 const cart = require(__dirname + "../../../../middleware/cart_DB");
 const _bird = require(__dirname + "../../../../middleware/messageBird");
 
@@ -67,16 +68,7 @@ res.render("layouts/500", {
          } catch (err) {
             console.error(":::", err);
             _bird.message("danger", err);
-res.render("layouts/500", {
-                user: req.user,
-                bird: _bird.fly,
-                breadcrumb: `❌🤦‍♂️`,
-                product: _get.AllProduct(),
-                login: req.isAuthenticated(),
-                website: _get.Pages().website,
-                name: `500 - Internal server error!`,
-                
-            });
+error500(req, res);
         }
     }
 }

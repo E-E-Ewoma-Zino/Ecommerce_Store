@@ -1,12 +1,12 @@
 // all the cart route code goes here
 const _get = require(__dirname + "../../../../middleware/get");
+const error500 = require(__dirname + "../../../error/controller/500");
 const _bird = require(__dirname + "../../../../middleware/messageBird");
 const cart = require(__dirname + "../../../../middleware/cart_DB");
 
 
 module.exports = {
     get(req, res) {
-        
         try {
             // cart.setCart(req.query);
 
@@ -34,16 +34,7 @@ module.exports = {
          } catch (err) {
             console.error(":::", err);
             _bird.message("danger", err);
-            res.render("layouts/500", {
-                website: _get.Pages().website,
-                login: req.isAuthenticated(),
-                user: req.user,
-                bird: _bird.fly,
-                name: `500 - Internal server error!`,
-                breadcrumb: `❌🤦‍♂️`,
-                product: _get.AllProduct(),
-
-            });
+            error500(req, res);
         }
     },
     post(req, res) {
@@ -66,16 +57,7 @@ module.exports = {
          } catch (err) {
             console.error(":::", err);
             _bird.message("danger", err);
-            res.render("layouts/500", {
-                website: _get.Pages().website,
-                login: req.isAuthenticated(),
-                user: req.user,
-                bird: _bird.fly,
-                name: `500 - Internal server error!`,
-                breadcrumb: `❌🤦‍♂️`,
-                product: _get.AllProduct(),
-
-            });
+            error500(req, res);
         }
     },
     delete(req, res) {
@@ -99,16 +81,7 @@ module.exports = {
          } catch (err) {
             console.error(":::", err);
             _bird.message("danger", err);
-            res.render("layouts/500", {
-                website: _get.Pages().website,
-                login: req.isAuthenticated(),
-                user: req.user,
-                bird: _bird.fly,
-                name: `500 - Internal server error!`,
-                breadcrumb: `❌🤦‍♂️`,
-                product: _get.AllProduct(),
-
-            });
+            error500(req, res);
         }
     }
 }

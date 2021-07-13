@@ -1,5 +1,6 @@
 // all the category route code goes here
 const _get = require(__dirname + "../../../../middleware/get");
+const error500 = require(__dirname + "../../../error/controller/500");
 const search = require(__dirname + "../../../../middleware/search");
 const logger = require(__dirname + "../../../../middleware/logger");
 const _bird = require(__dirname + "../../../../middleware/messageBird");
@@ -99,16 +100,7 @@ module.exports = {
         } catch (err) {
             console.error(":::", err);
             _bird.message("danger", err);
-            res.render("layouts/500", {
-                website: _get.Pages().website,
-                login: req.isAuthenticated(),
-                user: req.user,
-                bird: _bird.fly,
-                name: `500 - Internal server error!`,
-                breadcrumb: `❌🤦‍♂️`,
-                product: _get.AllProduct(),
-
-            });
+            error500(req, res);
         }
     },
     post(req, res) {
@@ -161,16 +153,7 @@ module.exports = {
         } catch (err) {
             console.error(":::", err);
             _bird.message("danger", err);
-            res.render("layouts/500", {
-                website: _get.Pages().website,
-                login: req.isAuthenticated(),
-                user: req.user,
-                bird: _bird.fly,
-                name: `500 - Internal server error!`,
-                breadcrumb: `❌🤦‍♂️`,
-                product: _get.AllProduct(),
-
-            });
+            error500(req, res);
         }
     }
 }

@@ -2,12 +2,13 @@
 const express = require("express");
 const upload = require(__dirname + "../../config/multer");
 const login = require(__dirname + "../../components/admin/controller/login");
-const dashboard = require(__dirname + "../../components/admin/controller/dashboard");
-const orders = require(__dirname + "../../components/admin/controller/orderTracking");
 const products = require(__dirname + "../../components/admin/controller/products");
 const category = require(__dirname + "../../components/admin/controller/category");
 const settings = require(__dirname + "../../components/admin/controller/settings");
+const dashboard = require(__dirname + "../../components/admin/controller/dashboard");
+const orders = require(__dirname + "../../components/admin/controller/orderTracking");
 const addProduct = require(__dirname + "../../components/admin/controller/addProduct");
+const editproduct = require(__dirname + "../../components/admin/controller/edit_product");
 
 // This router is for the home / routes
 const router = express.Router();
@@ -53,5 +54,12 @@ router.get("/addProduct", (req, res) => addProduct.get(req, res));
 // @route   POST admin/addProduct
 router.post("/addProduct", upload.array("img"), (req, res) => addProduct.post(req, res));
 
+// @desc    edit products page
+// @route   GET /admin/edit/:productId
+router.get("/edit/:productId", (req, res) => editproduct.get(req, res));
+
+// @desc    edit products page
+// @route   POST /admin/edit/:productId
+router.post("/edit/:productId", upload.array("img"), (req, res) => editproduct.post(req, res));
 
 module.exports = router;

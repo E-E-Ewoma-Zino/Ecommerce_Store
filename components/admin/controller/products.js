@@ -1,5 +1,6 @@
 // all the product dashboard route code goes here
 const _get = require(__dirname + "../../../../middleware/get");
+const error500 = require(__dirname + "../../../error/controller/500");
 const _bird = require(__dirname + "../../../../middleware/messageBird");
 const logger = require(__dirname + "../../../../middleware/logger");
 
@@ -7,27 +8,13 @@ module.exports = {
     get(req, res) {
         try {
             res.render("admin/products", {
-                website: _get.Pages().website,
-                login: req.isAuthenticated(),
-                user: req.user,
-                bird: _bird.fly,
                 products: _get.AllProduct(),
-                name: `Admin LogIn`,
-                breadcrumb: `Home - Admin - Login`,
-                userEmail: ""
+                bird: _bird.fly
             });
         } catch (err) {
             _bird.message("danger", err);
             console.error(":::", err);
-            res.render("layouts/500", {
-                website: _get.Pages().website,
-                login: req.isAuthenticated(),
-                user: req.user,
-                name: `500 - Internal server error!`,
-                breadcrumb: `❌🤦‍♂️`,
-                product: _get.AllProduct(),
-                bird: _bird.fly
-            });
+            error500(req, res);
         }
     }
 }

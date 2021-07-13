@@ -1,5 +1,6 @@
 <%- include("../partials/admin/_head") %>
-
+<!-- to send product category to script -->
+<input type="hidden" id="productCategory" value="<%= product.categories %>">
 
 	<div class="container-scroller">
 		<!-- nav -->
@@ -17,7 +18,10 @@
 								<div class="col-md-12 grid-margin">
 									<div class="d-flex justify-content-between align-items-center">
 										<div>
-											<h4 class="font-weight-bold mb-0">Add New Product</h4>
+											<h4 class="font-weight-bold mb-0"><img class="rounded-circle" src="/<%= product.img[0].path %>" alt="<%= product.img[0].fileName %>" width="50vw" height="50vw"> Edit Product: <%= product.name %>
+													
+											</h4>
+
 										</div>
 										<div>
 											<a href="/admin/products" class="btn btn-primary btn-icon-text btn-rounded">
@@ -28,7 +32,7 @@
 								</div>
 							</div>
 							<!-- row -->
-							<form class="row forms-sample" action="/admin/addProduct" method="POST"
+							<form class="row forms-sample" action="/admin/edit/<%= product._id %>" method="POST"
 								enctype="multipart/form-data">
 								<div class="col-md-6 grid-margin stretch-card">
 									<div class="card">
@@ -41,12 +45,12 @@
 											<div class="form-group">
 												<label for="">Product Name</label>
 												<input type="text" name="name" class="form-control"
-													placeholder="Product Name" required>
+													placeholder="Product Name" value="<%= product.name %>" required>
 											</div>
 											<div class="form-group">
 												<label for="">Brand Name</label>
 												<input type="text" name="brand" class="form-control"
-													placeholder="Brand Name" required>
+													placeholder="Brand Name" value="<%= product.brand %>" required>
 											</div>
 											<!--  -->
 										</div>
@@ -63,12 +67,12 @@
 											<div class="form-group">
 												<label for="">Price</label>
 												<input type="text" name="price" class="form-control" placeholder="Price"
-													required>
+													value="<%= product.price %>" required>
 											</div>
 											<div class="form-group">
 												<label for="">Total Avalable Products</label>
 												<input type="number" name="totalNo" class="form-control"
-													placeholder="Total Product" required>
+													placeholder="Total Product" value="<%= product.totalNo %>" required>
 											</div>
 
 											<!--  -->
@@ -86,32 +90,33 @@
 											<div class="form-group">
 												<label for="">Category</label>
 												<input type="text" id="formCategoryName" class="form-control"
-													placeholder="Category" value="" readonly>
-											<!-- This input takes the value for the product category -->
-												<input name="category" id="formCategoryId" hidden>
+													placeholder="Category" readonly>
+												<!-- This input takes the value for the product category -->
+												<input name="category" id="formCategoryId"
+													value="<%= product.categories %>" hidden>
 											</div>
 
 											<div class="form-group">
 												<label for="">Color</label>
 												<input type="text" name="color" class="form-control"
-													placeholder="Product Color" required>
+													placeholder="Product Color" value="<%= product.color %>" required>
 											</div>
 
 											<div class="form-group">
 												<label>Choose one or more images for your product</label>
 												<div class="input-group col-xs-12">
 													<input class="form-control" multiple="multiple" accept="image/*"
-														name="img" type="file" placeholder="Product image" required>
+														name="img" type="file" placeholder="Product image">
 												</div>
 											</div>
 											<div class="form-group">
 												<label for="exampleTextarea1">Description</label>
 												<textarea name="description" class="form-control" id="exampleTextarea1"
-													rows="7"></textarea>
+													rows="7"><%= product.description %></textarea>
 											</div>
 											<!--  -->
-											<button type="submit" class="btn btn-primary mr-2">Submit</button>
-											<a href="/admin/products" class="btn btn-light">Cancel</a>
+											<button type="submit" class="btn btn-primary mr-2">Update</button>
+											<button type="button" class="btn btn-light" onclick="btnLink('/category/<%= product._id %>?preview=true', '<%= product._id %>' + 2)">View Product</button>
 										</div>
 									</div>
 								</div>
@@ -133,7 +138,8 @@
 											<div class="form-group">
 												<hr>
 											</div>
-											<button type="button" class="btn btn-primary ml-2 " onclick="createCategoryControl(true, this)">Create New Category</button>
+											<button type="button" class="btn btn-primary ml-2 "
+												onclick="createCategoryControl(true, this)">Create New Category</button>
 											<div id="category_control" class="">
 												<div class="form-group">
 													<label for="">Create New Category</label>
@@ -153,7 +159,28 @@
 												<button type="button" class="btn btn-primary ml-2 "
 													onclick="createNewCategory()">Create New
 													Category</button>
-												<a href="#x" class="btn btn-light" onclick="createCategoryControl(false)">Cancel</a>
+												<a href="#x" class="btn btn-light"
+													onclick="createCategoryControl(false)">Cancel</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--  -->
+								<div class="col-md-12 grid-margin stretch-card">
+									<div class="card">
+										<div class="card-body">
+											<div class="image-gallery d-flex align-items-center">
+												<% product.img.forEach((img, index)=> { %>
+													<div class="img-content">
+														<button type="button"
+															class="delete-btn btn btn-danger btn-rounded btn-icon"
+															onclick="removeImage('<%= index %>')">
+															<i class="ti-trash"></i>
+														</button>
+														<img src="/<%= img.path %>" alt="<%= img.filename %>"
+															width="100%" height="auto">
+													</div>
+													<% }); %>
 											</div>
 										</div>
 									</div>
@@ -175,4 +202,5 @@
 	<script src="/aronoz/js/axios.js"></script>
 
 	<script src="/royalUI/js/category.js"></script>
+	<script src="/royalUI/js/editProduct.js"></script>
 	<%- include("../partials/admin/_scripts") %>

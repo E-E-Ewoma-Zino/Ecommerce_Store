@@ -47,7 +47,6 @@ proceed.addEventListener("click", () => {
 
 // for bootstraps tooltip
 $(document).ready(function () {
-    console.log("wertyui");
     $('[data-toggle="tooltip"]').tooltip();
 });
 

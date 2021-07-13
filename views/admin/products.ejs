@@ -21,7 +21,8 @@
 										</div>
 										<div>
 											<div>
-												<a href="/admin/addproduct" class="btn btn-primary btn-icon-text btn-rounded">
+												<a href="/admin/addproduct"
+													class="btn btn-primary btn-icon-text btn-rounded">
 													<i class="ti-plus btn-icon-prepend"></i>Add New Product
 												</a>
 											</div>
@@ -36,12 +37,13 @@
 											<p class="card-title text-md-center text-xl-left">Total Products</p>
 											<div
 												class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">34040</h3>
+												<h3 class="ml-3 mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">
+													<%= products.length %>
+												</h3>
 												<i class="ti-calendar icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
 											</div>
 											<p class="mb-0 mt-2 text-danger">0.12% <span
-													class="text-black ml-1"><small>(30
-														days)</small></span></p>
+													class="text-black ml-1"><small>(30 days)</small></span></p>
 										</div>
 									</div>
 								</div>
@@ -51,7 +53,9 @@
 											<p class="card-title text-md-center text-xl-left">Avalable Products</p>
 											<div
 												class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">47033</h3>
+												<h3 class="ml-3 mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">
+													<%= products.length %>
+												</h3>
 												<i class="ti-user icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
 											</div>
 											<p class="mb-0 mt-2 text-danger">0.47% <span
@@ -63,10 +67,10 @@
 								<div class="col-md-3 grid-margin stretch-card">
 									<div class="card">
 										<div class="card-body">
-											<p class="card-title text-md-center text-xl-left">Downloads</p>
+											<p class="card-title text-md-center text-xl-left">Buys</p>
 											<div
 												class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">40016</h3>
+												<h3 class="ml-3 mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">40016</h3>
 												<i class="ti-agenda icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
 											</div>
 											<p class="mb-0 mt-2 text-success">64.00%<span
@@ -81,7 +85,7 @@
 											<p class="card-title text-md-center text-xl-left">Returns</p>
 											<div
 												class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-												<h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">61344</h3>
+												<h3 class="ml-3 mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">61344</h3>
 												<i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
 											</div>
 											<p class="mb-0 mt-2 text-success">23.00%<span
@@ -95,10 +99,10 @@
 								<div class="col-lg-12 grid-margin stretch-card">
 									<div class="card">
 										<div class="card-body">
-											<h4 class="card-title">Bordered table</h4>
-											<p class="card-description">
+											<h4 class="card-title">Product table</h4>
+											<!-- <p class="card-description">
 												Add class <code>.table-bordered</code>
-											</p>
+											</p> -->
 											<div class="table-responsive pt-3">
 												<table class="table table-bordered">
 													<thead>
@@ -133,13 +137,14 @@
 														</tr>
 													</thead>
 													<tbody>
-														<% products.forEach((product, index) => { %>
-															<tr>
+														<% products.forEach((product, index)=> { %>
+															<tr class="option-container">
 																<td>
 																	<%= index + 1 %>
 																</td>
 																<td>
-																	<img src="<%= product.img[0].path %>" alt="<%= product.name %>">
+																	<img src="/<%= product.img[0].path %>"
+																		alt="<%= product.name %>">
 																</td>
 																<td>
 																	<%= product.name %>
@@ -156,8 +161,25 @@
 																<td>
 																	<%= product.isFeatured %>
 																</td>
+																<td>
+																	<div class="option template-demo d-flex justify-content-between flex-nowrap">
+																		<button type="button"
+																			class="btn btn-primary btn-rounded btn-icon" onclick="btnLink('/admin/edit/<%= product._id %>?edit=true', '<%= product._id %>')">
+																			<i class="ti-pencil"></i>
+																		</button>
+																		<button type="button"
+																			class="btn btn-danger btn-rounded btn-icon" onclick="btnLink('/admin/delete', '<%= product._id %>')">
+																			<i class="ti-trash"></i>
+																		</button>
+																		<button type="button"
+																			class="btn btn-success btn-rounded btn-icon" onclick="btnLink('/category/<%= product._id %>?preview=true', '<%= product._id %>')">
+																			<i class="ti-eye"></i>
+																		</button>
+																	</div>
+																</td>
 															</tr>
-														<% }); %>
+
+															<% }); %>
 													</tbody>
 												</table>
 											</div>

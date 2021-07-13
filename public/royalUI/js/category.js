@@ -19,20 +19,29 @@ function messager(data) {
 	messageBird.innerHTML = data.message;
 }
 
+refresh("/admin/category", (err, data) => {
+	if(err){
+		console.log(":::", err);
+		messager({
+			replace: ["success", "danger"],
+			message: "Please Refresh. Problem loading Pages."
+		});
+		return;
+	}
+	// console.log("res::: ", res.data);
+	// send in data or if data is undefine send in an empty array
+	displayCategory(data || []);
+});
 
-
-// store the categories
-let allCategory;
-refresh()
 // Get req to get all cartegory
-function refresh() {
+function refresh(url, callback) {
 
-	axios.get(hostURL + "/admin/category").then((res) => {
-		console.log("res::: ", res.data);
-		allCategory = res.data;
-		displayCategory(allCategory || []);
+	axios.get(hostURL + url).then((res) => {
+		// using a callback to get the resposne asyncronously
+		callback(null, res.data);
 	}).catch((err) => {
 		console.log(":::ERr ", err);
+		callback(err, null);
 	});
 }
 
@@ -45,20 +54,32 @@ function createNewCategory() {
 	}
 	console.log("new");
 
-	if (data.name) postCartegory(data);
+	if (data.name) postCartegory({url: "/admin/category", _data: data});
 	else messager({
 		replace: ["success", "danger"],
 		message: "Category has no name"
 	});
 }
-// add a new category
-function postCartegory(data) {
 
-	axios.post(hostURL + "/admin/category", data).then(function (res) {
+// Post function to add a new category
+function postCartegory(data) {
+	axios.post(hostURL + data.url, data._data).then(function (res) {
 		// console.log("data ", res.data);
-		refresh();
+		refresh("/admin/category", (err, data) => {
+			if(err){
+				console.log(":::", err);
+				messager({
+					replace: ["success", "danger"],
+					message: "Please Refresh. Problem loading Pages."
+				});
+				return;
+			}
+			// console.log("res::: ", res.data);
+			// send in data or if data is undefine send in an empty array
+			displayCategory(data || []);
+		});
 		messager({
-			replace: ["success", "danger"],
+			replace: [ "danger", "success"],
 			message: "Category has been added"
 		});
 	}).catch(function (err) {
@@ -67,8 +88,8 @@ function postCartegory(data) {
 }
 
 
-const model = document.getElementById("parent");
 // show modal
+const model = document.getElementById("parent");
 function modal() {
 	model.style.display = "flex";
 }
@@ -77,7 +98,6 @@ function modal() {
 window.onclick = (e) => {
 	if (e.target == model) {
 		model.style.display = "none";
-		console.log("outq");
 	}
 }
 
@@ -90,11 +110,17 @@ const formCategoryName = document.getElementById("formCategoryName");
 const formCategoryId = document.getElementById("formCategoryId");
 
 let childValue = {};
+// when parent section is true the function for the list of categories will only change the parent section
+let parentSection = false;
 
 // empty childValue
 function empty() {
 	parentInputName.value = "";
 	parentInputId.value = "";
+	newCategory.value = "";
+	myCategory.id = [];
+	myCategory.names = [];
+	formCategoryName.value = "";
 }
 
 // print categories
@@ -108,13 +134,12 @@ function displayCategory(category) {
 		body += `<li class="children list-group-item list-group-item-action d-flex justify-content-between align-items-center">
 		<div class="">
 			<input type="checkbox" id="${cat._id}" />
-
-			${cat.parents.length ? cat.parents[0].name + " -> " : ""}
-			${cat.name}
+			${cat.parents.length ? ` <i class="tool-tip cursor-pointer" gloss="${cat.parents.slice().reverse().map(parent => parent.name + " ")}">...</i> ` + cat.parents[0].name + ` <i class="ti-arrow-circle-right"></i> ` : ""}
+			<strong>${cat.name}</strong>
 		</div>
 		<input type="hidden" name="id" value="${cat._id}">
 		<input type="hidden" name="id" value="${cat.name}">
-		<span class="badge badge-primary badge-pill">
+		<span class="tool-tip tool-tip-left badge badge-primary badge-pill" gloss="${cat.name} has ${cat.products.length} ${cat.products.length > 1 ? "products" : "product"}">
 		${cat.products.length}
 		</span>
 	</li>`;
@@ -122,25 +147,27 @@ function displayCategory(category) {
 	body += `</ul>`;
 	document.getElementById("categoryBody").innerHTML = body;
 
+	onCategoryClick(children);
+}
 
+// If a category in the listis clicked activate this function
+function onCategoryClick(children) {
 	for (let i = 0; i < children.length; i++) {
 		const child = children[i];
 		child.addEventListener("click", () => {
 
-			// when parent section is true the function for the list of categories will only change the parent section
-			let parentSection = false;
-			if(parentSection){
+			if (parentSection) {
 				// get name and id of the clicked element and put it in parent Input
 				// console.log(child.children[1].value);
 				childValue.id = child.children[1].value;
 				// console.log(child.children[2].value);
 				childValue.name = child.children[2].value;
-				
+
 				parentInputName.value = "Parent -> " + childValue.name;
 				parentInputId.value = childValue.id;
-				
+
 				// activate checkbox
-			}else{
+			} else {
 				addToCategory(child.firstElementChild.firstElementChild, child.children[2].value);
 				formCategoryName.value = myCategory.names.toString();
 				formCategoryId.value = JSON.stringify(myCategory.id);
@@ -155,14 +182,14 @@ const myCategory = {
 	id: [],
 	names: []
 };
+
 // add or remove a product to a list of category
 function addToCategory(child, name) {
-	console.log(child.id);
-	if(child.checked){
+	if (child.checked) {
 		child.checked = false;
 		myCategory.id.splice(myCategory.id.indexOf(child.id), 1);
 		myCategory.names.splice(myCategory.names.indexOf(name), 1);
-	}else{
+	} else {
 		child.checked = true;
 		myCategory.id.push(child.id);
 		myCategory.names.push(name);
@@ -171,3 +198,32 @@ function addToCategory(child, name) {
 	// still works
 	// on.checked ? on.checked = false : on.checked = true;
 }
+
+// This function shows and hides the create category section and
+// This function close the create category section
+// create is a bool that either open or close the sectuon
+const category_control = document.getElementById("category_control");
+let control;
+function createCategoryControl(create, e) {
+	if (create) {
+		control = e;
+		category_control.style.display = "block";
+		category_control.classList.remove("smooth-close");
+		category_control.classList.add("smooth-open");
+		control.style.display = "none";
+		parentSection = true;
+	} else {
+		empty();
+		category_control.classList.remove("smooth-open");
+		category_control.classList.add("smooth-close");
+
+		setTimeout(() => {
+			category_control.style.display = "none";
+			control.style.display = "block";
+		}, 1700);
+		parentSection = false;
+	}
+}
+
+
+// 
