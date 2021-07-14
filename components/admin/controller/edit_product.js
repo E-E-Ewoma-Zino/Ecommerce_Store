@@ -12,7 +12,7 @@ module.exports = {
 		try {
 			console.log(req.query);
 			// update the page by removing the deleted images
-			// if(req.query.removeImage) removeImage(req.params.productId, req.query.removeImage);
+			if(req.query.removeImage) removeImage(req.params.productId, req.query.removeImage);
 
 			_get.ProductByID(req.params.productId, (product) => {
 				// for easy data transfer

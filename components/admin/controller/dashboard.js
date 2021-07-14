@@ -7,15 +7,7 @@ const logger = require(__dirname + "../../../../middleware/logger");
 module.exports = {
     get(req, res) {
         try {
-            res.render("admin/dashboard", {
-                website: _get.Pages().website,
-                login: req.isAuthenticated(),
-                user: req.user,
-                bird: _bird.fly,
-                name: `Admin LogIn`,
-                breadcrumb: `Home - Admin - Login`,
-                userEmail: ""
-            });
+            res.render("admin/dashboard");
         } catch (err) {
             _bird.message("danger", err);
             console.error(":::", err);
