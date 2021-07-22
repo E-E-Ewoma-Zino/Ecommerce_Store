@@ -20756,6 +20756,7 @@ ul li, ol li, dl li {
 .delete-btn{
 	position: absolute;
 	top: 0px;
+	right: 0px;
 	visibility: hidden;
 	transform: scale(.1);
 	transition: all .4s;

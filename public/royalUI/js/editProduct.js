@@ -72,15 +72,18 @@ function checkTheCategoryThatAreContainedInTheProduct(data) {
 // Function to remove an image from a product
 // Get req that has a query
 // this function recieves an index from the delete btn and uses that index to know where to delete the image
-function removeImage(index) {
+function removeImage(btn, index) {
 
 	axios.get(hostURL + window.location.pathname + window.location.search + "&removeImage=" + index).then((res) => {
 		// using a callback to get the resposne asyncronously
-		console.log(res.data);
+		// console.log(res.data);
 		messager({
 			replace: [ "danger", "success"],
 			message: "Delete Successful."
 		});
+
+		document.getElementsByClassName("img-content")[index].style.filter = "sepia(1)";
+		btn.style.display = "none";
 	}).catch((err) => {
 		console.log(":::ERr ", err);
 		messager({

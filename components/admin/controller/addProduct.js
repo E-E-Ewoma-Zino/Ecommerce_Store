@@ -31,6 +31,9 @@ module.exports = {
 
 		// console.log(req.files);
 		// console.log("::::::::::", req.body);
+		// 
+		// 
+		let cat = req.body.category ? JSON.parse(req.body.category) : [];
 
 		try {
 			const newProduct = new Products({
@@ -41,7 +44,7 @@ module.exports = {
 				color: _.toLower(req.body.color),
 				name: _.toLower(req.body.name[0]),
 				description: req.body.description,
-				categories: JSON.parse(req.body.category)
+				categories: cat
 			});
 
 			newProduct.save((err) => {

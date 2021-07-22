@@ -133,7 +133,7 @@ function displayCategory(category) {
 	category.forEach(cat => {
 		body += `<li class="children list-group-item list-group-item-action d-flex justify-content-between align-items-center">
 		<div class="">
-			<input type="checkbox" id="${cat._id}" />
+			<input type="checkbox" id="${cat._id}" onclick="onCategoryClick('${children}')"/>
 			${cat.parents.length ? ` <i class="tool-tip cursor-pointer" gloss="${cat.parents.slice().reverse().map(parent => parent.name + " ")}">...</i> ` + cat.parents[0].name + ` <i class="ti-arrow-circle-right"></i> ` : ""}
 			<strong>${cat.name}</strong>
 		</div>
@@ -155,17 +155,17 @@ function onCategoryClick(children) {
 	for (let i = 0; i < children.length; i++) {
 		const child = children[i];
 		child.addEventListener("click", () => {
-
+			
 			if (parentSection) {
 				// get name and id of the clicked element and put it in parent Input
 				// console.log(child.children[1].value);
 				childValue.id = child.children[1].value;
 				// console.log(child.children[2].value);
 				childValue.name = child.children[2].value;
-
+				
 				parentInputName.value = "Parent -> " + childValue.name;
 				parentInputId.value = childValue.id;
-
+				
 				// activate checkbox
 			} else {
 				addToCategory(child.firstElementChild.firstElementChild, child.children[2].value);
@@ -194,7 +194,7 @@ function addToCategory(child, name) {
 		myCategory.id.push(child.id);
 		myCategory.names.push(name);
 	}
-	console.log(myCategory);
+	// console.log(myCategory);
 	// still works
 	// on.checked ? on.checked = false : on.checked = true;
 }

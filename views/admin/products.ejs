@@ -146,11 +146,11 @@
 																	<img src="/<%= product.img[0].path %>"
 																		alt="<%= product.name %>">
 																</td>
-																<td>
+																<td style="text-transform: capitalize;">
 																	<%= product.name %>
 																</td>
-																<td>
-																	<%= product._id %>
+																<td title="<%= product._id %>">
+																	<%= product._id.toString().substr(0, 5) %>...
 																</td>
 																<td>
 																	$ <%= product.price %>

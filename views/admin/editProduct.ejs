@@ -1,6 +1,6 @@
 <%- include("../partials/admin/_head") %>
-<!-- to send product category to script -->
-<input type="hidden" id="productCategory" value="<%= product.categories %>">
+	<!-- to send product category to script -->
+	<input type="hidden" id="productCategory" value="<%= product.categories %>">
 
 	<div class="container-scroller">
 		<!-- nav -->
@@ -18,8 +18,11 @@
 								<div class="col-md-12 grid-margin">
 									<div class="d-flex justify-content-between align-items-center">
 										<div>
-											<h4 class="font-weight-bold mb-0"><img class="rounded-circle" src="/<%= product.img[0].path %>" alt="<%= product.img[0].fileName %>" width="50vw" height="50vw"> Edit Product: <%= product.name %>
-													
+											<h4 class="font-weight-bold mb-0"><img class="rounded-circle"
+												src="/<%= product.img.length ? product.img[0].path : "../aronoz/img/favicon.png" %>"
+													alt="<%= product.img.length && product.img[0].fileName %>" width="50vw" height="50vw">
+												Edit Product: <%= product.name %>
+
 											</h4>
 
 										</div>
@@ -116,7 +119,9 @@
 											</div>
 											<!--  -->
 											<button type="submit" class="btn btn-primary mr-2">Update</button>
-											<button type="button" class="btn btn-light" onclick="btnLink('/category/<%= product._id %>?preview=true', '<%= product._id %>' + 2)">View Product</button>
+											<button type="button" class="btn btn-light"
+												onclick="btnLink('/category/<%= product._id %>?preview=true', '<%= product._id %>' + 2)">View
+												Product</button>
 										</div>
 									</div>
 								</div>
@@ -169,12 +174,16 @@
 								<div class="col-md-12 grid-margin stretch-card">
 									<div class="card">
 										<div class="card-body">
+											<button type="button" class="btn btn-primary btn-rounded btn-icon"
+												onclick="refresh()">
+												<i class="ti-reload"></i>
+											</button>
 											<div class="image-gallery d-flex align-items-center">
 												<% product.img.forEach((img, index)=> { %>
 													<div class="img-content">
 														<button type="button"
 															class="delete-btn btn btn-danger btn-rounded btn-icon"
-															onclick="removeImage('<%= index %>')">
+															onclick="removeImage(this, '<%= index %>')">
 															<i class="ti-trash"></i>
 														</button>
 														<img src="/<%= img.path %>" alt="<%= img.filename %>"
