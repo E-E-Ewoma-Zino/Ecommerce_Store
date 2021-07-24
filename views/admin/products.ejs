@@ -143,8 +143,8 @@
 																	<%= index + 1 %>
 																</td>
 																<td>
-																	<img src="/<%= product.img[0].path %>"
-																		alt="<%= product.name %>">
+																	<img src="/<%= product.img.length ? product.img[0].path : "../aronoz/img/favicon.png" %>"
+																	alt="<%= product.img.length && product.img[0].fileName %>">
 																</td>
 																<td style="text-transform: capitalize;">
 																	<%= product.name %>
@@ -168,7 +168,7 @@
 																			<i class="ti-pencil"></i>
 																		</button>
 																		<button type="button"
-																			class="btn btn-danger btn-rounded btn-icon" onclick="btnLink('/admin/delete', '<%= product._id %>')">
+																			class="btn btn-danger btn-rounded btn-icon" onclick="modal({type: 'form', message: 'Are you sure you want to delete <strong><%= product.name %></strong>.', title: 'Confirm Your Request', method: {name: 'deleteProduct', params: '<%= product._id %>'}})">
 																			<i class="ti-trash"></i>
 																		</button>
 																		<button type="button"
@@ -178,10 +178,11 @@
 																	</div>
 																</td>
 															</tr>
-
+															
 															<% }); %>
-													</tbody>
-												</table>
+														</tbody>
+													</table>
+													<%- include("../components/modal") %>
 											</div>
 										</div>
 									</div>
@@ -189,11 +190,17 @@
 							</div>
 						</div>
 						<!-- content-wrapper ends -->
+						<%- include("../components/messageBird") %>
 						<%- include("../partials/admin/_footer") %>
 					</div>
 					<!-- main-panel ends -->
 			</div>
 			<!-- page-body-wrapper ends -->
 	</div>
+<!-- axios plugin -->
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="/aronoz/js/axios.js"></script>
+	<!-- page script -->
+	<script src="/royalUI/js/product.js"></script>
 
 	<%- include("../partials/admin/_scripts") %>

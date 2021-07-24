@@ -30,6 +30,10 @@ router.get("/dashboard", (req, res) => dashboard.get(req, res));
 // @route   GET /admin/products
 router.get("/products", (req, res) => products.get(req, res));
 
+// @desc    products page
+// @route   DELETE /admin/products
+router.delete("/products", (req, res) => products.delete(req, res));
+
 // @desc    orders page
 // @route   GET /admin/orders
 router.get("/orders", (req, res) => orders.get(req, res));

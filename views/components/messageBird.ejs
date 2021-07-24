@@ -9,11 +9,18 @@
 						<%= cry.message %>
 					</div>
 					<% }else{ %>
-						No Message
+						<div class="alert alert-danger alert-dismissible">
+							<button type="button" class="close" data-dismiss="alert">&times;</button>
+							No Message
+						</div>
 						<%} %>
 							<% }); %>
 								<% }catch(err){ %>
-									Error from try <%= err %> 
+									<div class="alert alert-danger alert-dismissible">
+										<button type="button" class="close" data-dismiss="alert">&times;</button>
+										Error: <%= err %> 
+									</div>
+									
 									<% } %>
 
 										<div id="littleMessageBox" class="alert alert-danger alert-dismissible">

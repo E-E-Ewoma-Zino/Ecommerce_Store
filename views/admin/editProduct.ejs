@@ -158,8 +158,8 @@
 													<input type="text" id="inputParentName"
 														class="form-control list-group-item"
 														placeholder="Add Parent (only if it is a subcategory)"
-														onclick="modal()" value="" readonly>
-													<%- include("../components/parent") %>
+														onclick="modal({type: 'info', message: 'Use the <strong>Category</strong> list above to select the parent.', title: 'Select a Parent'})" value="" readonly>
+													<%- include("../components/modal") %>
 												</div>
 												<button type="button" class="btn btn-primary ml-2 "
 													onclick="createNewCategory()">Create New
@@ -206,10 +206,10 @@
 
 			<!-- page-body-wrapper ends -->
 	</div>
-
+	
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script src="/aronoz/js/axios.js"></script>
-
-	<script src="/royalUI/js/category.js"></script>
-	<script src="/royalUI/js/editProduct.js"></script>
+	
 	<%- include("../partials/admin/_scripts") %>
+	<script src="/royalUI/js/editProduct.js"></script>
+	<script src="/royalUI/js/category.js"></script>

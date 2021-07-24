@@ -5,11 +5,11 @@ const _bird = require(__dirname + "../../../../middleware/messageBird");
 
 
 module.exports = (req, res) => {
-    try {
-        res.redirect("admin/login");
-    } catch (err) {
-        console.error("::::::>>:", err);
-        _bird.message("danger", err);
-        error500(req, res);
-    }
+	try {
+		res.redirect("admin/login");
+	} catch (err) {
+		console.error("::::::>>:", err);
+		_bird.message("danger", err);
+		error500(req, res);
+	}
 }

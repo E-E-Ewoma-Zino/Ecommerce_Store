@@ -1,26 +1,7 @@
+// 
 
-// url for the axios.get and post method
-const hostURL = window.location.origin;
-
-
-
-// using messageBird
-const messageBox = document.getElementById("littleMessageBox");
-const messageBird = document.getElementById("littleMessage");
-
-// message sender
-function messager(data) {
-	$("#littleMessageBox").fadeIn(() => {
-		setTimeout(() => {
-			$("#littleMessageBox").fadeOut();
-		}, 7000);
-	});
-	messageBox.classList.replace(`alert-${data.replace[0]}`, `alert-${data.replace[1]}`);
-	messageBird.innerHTML = data.message;
-}
-
-refresh("/admin/category", (err, data) => {
-	if(err){
+getAxios("/admin/category", (err, data) => {
+	if (err) {
 		console.log(":::", err);
 		messager({
 			replace: ["success", "danger"],
@@ -33,17 +14,6 @@ refresh("/admin/category", (err, data) => {
 	displayCategory(data || []);
 });
 
-// Get req to get all cartegory
-function refresh(url, callback) {
-
-	axios.get(hostURL + url).then((res) => {
-		// using a callback to get the resposne asyncronously
-		callback(null, res.data);
-	}).catch((err) => {
-		console.log(":::ERr ", err);
-		callback(err, null);
-	});
-}
 
 // get the newCategory data and post to the server
 const newCategory = document.getElementById("newCategory");
@@ -54,51 +24,39 @@ function createNewCategory() {
 	}
 	console.log("new");
 
-	if (data.name) postCartegory({url: "/admin/category", _data: data});
+	if (data.name) postAxios({ url: "/admin/category", _data: data }, (error, response) => {
+		if (error) {
+			console.log(":::", err);
+			messager({
+				replace: ["success", "danger"],
+				message: "Task Failed!"
+			});
+			return;
+		}
+		else {
+			getAxios("/admin/category", (err, data) => {
+				if (err) {
+					console.log(":::", err);
+					messager({
+						replace: ["success", "danger"],
+						message: "Please Refresh. Problem loading Pages."
+					});
+					return;
+				}
+				// console.log("res::: ", res.data);
+				// send in data or if data is undefine send in an empty array
+				displayCategory(data || []);
+			});
+			messager({
+				replace: ["danger", "success"],
+				message: "Category has been added"
+			});
+		}
+	});
 	else messager({
 		replace: ["success", "danger"],
 		message: "Category has no name"
 	});
-}
-
-// Post function to add a new category
-function postCartegory(data) {
-	axios.post(hostURL + data.url, data._data).then(function (res) {
-		// console.log("data ", res.data);
-		refresh("/admin/category", (err, data) => {
-			if(err){
-				console.log(":::", err);
-				messager({
-					replace: ["success", "danger"],
-					message: "Please Refresh. Problem loading Pages."
-				});
-				return;
-			}
-			// console.log("res::: ", res.data);
-			// send in data or if data is undefine send in an empty array
-			displayCategory(data || []);
-		});
-		messager({
-			replace: [ "danger", "success"],
-			message: "Category has been added"
-		});
-	}).catch(function (err) {
-		console.error("Could not add to cart! ", err);
-	});
-}
-
-
-// show modal
-const model = document.getElementById("parent");
-function modal() {
-	model.style.display = "flex";
-}
-
-// deactivate modal
-window.onclick = (e) => {
-	if (e.target == model) {
-		model.style.display = "none";
-	}
 }
 
 // get the children then if clicked update it with the value
@@ -133,8 +91,10 @@ function displayCategory(category) {
 	category.forEach(cat => {
 		body += `<li class="children list-group-item list-group-item-action d-flex justify-content-between align-items-center">
 		<div class="">
-			<input type="checkbox" id="${cat._id}" onclick="onCategoryClick('${children}')"/>
-			${cat.parents.length ? ` <i class="tool-tip cursor-pointer" gloss="${cat.parents.slice().reverse().map(parent => parent.name + " ")}">...</i> ` + cat.parents[0].name + ` <i class="ti-arrow-circle-right"></i> ` : ""}
+		<!-- This check box is just to check if the category is checked or not easily and it also holds the category id -->
+			<input type="checkbox" id="${cat._id}" hidden/>
+			<i class="ti-control-record"></i>
+			${cat.parents.length ? ` <i class="tool-tip cursor-pointer ti-more" gloss="${cat.parents.slice().reverse().map(parent => parent.name + " ")}"></i> ` + cat.parents[0].name + ` <i class="ti-arrow-circle-right"></i> ` : ""}
 			<strong>${cat.name}</strong>
 		</div>
 		<input type="hidden" name="id" value="${cat._id}">
@@ -155,17 +115,17 @@ function onCategoryClick(children) {
 	for (let i = 0; i < children.length; i++) {
 		const child = children[i];
 		child.addEventListener("click", () => {
-			
+
 			if (parentSection) {
 				// get name and id of the clicked element and put it in parent Input
 				// console.log(child.children[1].value);
 				childValue.id = child.children[1].value;
 				// console.log(child.children[2].value);
 				childValue.name = child.children[2].value;
-				
+
 				parentInputName.value = "Parent -> " + childValue.name;
 				parentInputId.value = childValue.id;
-				
+
 				// activate checkbox
 			} else {
 				addToCategory(child.firstElementChild.firstElementChild, child.children[2].value);
@@ -187,10 +147,16 @@ const myCategory = {
 function addToCategory(child, name) {
 	if (child.checked) {
 		child.checked = false;
+		child.nextElementSibling.classList.remove("ti-check");
+		child.nextElementSibling.classList.add("ti-control-record");
+		child.nextElementSibling.classList.toggle("text-success");
 		myCategory.id.splice(myCategory.id.indexOf(child.id), 1);
 		myCategory.names.splice(myCategory.names.indexOf(name), 1);
 	} else {
 		child.checked = true;
+		child.nextElementSibling.classList.add("ti-check");
+		child.nextElementSibling.classList.toggle("text-success");
+		child.nextElementSibling.classList.remove("ti-control-record");
 		myCategory.id.push(child.id);
 		myCategory.names.push(name);
 	}
@@ -212,6 +178,20 @@ function createCategoryControl(create, e) {
 		category_control.classList.add("smooth-open");
 		control.style.display = "none";
 		parentSection = true;
+		getAxios("/admin/category", (err, data) => {
+			if (err) {
+				console.log(":::", err);
+				messager({
+					replace: ["success", "danger"],
+					message: "Please Refresh. Problem loading Pages."
+				});
+				return;
+			}
+			// console.log("res::: ", res.data);
+			// send in data or if data is undefine send in an empty array
+			displayCategory(data || []);
+			empty();
+		});	
 	} else {
 		empty();
 		category_control.classList.remove("smooth-open");

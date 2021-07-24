@@ -8,7 +8,7 @@
 // 2. in the category input get all the category from the product and check it as selected
 const productCategories = document.getElementById("productCategory");
 
-refresh("/admin/category", (err, data) => {
+getAxios("/admin/category", (err, data) => {
 	if (err) {
 		console.log(":::", err);
 		messager({
@@ -50,7 +50,7 @@ function checkTheCategoryThatAreContainedInTheProduct(data) {
 	for (let i = 0; i < data.listValue.length; i++) {
 		for (let j = 0; j < children.length; j++) {
 			const child = children[j];
-			if(child.children[1].value == data.categories[i]._id) {
+			if (child.children[1].value == data.categories[i]._id) {
 				// console.log(child.children[1].value);
 				// console.log(data.categories[i]._id);
 				child.firstElementChild.firstElementChild.checked = true;
@@ -74,21 +74,42 @@ function checkTheCategoryThatAreContainedInTheProduct(data) {
 // this function recieves an index from the delete btn and uses that index to know where to delete the image
 function removeImage(btn, index) {
 
-	axios.get(hostURL + window.location.pathname + window.location.search + "&removeImage=" + index).then((res) => {
-		// using a callback to get the resposne asyncronously
-		// console.log(res.data);
-		messager({
-			replace: [ "danger", "success"],
-			message: "Delete Successful."
-		});
+	// axios.get(hostURL + window.location.pathname + window.location.search + "&removeImage=" + index).then((res) => {
+	// // using a callback to get the resposne asyncronously
+	// // console.log(res.data);
+	// messager({
+	// 	replace: ["danger", "success"],
+	// 	message: "Delete Successful."
+	// });
 
-		document.getElementsByClassName("img-content")[index].style.filter = "sepia(1)";
-		btn.style.display = "none";
-	}).catch((err) => {
-		console.log(":::ERr ", err);
-		messager({
-			replace: ["success", "danger"],
-			message: "Delete Failed. Try again."
-		});
+	// document.getElementsByClassName("img-content")[index].style.filter = "sepia(1)";
+	// btn.style.display = "none";
+	// }).catch((err) => {
+	// 	console.log(":::ERr ", err);
+	// 	messager({
+	// 		replace: ["success", "danger"],
+	// 		message: "Delete Failed. Try again."
+	// 	});
+	// });
+	getAxios(window.location.pathname + window.location.search + "&removeImage=" + index, (err, res) => {
+		if (condition) {
+			if (err) {
+				console.log(":::err", err);
+				messager({
+					replace: ["success", "danger"],
+					message: "Delete Failed. Try again."
+				});
+				return;
+			}
+			// using a callback to get the resposne asyncronously
+			// console.log(res.data);
+			messager({
+				replace: ["danger", "success"],
+				message: "Delete Successful."
+			});
+
+			document.getElementsByClassName("img-content")[index].style.filter = "sepia(1)";
+			btn.style.display = "none";
+		}
 	});
 }

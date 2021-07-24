@@ -20621,15 +20621,15 @@ ul li, ol li, dl li {
 
 /* make a modal to show categories */
 
-#parent {
+#modal {
 	position: fixed;
 	top: 0%;
 	right: 0%;
 	width: 85%;
 	height: 100%;
 	display: none;
-	justify-content: center;
 	align-items: center;
+	justify-content: center;
 }
 
 /* make caterogy body scrollable */

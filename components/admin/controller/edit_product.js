@@ -17,7 +17,6 @@ function renderGet(res, bird, product) {
 module.exports = {
 	get(req, res) {
 		try {
-			console.log(req.query);
 			// update the page by removing the deleted images
 			if (req.query.removeImage) removeImage(req.params.productId, req.query.removeImage, (err, done) => {
 				if (err) _get.ProductByID(req.params.productId, (product) => {
@@ -40,18 +39,13 @@ module.exports = {
 	},
 	post(req, res) {
 		try {
-			logger.log(req.params);
-			logger.log(req.files);
-			logger.log(req.body);
 			const newData = {
-				// img: req.files,
 				price: req.body.price,
 				totalNo: req.body.totalNo,
 				brand: _.toLower(req.body.brand),
 				color: _.toLower(req.body.color),
 				name: _.toLower(req.body.name[0]),
 				description: req.body.description,
-				// categories: JSON.parse(req.body.category)
 			};
 
 			// this updates the image with the new one. NOTE it does not delete
@@ -68,7 +62,7 @@ module.exports = {
 			// get all the new categories
 			getNewCategories(req.params.productId, req.body.category, (newCategories)=>{
 				// not working!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				addTheNewCategories(req.params.productId, newCategories, (done)=>{
+				if (newCategories)	addTheNewCategories(req.params.productId, newCategories, (done)=>{
 					if(done) _bird.message("success", "Category Updated");
 				});
 			});
@@ -167,9 +161,10 @@ function getNewCategories(productId, newCategories, callback) {
 function addTheNewCategories(productId, categories, callback) {
 	logger.log("categories");
 	logger.log(categories);
+	logger.log(productId);
 	_get.ProductByID(productId, (product) => {
 		if (product) {
-			product.categories = [product.categories, ...categories];
+			product.categories = [...product.categories, ...categories];
 			product.save((err)=>{
 				if(err){
 					console.log("err:::", err);
