@@ -8,82 +8,94 @@ const _bird = require(__dirname + "../../../../middleware/messageBird");
 
 
 module.exports = {
-    get(req, res) {
-        try {
-            if (req.isAuthenticated()) cart.userCart(req.user._id, (cart) => {
-                res.render("layouts/checkout", {
-                    website: _get.Pages().website,
-                    login: req.isAuthenticated(),
-                    user: req.user,
-                    bird: _bird.fly,
-                    name: _get.Pages().checkout.name,
-                    breadcrumb: _get.Pages().checkout.breadcrumb,
-                    cart: cart
-                });
-            });
-            else {
-                res.render("layouts/checkout", {
-                    website: _get.Pages().website,
-                    login: req.isAuthenticated(),
-                    user: req.user,
-                    bird: _bird.fly,
-                    name: _get.Pages().checkout.name,
-                    breadcrumb: _get.Pages().checkout.breadcrumb,
-                    cart: { item: [] }
-                });
-            }
+	get(req, res) {
+		try {
+			if (req.isAuthenticated()) cart.userCart(req.user._id, (cart) => {
+				_get.Pages((err, page) => {
+					if (err) {
+						console.error(":::", err);
+					} else {
+						res.render("layouts/checkout", {
+							website: page.website,
+							login: req.isAuthenticated(),
+							user: req.user,
+							bird: _bird.fly,
+							name: page.checkout.name,
+							breadcrumb: page.checkout.breadcrumb,
+							cart: cart
+						});
+					}
+				});
+			});
+			else {
+				_get.Pages((err, page) => {
+					if (err) {
+						console.error(":::", err);
+					} else {
+						res.render("layouts/checkout", {
+							website: page.website,
+							login: req.isAuthenticated(),
+							user: req.user,
+							bird: _bird.fly,
+							name: page.checkout.name,
+							breadcrumb: page.checkout.breadcrumb,
+							cart: { item: [] }
+						});
+					}
+				});
+			}
 
 
-        } catch (err) {
-            console.error(":::", err);
+		} catch (err) {
+			console.error(":::", err);
 
-            _bird.message("danger", err);
-            error500(req, res);
-        }
-    },
-    post(req, res) {
-        // This is where an order will be created
-        // Steps to create an order
-        // 1. Get the order
-        // 2. Save the order
-        // 3. Done😁
+			_bird.message("danger", err);
+			error500(req, res);
+		}
+	},
+	post(req, res) {
+		// This is where an order will be created
+		// Steps to create an order
+		// 1. Get the order
+		// 2. Save the order
+		// 3. Done😁
 
-        logger.log("Order >", req.body);
-        const details = {
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            company: req.body.company,
-            phoneNo: req.body.phoneNo,
-            email: req.body.email,
-            country: req.body.country,
-            city: req.body.city,
-            address1: req.body.address1,
-            zip: req.body.zip,
-            note: req.body.note,
-        };
+		logger.log("Order >", req.body);
+		const details = {
+			firstname: req.body.firstname,
+			lastname: req.body.lastname,
+			company: req.body.company,
+			phoneNo: req.body.phoneNo,
+			email: req.body.email,
+			country: req.body.country,
+			city: req.body.city,
+			address1: req.body.address1,
+			zip: req.body.zip,
+			note: req.body.note,
+		};
 
-        cart.userCart(req.user._id, (cart) => {
+		cart.userCart(req.user._id, (cart) => {
 
-            const newOrder = new Orders({
-                user: req.user._id,
-                cart: cart.item,
-                total: req.body.total,
-                details: details,
-                shipping: req.body.shipping,
-                subtotal: req.body.subtotal,
-                orderMethod: req.body.orderMethod
-            });
+			const newOrder = new Orders({
+				user: req.user._id,
+				cart: cart._id,
+				total: req.body.total,
+				details: details,
+				shipping: req.body.shipping,
+				subtotal: req.body.subtotal,
+				orderMethod: req.body.orderMethod
+			});
 
-            newOrder.save((err) => {
+			newOrder.save((err) => {
 
-                if (err) {
-                    _bird.message("danger", "Sorry, could not create order");
-                }
-                else {
-                    _bird.message("success", "Successfully created an order");
-                }
-            });
-        });
-        res.send("Order Delivered Successfully");
-    }
+				if (err) {
+					_bird.message("danger", "Sorry, could not create order");
+				}
+				else {
+					_bird.message("success", "Successfully created an order");
+				}
+			});
+		});
+		res.send("Order Delivered Successfully");
+	}
 }

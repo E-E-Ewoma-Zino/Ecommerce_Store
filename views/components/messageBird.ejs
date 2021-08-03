@@ -18,7 +18,7 @@
 								<% }catch(err){ %>
 									<div class="alert alert-danger alert-dismissible">
 										<button type="button" class="close" data-dismiss="alert">&times;</button>
-										Error: <%= err %> 
+										_Error: <%= err %> 
 									</div>
 									
 									<% } %>
@@ -33,11 +33,9 @@
 <script>
 	const out = document.getElementsByClassName("fadeOut");
 	// get each message created and after 7s disable it
-	console.log("out", out.length);
 	for (let i = 0; i < out.length; i++) {
 		const fade = out[i];
 		setTimeout(() => {
-			console.log("waiting...");
 			fade.style.display = "none";
 		}, 7000);
 	}

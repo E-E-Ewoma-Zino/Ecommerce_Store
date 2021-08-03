@@ -5,26 +5,44 @@ const Products = require("../model/Products");
 const find_duplicate = require("./find_duplicate");
 
 module.exports = {
-	// @desc    THIS SCRIPT GETS ALL THE PAGE CONTENT AND THEN EXPORTS IT
-	Pages: () => allPages,
-	// @desc    THIS SCRIPT GETS ALL THE PAGE CONTENT AND THEN EXPORTS IT
-	AllProduct: () => allProducts,
-	// @desc    THIS SCRIPT GETS ALL THE PRODUCTS CATEGORY NAMES AND THEIR LENGTH
+	// @desc	THIS SCRIPT GETS ALL THE PAGE CONTENT AND THEN EXPORTS IT
+	Pages: (callback) => {
+		Pages.findOne({}, (err, page) => {
+			if (err) {
+				console.error(err);
+				callback(err, null);
+			}else{
+				callback(null, page);
+			}
+		});
+	},
+	// @desc	THIS SCRIPT GETS ALL THE PAGE CONTENT AND THEN EXPORTS IT
+	AllProduct: (callback) => {
+		Products.find({}, (err, products)=>{
+			if(err){
+				console.log(":::", err);
+				callback(err, null);
+			}else{
+				callback(null, products);
+			}
+		})
+	},
+	// @desc	THIS SCRIPT GETS ALL THE PRODUCTS CATEGORY NAMES AND THEIR LENGTH
 	AllCategory: () => find_duplicate(allCategory),
-	// @desc    THIS SCRIPT GETS ALL THE PRODUCTS COLORS NAMES AND THEIR LENGTH
+	// @desc	THIS SCRIPT GETS ALL THE PRODUCTS COLORS NAMES AND THEIR LENGTH
 	AllColor: () => find_duplicate(allColor),
-	// @desc    THIS SCRIPT GETS ALL THE PRODUCTS BRAND NAMES AND THEIR LENGTH
+	// @desc	THIS SCRIPT GETS ALL THE PRODUCTS BRAND NAMES AND THEIR LENGTH
 	AllBrand: () => find_duplicate(allBrand),
-	// @desc    THIS SCRIPT GETS FROM A CALLBACK FUNCTION ONE PRODUCT BY IT'S ID
-	ProductByID: async (id, result) => {
+	// @desc	THIS SCRIPT GETS FROM A CALLBACK FUNCTION ONE PRODUCT BY IT'S ID
+	ProductByID: async (id, callback) => {
 		try {
 			const product = await Products.findById({ _id: id }).exec();
-			result(product);
+			callback(product);
 		} catch (err) {
 			console.log(":::err ", err);
 		}
 	},
-	// @desc    THIS SCRIPT GETS FROM A CALLBACK FUNCTION THE TEMP/CURRENT USER
+	// @desc	THIS SCRIPT GETS FROM A CALLBACK FUNCTION THE TEMP/CURRENT USER
 	CurrentUser: (userId, callback) => {
 		Users.findOne({ _id: userId }).then((user) => {
 			callback(user);
@@ -34,51 +52,6 @@ module.exports = {
 		});
 	},
 };
-
-
-
-
-
-
-
-
-
-
-
-
-// =================== Get All Pages ===============================
-let allPages;  // TO STORE THE CONTENT
-
-// FUNCTION GETS THE CONTENT FROM mongoose findOne METHODE
-async function getPage(page) {
-	allPages = await page;
-}
-// FIND ALL THE PAGES
-Pages.findOne({}, (err, page) => {
-	if (err) {
-		console.error(err);
-	}
-	// console.log(page);
-	getPage(page);
-});
-// =================== Get All Pages end===============================
-
-// =================== Get All Products ===============================
-let allProducts;  // TO STORE THE CONTENT
-
-// FUNCTION GETS THE CONTENT FROM mongoose findOne METHODE
-async function getAllProduct(product) {
-	allProducts = await product;
-}
-
-// FIND ALL THE PRODUCTS
-Products.find({}, (err, Product) => {
-	if (err) {
-		console.error(err);
-	}
-	getAllProduct(Product);
-});
-// =================== Get All products ends===============================
 
 
 
@@ -92,13 +65,7 @@ async function AllCategory(product) {
 	});
 }
 
-// FIND ALL THE PRODUCTS
-Products.find({ category: { $ne: null } }, (err, product) => {
-	if (err) {
-		console.error(err);
-	}
-	AllCategory(product);
-});
+
 
 // =================== Get All products ends===============================
 

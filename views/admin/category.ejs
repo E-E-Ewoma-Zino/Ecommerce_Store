@@ -17,7 +17,7 @@
 								<div class="col-md-12 grid-margin">
 									<div class="d-flex justify-content-between align-items-center">
 										<div>
-											<h4 class="font-weight-bold mb-0">Products</h4>
+											<h4 class="font-weight-bold mb-0">Category</h4>
 										</div>
 										<div>
 											<div>
@@ -34,11 +34,11 @@
 								<div class="col-md-3 grid-margin stretch-card">
 									<div class="card">
 										<div class="card-body">
-											<p class="card-title text-md-center text-xl-left">Total Products</p>
+											<p class="card-title text-md-center text-xl-left">Total Category</p>
 											<div
 												class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-												<h3 class="total-product ml-3 mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">
-													<!-- Put product length -->
+												<h3 class="total_category ml-3 mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">
+													<!-- Category Length goes here -->
 												</h3>
 												<i class="ti-calendar icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
 											</div>
@@ -50,11 +50,11 @@
 								<div class="col-md-3 grid-margin stretch-card">
 									<div class="card">
 										<div class="card-body">
-											<p class="card-title text-md-center text-xl-left">Avalable Products</p>
+											<p class="card-title text-md-center text-xl-left">Avalable Category</p>
 											<div
 												class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-												<h3 class="total-product ml-3 mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">
-													<!-- Put product length -->
+												<h3 class="total_category ml-3 mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">
+													<!-- Category Length goes here -->
 												</h3>
 												<i class="ti-user icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
 											</div>
@@ -88,13 +88,64 @@
 												<h3 class="ml-3 mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">61344</h3>
 												<i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
 											</div>
-											<p class="mb-0 mt-2 text-success">23.00%<span class="text-black ml-1"><small>(30 days)</small></span></p>
+											<p class="mb-0 mt-2 text-success">23.00%<span
+													class="text-black ml-1"><small>(30
+														days)</small></span></p>
 										</div>
 									</div>
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-lg-12 grid-margin stretch-card">
+								<div class="col-md-12 grid-margin stretch-card">
+									<button type="button" class="btn btn-primary ml-2 "
+									onclick="createCategoryControl(true, this)">Create New Category</button>
+								</div>
+							</div>
+							<div class="row">
+								<div id="category_control" class="col-md-6 grid-margin stretch-card">
+									<div class="card">
+										<div class="card-body">
+											<h4 class="card-title">Category</h4>
+											<p class="card-description">
+												Categorise your product as a parent or as a child
+											</p>
+											<!--  -->
+											<div class="form-group">
+												<label for="exampleFormControlSelect2">Assign your product a
+													category</label>
+												<!-- this id is the container for the list of category -->
+												<div id="categoryBody" class="scroll"></div>
+											</div>
+											<div class="form-group">
+												<hr>
+											</div>
+											<div class="">
+												<div class="form-group">
+													<label for="">Create New Category</label>
+													<input type="text" id="newCategory" name="name"
+														class="form-control list-group-item" placeholder="Add Category">
+												</div>
+												<div class="form-group">
+													<input type="hidden" id="inputParentId" name="parent" value="">
+													<label for="">Choose a parent category from the list
+														above</label>
+													<input type="text" id="inputParentName"
+														class="form-control list-group-item"
+														placeholder="Add Parent (only if it is a subcategory)"
+														onclick="modal({type: 'info', message: 'Use the <strong>Category</strong> list above to select the parent.', title: 'Select a Parent'})"
+														value="" readonly>
+												</div>
+												<button type="button" class="btn btn-primary ml-2 "
+													onclick="createNewCategory()">Create New
+													Category</button>
+												<a href="#x" class="btn btn-light"
+													onclick="createCategoryControl(false)">Cancel</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							<!--  -->
+								<div class="col grid-margin stretch-card">
 									<div class="card">
 										<div class="card-body">
 											<h4 class="card-title">Product table</h4>
@@ -109,25 +160,10 @@
 																#
 															</th>
 															<th>
-																image
-															</th>
-															<th>
 																Name
 															</th>
 															<th>
-																Id
-															</th>
-															<th>
-																Price
-															</th>
-															<th>
-																Avaliable
-															</th>
-															<th>
-																Category
-															</th>
-															<th>
-																Featured
+																Products No.
 															</th>
 															<th>
 																Date
@@ -135,16 +171,16 @@
 														</tr>
 													</thead>
 													<tbody>
-														<!-- Product List Goes Here! -->
+													<!-- Category list goes here -->
 													</tbody>
 												</table>
-												<%- include("../components/modal") %>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+						<%- include("../components/modal") %>
 						<!-- content-wrapper ends -->
 						<%- include("../components/messageBird") %>
 							<%- include("../partials/admin/_footer") %>
@@ -153,8 +189,10 @@
 			</div>
 			<!-- page-body-wrapper ends -->
 	</div>
-	
-	<!-- page script -->
+	<!-- axios plugin -->
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="/aronoz/js/axios.js"></script>
 	
 	<%- include("../partials/admin/_scripts") %>
-	<script src="/royalUI/js/product.js"></script>
+	<!-- page script -->
+	<script src="/royalUI/js/category.js"></script>

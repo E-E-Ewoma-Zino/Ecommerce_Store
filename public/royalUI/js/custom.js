@@ -49,14 +49,35 @@ function modal(data) {
 		content.innerHTML = `<h4 class="card-title">${data.title}</h4>
 		<p class="card-description">${data.message}</p>`;
 	}
-	else if (data.type === "form") {
+	else if (data.type === "categoryInfo") {
 		myModal.style.display = "flex";
+		getAxios("/admin/categoryAPI", (err, response) => {
+			if (err) {
+				console.log("err:::", err);
+			}
+			else {
+				content.innerHTML = `<h4 class="card-title">${data.title}</h4>
+				<div class="card-description">
+					<h4>Parents</h4>
+					<span>${response[data.index].parents.length ? response[data.index].parents.map(parent => parent.name) : "None"}</span>
+					<hr>
+					<h4>Children</h4>
+					<span>${response[data.index].children.length ? response[data.index].children.map(child => child.name) : "None"}</span>
+					<hr>
+					<h4>Products</h4>
+					<span>${response[data.index].products.length ? response[data.index].products.map(product => product.name) : "None"}</span>
+				</div>`
+			}
+		});
+	}
+	else if (data.type === "form") {
+		// console.log("Click", data);
+		console.log(myModal.style.display = "flex");
 		content.innerHTML = `<h4 class="card-title">${data.title}</h4>
 		<p class="card-description">${data.message}</p>
-		<div class="text-center my-4"><button type="button" class="btn btn-danger ml-2" onclick="${data.method.name}('${data.method.params}')">
+		<div class="text-center my-4"><button type="button" class="btn btn-danger ml-2" onclick="${data.method.name}('${data.method.params.url}', '${data.method.params.itemId}')">
 		Confirm</button>
 		<a href="#x" class="btn btn-light" onclick="closeModal()">Cancel</a></div>`;
-		
 	}
 	else {
 		messager({
@@ -110,5 +131,76 @@ function deleteAxios(url, callback) {
 		callback(null, res.data);
 	}).catch((err) => {
 		callback(err, null);
+	});
+}
+
+// This code is being shared by 2 or more processes 
+// eg. The product delete method in the product page and the delete metheod in the category page
+// delete product from product db and 
+// delete from the category
+function deleteItem(url, itemId) {
+	// I called this page from category.js[it shouldn't be there but whatevet~]
+	// postAxios({ url: "/admin/" + url, _data: productId }, (err, res) => {
+	// 	if (err) {
+	// console.log(":::err", err);
+	// messager({
+	// 	replace: ["success", "danger"],
+	// 	message: "Problem occured while deleting product! "
+	// });
+	// 		return;
+	// 	}
+	// 	else {
+	// getAxios("/admin/" + url, (error, response) => {
+	// 	if (err) {
+	// 		console.log(":::err", err);
+	// 		messager({
+	// 			replace: ["success", "danger"],
+	// 			message: "Please Refresh. Problem loading Pages."
+	// 		});
+	// 		return;
+	// 	}
+	// 	messager({
+	// 		replace: ["danger", "success"],
+	// 		message: "Product Deleted"
+	// 	});
+	// });
+	// 	}
+	// });
+
+	deleteAxios("/admin/" + url + "?q=" + itemId, (err, res) => {
+		if (err) {
+			console.log(":::err", err);
+			messager({
+				replace: ["success", "danger"],
+				message: "Problem occured while deleting " + url + "!"
+			});
+		}
+		else {
+			getAxios("/admin/" + url, (err, response) => {
+				if (err) {
+					// console.log(":::err", err);
+					messager({
+						replace: ["success", "danger"],
+						message: "Please Refresh. Problem loading Pages."
+					});
+					return;
+				}
+				messager({
+					replace: ["danger", "success"],
+					message: "Deleted"
+				});
+				closeModal();
+				// checks if the url is sent by the product delete page
+				if (url === "productsAPI") displayProductTable(response);
+				else if (url === "categoryAPI") {
+					displayCategoryTable(response || []);
+					displayCategory(response || []);
+				}
+				else messager({
+					replace: ["success", "warning"],
+					message: "Page could not refresh!."
+				});
+			});
+		}
 	});
 }

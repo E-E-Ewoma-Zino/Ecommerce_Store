@@ -15,6 +15,7 @@ module.exports = {
             }).catch((err) => {
                 // catch cart errors
                 console.log(":::Err ", err);
+                callback(err)
             });
         });
     },

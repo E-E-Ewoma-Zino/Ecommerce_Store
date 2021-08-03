@@ -5,21 +5,27 @@ const _bird = require(__dirname + "../../../../middleware/messageBird");
 const logger = require(__dirname + "../../../../middleware/logger");
 
 module.exports = {
-    get(req, res) {
-        try {
-            res.render("admin/login", {
-                website: _get.Pages().website,
-                login: req.isAuthenticated(),
-                user: req.user,
-                bird: _bird.fly,
-                name: `Admin LogIn`,
-                breadcrumb: `Home - Admin - Login`,
-                userEmail: ""
-            });
-        } catch (err) {
-            _bird.message("danger", err);
-            console.error(":::", err);
-            error500(req, res);
-        }
-    }
+	get(req, res) {
+		try {
+			_get.Pages((err, page)=>{
+				if (err) {
+					console.error(":::",err);
+				}else{
+					res.render("admin/login", {
+						website: page.website,
+						login: req.isAuthenticated(),
+						user: req.user,
+						bird: _bird.fly,
+						name: `Admin LogIn`,
+						breadcrumb: `Home - Admin - Login`,
+						userEmail: ""
+					});
+				}
+			});
+		} catch (err) {
+			_bird.message("danger", err);
+			console.error(":::", err);
+			error500(req, res);
+		}
+	}
 }

@@ -1,6 +1,5 @@
 // 
-
-getAxios("/admin/category", (err, data) => {
+getAxios("/admin/categoryAPI", (err, data) => {
 	if (err) {
 		console.log(":::", err);
 		messager({
@@ -24,7 +23,7 @@ function createNewCategory() {
 	}
 	console.log("new");
 
-	if (data.name) postAxios({ url: "/admin/category", _data: data }, (error, response) => {
+	if (data.name) postAxios({ url: "/admin/categoryAPI", _data: data }, (error, response) => {
 		if (error) {
 			console.log(":::", err);
 			messager({
@@ -34,7 +33,7 @@ function createNewCategory() {
 			return;
 		}
 		else {
-			getAxios("/admin/category", (err, data) => {
+			getAxios("/admin/categoryAPI", (err, data) => {
 				if (err) {
 					console.log(":::", err);
 					messager({
@@ -78,7 +77,7 @@ function empty() {
 	newCategory.value = "";
 	myCategory.id = [];
 	myCategory.names = [];
-	formCategoryName.value = "";
+	if (window.location.pathname !== "/admin/category") formCategoryName.value = "";
 }
 
 // print categories
@@ -178,7 +177,7 @@ function createCategoryControl(create, e) {
 		category_control.classList.add("smooth-open");
 		control.style.display = "none";
 		parentSection = true;
-		getAxios("/admin/category", (err, data) => {
+		getAxios("/admin/categoryAPI", (err, data) => {
 			if (err) {
 				console.log(":::", err);
 				messager({
@@ -190,9 +189,11 @@ function createCategoryControl(create, e) {
 			// console.log("res::: ", res.data);
 			// send in data or if data is undefine send in an empty array
 			displayCategory(data || []);
+			if (window.location.pathname === "/admin/category")	displayCategoryTable(data);
 			empty();
-		});	
+		});
 	} else {
+		// close the form
 		empty();
 		category_control.classList.remove("smooth-open");
 		category_control.classList.add("smooth-close");
@@ -205,5 +206,61 @@ function createCategoryControl(create, e) {
 	}
 }
 
+// assign total product to total product box
+const total_category = document.getElementsByClassName("total_category");
+// get the product tbody from the DOM
+const tbody = document.getElementsByTagName("tbody")[0];
 
-// 
+// display the list of category in the category Page
+function displayCategoryTable(categories) {
+	let tableBody = (data) => {
+		return `
+			<tr class="option-container">
+				<td>
+					${data.index + 1}
+				</td>
+				<td style="text-transform: capitalize;">
+					${data.name}
+				</td>
+				<td>
+					${data.products.length}
+				</td>
+				<td>
+					<div class="option template-demo d-flex justify-content-between flex-nowrap">
+						<button type="button"
+							class="btn btn-danger btn-rounded btn-icon" onclick="modal({type: 'form', message: 'Are you sure you want to delete <strong>${data.name}</strong>.', title: 'Confirm Your Request', method: {name: 'deleteItem', params: {url: 'categoryAPI', itemId: '${data._id}'}}})">
+							<i class="ti-trash"></i>
+						</button>
+						<button type="button"
+							class="btn btn-success btn-rounded btn-icon" onclick="modal({type: 'categoryInfo', index: ${data.index}, title: 'About <strong>${data.name}</strong>'})">
+							<i class="ti-eye"></i>
+						</button>
+					</div>
+				</td>
+			</tr>`;
+	}
+
+	tbody.innerHTML = "";
+	// input product new length
+	total_category[0].innerHTML = categories.length;
+	total_category[1].innerHTML = categories.length;
+
+	categories.forEach((category, index) => {
+		const tr = document.createElement("tr");
+		tr.className = "option-container";
+		tr.innerHTML = tableBody({ index, ...category });
+		tbody.append(tr);
+	});
+	console.log("koko");
+}
+
+// on page load
+// Display category in product page
+getAxios("/admin/categoryAPI", (err, data) => {
+	if (err) {
+		console.log("err:::", err);
+	}
+	else {
+		displayCategoryTable(data);
+	}
+});

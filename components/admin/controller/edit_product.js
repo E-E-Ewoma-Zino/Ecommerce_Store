@@ -61,7 +61,6 @@ module.exports = {
 			// update the categories
 			// get all the new categories
 			getNewCategories(req.params.productId, req.body.category, (newCategories)=>{
-				// not working!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				if (newCategories)	addTheNewCategories(req.params.productId, newCategories, (done)=>{
 					if(done) _bird.message("success", "Category Updated");
 				});
@@ -159,9 +158,6 @@ function getNewCategories(productId, newCategories, callback) {
 }
 // 2. Be able to add only the new category id in the category list
 function addTheNewCategories(productId, categories, callback) {
-	logger.log("categories");
-	logger.log(categories);
-	logger.log(productId);
 	_get.ProductByID(productId, (product) => {
 		if (product) {
 			product.categories = [...product.categories, ...categories];

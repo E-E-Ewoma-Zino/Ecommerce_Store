@@ -4,31 +4,28 @@ const error500 = require(__dirname + "../../../error/controller/500");
 const _bird = require(__dirname + "../../../../middleware/messageBird");
 
 
-module.exports = (req, res)=>{
-    try {
-        res.render("layouts/contact", {
-            website: _get.Pages().website,
-            login: req.isAuthenticated(),
-            user: req.user,
-bird: _bird.fly,
-            name: _get.Pages().contact.name,
-            breadcrumb: _get.Pages().contact.breadcrumb,
-            contact: _get.Pages().contact.contact
-        });
+module.exports = (req, res) => {
+	try {
+		_get.Pages((err, page) => {
+			if (err) {
+				console.error(":::", err);
+			} else {
+				res.render("layouts/contact", {
+					website: page.website,
+					login: req.isAuthenticated(),
+					user: req.user,
+					bird: _bird.fly,
+					name: page.contact.name,
+					breadcrumb: page.contact.breadcrumb,
+					contact: page.contact.contact
+				});
+			}
+		});
 
-    
-         } catch (err) {
-        console.error(":::", err);
-        _bird.message("danger", err);
-res.render("layouts/500", {
-            website: _get.Pages().website,
-            login: req.isAuthenticated(),
-            user: req.user,
-bird: _bird.fly,
-            name: `500 - Internal server error!`,
-            breadcrumb: `❌🤦‍♂️`,
-            product: _get.AllProduct(),
-            
-        });
-    }
+
+	} catch (err) {
+		console.error(":::", err);
+		_bird.message("danger", err);
+		error500(req, res);
+	}
 }

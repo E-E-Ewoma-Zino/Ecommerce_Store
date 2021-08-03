@@ -67,7 +67,7 @@ module.exports = {
 	// Arrange the array in acending order and populate the parent with the name
 	sortAndPopulate(callback) {
 		this.All((err, all) => {
-			if(!all.length){
+			if (!all.length) {
 				callback(null, []);
 				return;
 			}
@@ -79,17 +79,28 @@ module.exports = {
 
 	},
 	// Add product to category
-	addProduct(productID, categoryList){
+	addProduct(productID, categoryList) {
 		categoryList.forEach(category => {
-			this.ById(mongoose.Types.ObjectId(category), (err, cat)=>{
+			this.ById(mongoose.Types.ObjectId(category), (err, cat) => {
 				if (err) {
 					console.log(err);
 				}
-				else{
+				else {
 					cat.products.push(productID);
 					cat.save();
 				}
 			})
+		});
+	},
+	// delete a category
+	deleteOne: (categoryId, callback) => {
+		Category.deleteOne({ _id: categoryId }, (err) => {
+			if (err) {
+				console.log("err:::", err);
+				callback(err, null);
+				return;
+			}
+			callback(null, true);
 		});
 	}
 }
@@ -120,9 +131,9 @@ function populate(list, cb) {
 
 	for (let i = 0; i < list.length; i++) {
 		const parent = list[i];
-		Category.findById({ _id: parent._id }).populate({ path: "parents", select: ["name"] }).exec((err, child) => {
+		Category.findById({ _id: parent._id }).populate({ path: "parents children products", select: ["name"] }).exec((err, child) => {
 			if (err) {
- 			console.log(err);
+				console.log(err);
 				cb(err, null);
 			} else {
 				family.push(child);

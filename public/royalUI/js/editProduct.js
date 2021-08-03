@@ -8,7 +8,7 @@
 // 2. in the category input get all the category from the product and check it as selected
 const productCategories = document.getElementById("productCategory");
 
-getAxios("/admin/category", (err, data) => {
+getAxios("/admin/categoryAPI", (err, data) => {
 	if (err) {
 		console.log(":::", err);
 		messager({
@@ -92,24 +92,22 @@ function removeImage(btn, index) {
 	// 	});
 	// });
 	getAxios(window.location.pathname + window.location.search + "&removeImage=" + index, (err, res) => {
-		if (condition) {
-			if (err) {
-				console.log(":::err", err);
-				messager({
-					replace: ["success", "danger"],
-					message: "Delete Failed. Try again."
-				});
-				return;
-			}
-			// using a callback to get the resposne asyncronously
-			// console.log(res.data);
+		if (err) {
+			console.log(":::err", err);
 			messager({
-				replace: ["danger", "success"],
-				message: "Delete Successful."
+				replace: ["success", "danger"],
+				message: "Delete Failed. Try again."
 			});
-
-			document.getElementsByClassName("img-content")[index].style.filter = "sepia(1)";
-			btn.style.display = "none";
+			return;
 		}
+		// using a callback to get the resposne asyncronously
+		// console.log(res.data);
+		messager({
+			replace: ["danger", "success"],
+			message: "Delete Successful."
+		});
+
+		document.getElementsByClassName("img-content")[index].style.filter = "sepia(1)";
+		btn.style.display = "none";
 	});
 }

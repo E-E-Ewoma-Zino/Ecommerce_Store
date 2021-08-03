@@ -2,34 +2,30 @@
 const _get = require(__dirname + "../../../../middleware/get");
 const error500 = require(__dirname + "../../../error/controller/500");
 const _bird = require(__dirname + "../../../../middleware/messageBird");
-const cart = require(__dirname + "../../../../middleware/cart_DB");
 
-module.exports = (req, res)=>{
-    
-    _get.ProductByID(req.params.id, (product) => {
-        try{
-            res.render("layouts/Single-product", {
-                website: _get.Pages().website,
-                login: req.isAuthenticated(),
-            user: req.user,
-bird: _bird.fly,
-                name: _get.Pages().single.name,
-                breadcrumb: _get.Pages().single.breadcrumb,
-                product: product
-            });
-        }catch(err) {
-            console.error(":::::", err);
-            _bird.message("danger", err);
-res.render("layouts/500", {
-                website: _get.Pages().website,
-                login: req.isAuthenticated(),
-                user: req.user,
-bird: _bird.fly,
-                name: `500 - Internal server error!`,
-                breadcrumb: `❌🤦‍♂️`,
-                product: _get.AllProduct(),
-                
-            });
-        }
-    });
+module.exports = (req, res) => {
+
+	_get.ProductByID(req.params.id, (product) => {
+		try {
+			_get.Pages((err, page)=>{
+				if (err) {
+					console.error(":::", err);
+				}else{
+					res.render("layouts/Single-product", {
+						website: page.website,
+						login: req.isAuthenticated(),
+						user: req.user,
+						bird: _bird.fly,
+						name: page.single.name,
+						breadcrumb: pages.single.breadcrumb,
+						product: product
+					});
+				}
+			});
+		} catch (err) {
+			console.error(":::::", err);
+			_bird.message("danger", err);
+			error500(req, res);
+		}
+	});
 }

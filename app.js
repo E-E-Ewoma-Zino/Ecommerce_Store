@@ -1,5 +1,5 @@
 require("dotenv").config();
-const methodOveride = require("method-override");
+const methodOverride = require("method-override");
 const session = require("express-session");
 const mongoose = require("mongoose");
 const passport = require("passport");
@@ -15,20 +15,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/uploads', express.static(path.join(__dirname + '/uploads'))); 
-app.use(methodOveride((req, res) => {
-    if (req.body && typeof req.body === "object" && "_method" in req.body) {
-        // looks in url post bodies and delete it
-        let method = req.body._method;
-        delete req.body._method;
-        return method
-    }
+app.use(methodOverride((req, res) => {
+	if (req.body && typeof req.body === "object" && "_method" in req.body) {
+		// looks in url post bodies and delete it
+		let method = req.body._method;
+		delete req.body._method;
+		return method
+	}
 }));
 
 // tell app to use express session
 app.use(session({
-    secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: false
+	secret: process.env.SECRET,
+	resave: false,
+	saveUninitialized: false
 }));
 
 // passport config

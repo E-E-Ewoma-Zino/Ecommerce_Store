@@ -20626,6 +20626,7 @@ ul li, ol li, dl li {
 	top: 0%;
 	right: 0%;
 	width: 85%;
+	z-index: 1;
 	height: 100%;
 	display: none;
 	align-items: center;
@@ -20718,6 +20719,10 @@ ul li, ol li, dl li {
 .option-container{
 	position: relative;
 	height: 15vh;
+}
+
+.option-container:hover{
+	background-color: rgba(192, 182, 182, 0.1);
 }
 
 .option-container:hover .option{
