@@ -38,11 +38,27 @@ const couponForm = document.getElementById("couponForm");
 // is this if() even working?? Opps :| i forget to add .checked :|
 proceed.addEventListener("click", () => {
 	if (confirmForm.checked) {
-		makePayment();
-		orderForm.submit();
+		makePayment((data) => {
+			if (!data) {
+				console.log("No data", data);
+				messager({
+					replace: ["success", "danger"],
+					message: "Purchase failed!"
+				});
+			} else {
+				// put the transation details in the form
+				document.getElementsByClassName("flutterwaveDetails")[0].value = data.status;
+				document.getElementsByClassName("flutterwaveDetails")[1].value = data.tx_ref;
+				document.getElementsByClassName("flutterwaveDetails")[2].value = data.flw_ref;
+				document.getElementsByClassName("flutterwaveDetails")[3].value = data.transaction_id;
+				orderForm.submit();
+			}
+		});
 	}
-	else alert("Form not confirmed!");
-	// i think this should work :|
+	else messager({
+		replace: ["success", "danger"],
+		message: "Form not confirmed!"
+	});
 });
 
 // for bootstraps tooltip
@@ -59,33 +75,39 @@ const number = document.getElementById("number").value;
 const email = document.getElementById("email").value;
 const price = document.getElementById("total").value;
 
-function makePayment() {
-	console.log("Making Payment");
-	FlutterwaveCheckout({
-		public_key: "FLWPUBK-d54c06fe9df198dc11c99978d6ec1c7b-X",
-		tx_ref: "RX1" + Math.floor(Math.random() * 9999999) + 1,
-		amount: price,
-		currency: "NGN",
-		redirect_url: // specified redirect URL
-			window.location.origin,
-		customer: {
-			email: email,
-			phone_number: number,
-			name: firstname
-		},
-		callback: function (data) {
-			console.log("I am completed", data);
-		},
-		onclose: function () {
-			// close modal
-			console.log("closed function");
-		},
-		customizations: {
-			title: "Aronoz",
-			description: "Payment for items in cart",
-		},
-	});
-	console.log("Done Making Payment");
+
+function makePayment(callback) {
+	try {
+		FlutterwaveCheckout({
+			public_key: "FLWPUBK_TEST-88cd4a7dc50e807c5da141b586b3a656-X",
+			tx_ref: "RX1" + Math.floor(Math.random() * 9999999) + 1,
+			amount: price,
+			currency: "NGN",
+			customer: {
+				email: email,
+				phone_number: number,
+				name: firstname
+			},
+			callback: function (data) {
+				console.log("I am completed", data);
+				callback(data);
+			},
+			onclose: function () {
+				// close modal
+				console.log("closed function");
+			},
+			customizations: {
+				title: "Aronoz",
+				description: "Payment for items in cart",
+			},
+		});
+	} catch (err) {
+		console.log(err);
+		if(err == "ReferenceError: FlutterwaveCheckout is not defined")	messager({
+			replace: ["success", "danger"],
+			message: "Little or No Connection!"
+		});
+	}
 }
 // check the data from callback
 // fix modal

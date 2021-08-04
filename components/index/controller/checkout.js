@@ -44,11 +44,8 @@ module.exports = {
 					}
 				});
 			}
-
-
 		} catch (err) {
 			console.error(":::", err);
-
 			_bird.message("danger", err);
 			error500(req, res);
 		}
@@ -61,6 +58,7 @@ module.exports = {
 		// 3. Done😁
 
 		logger.log("Order >", req.body);
+
 		const details = {
 			firstname: req.body.firstname,
 			lastname: req.body.lastname,
@@ -71,23 +69,30 @@ module.exports = {
 			city: req.body.city,
 			address1: req.body.address1,
 			zip: req.body.zip,
-			note: req.body.note,
+			note: req.body.note
 		};
 
-		cart.userCart(req.user._id, (cart) => {
+		// FlutterWave details
+		const flutterwave = {
+			status: req.body.status,
+			tx_ref: req.body.tx_ref,
+			flw_ref: req.body.flw_ref,
+			transaction_id: req.body.transaction_id
+		}
 
+		cart.userCart(req.user._id, (cart) => {
 			const newOrder = new Orders({
-				user: req.user._id,
 				cart: cart._id,
-				total: req.body.total,
 				details: details,
-				shipping: req.body.shipping,
+				user: req.user._id,
+				total: req.body.total,
+				flutterwave: flutterwave,
 				subtotal: req.body.subtotal,
+				shipping: req.body.shipping,
 				orderMethod: req.body.orderMethod
 			});
 
 			newOrder.save((err) => {
-
 				if (err) {
 					_bird.message("danger", "Sorry, could not create order");
 				}
@@ -96,6 +101,10 @@ module.exports = {
 				}
 			});
 		});
-		res.send("Order Delivered Successfully");
+
+		// if Purchase is successful
+		if(flutterwave.status === "successful")	res.redirect("/");
+		// else
+		else	res.redirect("back");
 	}
 }

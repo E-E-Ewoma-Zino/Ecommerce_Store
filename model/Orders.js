@@ -9,6 +9,7 @@ const orderSchema = new mongoose.Schema({
 	details: Object,
 	shipping: String,
 	subtotal: String,
+	flutterwave: Object,
 	orderMethod: String,
 	createdAt: {
 		type: Date,
