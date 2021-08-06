@@ -10,22 +10,30 @@ const _bird = require(__dirname + "../../../../middleware/messageBird");
 module.exports = {
 	get(req, res) {
 		try {
-			if (req.isAuthenticated()) cart.userCart(req.user._id, (cart) => {
-				_get.Pages((err, page) => {
-					if (err) {
-						console.error(":::", err);
-					} else {
-						res.render("layouts/checkout", {
-							website: page.website,
-							login: req.isAuthenticated(),
-							user: req.user,
-							bird: _bird.fly,
-							name: page.checkout.name,
-							breadcrumb: page.checkout.breadcrumb,
-							cart: cart
-						});
-					}
-				});
+			if (req.isAuthenticated()) cart.userCart(req.user._id, (error, cart) => {
+				if (error) {
+					console.log(error);
+					_bird.message("danger", error);
+					error500(req, res);//501
+				} else {
+					_get.Pages((err, page) => {
+						if (err) {
+							console.error(":::", err);
+							_bird.message("danger", err);
+							error500(req, res);//501
+						} else {
+							res.render("layouts/checkout", {
+								website: page.website,
+								login: req.isAuthenticated(),
+								user: req.user,
+								bird: _bird.fly,
+								name: page.checkout.name,
+								breadcrumb: page.checkout.breadcrumb,
+								cart: cart
+							});
+						}
+					});
+				}
 			});
 			else {
 				_get.Pages((err, page) => {
@@ -80,31 +88,37 @@ module.exports = {
 			transaction_id: req.body.transaction_id
 		}
 
-		cart.userCart(req.user._id, (cart) => {
-			const newOrder = new Orders({
-				cart: cart._id,
-				details: details,
-				user: req.user._id,
-				total: req.body.total,
-				flutterwave: flutterwave,
-				subtotal: req.body.subtotal,
-				shipping: req.body.shipping,
-				orderMethod: req.body.orderMethod
-			});
-
-			newOrder.save((err) => {
-				if (err) {
-					_bird.message("danger", "Sorry, could not create order");
-				}
-				else {
-					_bird.message("success", "Successfully created an order");
-				}
-			});
+		cart.userCart(req.user._id, (err, cart) => {
+			if (err) {
+				console.log(err);
+				_bird.message("danger", err);
+				error500(req, res);//501
+			} else {
+				const newOrder = new Orders({
+					cart: cart._id,
+					details: details,
+					user: req.user._id,
+					total: req.body.total,
+					flutterwave: flutterwave,
+					subtotal: req.body.subtotal,
+					shipping: req.body.shipping,
+					orderMethod: req.body.orderMethod
+				});
+				
+				newOrder.save((err) => {
+					if (err) {
+						_bird.message("danger", "Sorry, could not create order");
+					}
+					else {
+						_bird.message("success", "Successfully created an order");
+					}
+				});
+			}
 		});
 
 		// if Purchase is successful
-		if(flutterwave.status === "successful")	res.redirect("/");
+		if (flutterwave.status === "successful") res.redirect("/");
 		// else
-		else	res.redirect("back");
+		else res.redirect("back");
 	}
 }

@@ -1,0 +1,318 @@
+<%- include("../partials/admin/_head") %>
+
+
+	<div class="container-scroller">
+		<!-- nav -->
+		<%- include("../partials/admin/_header") %>
+
+			<div class="container-fluid page-body-wrapper">
+
+				<!-- sidebar -->
+				<%- include("../partials/admin/_sidebar") %>
+
+					<!-- partial main-->
+					<div class="main-panel">
+						<div class="content-wrapper">
+							<div class="row">
+								<div class="col-md-12 grid-margin">
+									<div class="d-flex justify-content-between align-items-center">
+										<div>
+											<h4 class="font-weight-bold mb-0">Order Description</h4>
+										</div>
+										<div>
+											<a href="/admin/orders" class="btn btn-primary btn-icon-text btn-rounded">
+												<i class="ti-arrow-left btn-icon-prepend"></i>Back
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6 d-flex align-items-stretch">
+									<div class="row">
+										<div class="col-md-12 grid-margin stretch-card">
+											<div class="card">
+												<div class="card-body">
+													<h4 class="card-title">Registration Details</h4>
+													<div class="template-demo">
+														<h4>
+															<small class="text-muted">
+																Full Name:
+															</small>
+															<small class="text-muted">
+																<%= order.details.firstname %> <%= order.details.lastname %> 
+															</small>
+														</h4>
+														<h4>
+															<small class="text-muted">
+																Email:
+															</small>
+															<small class="text-muted">
+																<a class="text-dark" href="mailto:<%= order.details.email %>"><%= order.details.email %></a> 
+															</small>
+														</h4>
+														<h4>
+															<small class="text-muted">
+																Phone:
+															</small>
+															<small class="text-muted">
+																<a class="text-dark" href="tel: <%= order.details.phoneNo %>"><%= order.details.phoneNo %></a>
+															</small>
+														</h4>
+														<h4>
+															<small class="text-muted">
+																City:
+															</small>
+															<small class="text-muted">
+																<%= order.details.city %>
+															</small>
+														</h4>
+														<h4>
+															<small class="text-muted">
+																Country:
+															</small>
+															<small class="text-muted">
+																<%= order.details.country %>
+															</small>
+														</h4>
+														<h4>
+															<small class="text-muted">
+																Shipping Address:
+															</small>
+															<small class="text-muted">
+																<%= order.details.address1 %>
+															</small>
+														</h4>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-12 grid-margin stretch-card">
+											<div class="card">
+												<div class="card-body">
+													<h4 class="card-title">Customer Details</h4>
+													<div class="template-demo">
+														<h4>
+															<small class="text-muted">
+																Full Name:
+															</small>
+															<small class="text-muted">
+																<%= order.user.firstname %> <%= order.user.lastname %> 
+															</small>
+														</h4>
+														<h4>
+															<small class="text-muted">
+																Email:
+															</small>
+															<small class="text-muted">
+																<a class="text-dark" href="mailto:<%= order.user.username %>"><%= order.user.username %></a> 
+															</small>
+															<% console.log(order.cart) %> 
+														</h4>
+														<h4>
+															<small class="text-muted">
+																Phone:
+															</small>
+															<small class="text-muted">
+																<a class="text-dark" href="tel: <%= order.user.phoneNo %>"><%= order.user.phoneNo %></a>
+															</small>
+														</h4>
+														<h4>
+															<small class="text-muted">
+																Address:
+															</small>
+															<small class="text-muted">
+																<%= order.user.address1 %>
+															</small>
+														</h4>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6 grid-margin stretch-card">
+									<div class="card">
+										<div class="card-body">
+											<h4 class="card-title">Product details</h4>
+											<p class="card-description">
+												Add class <code>.table</code>
+											</p>
+											<div class="table-responsive">
+												<table class="table">
+													<thead>
+														<tr>
+															<th>Profile</th>
+															<th>VatNo.</th>
+															<th>Created</th>
+															<th>Status</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>Jacob</td>
+															<td>53275531</td>
+															<td>12 May 2017</td>
+															<td><label class="badge badge-danger">Pending</label></td>
+														</tr>
+														<tr>
+															<td>Messsy</td>
+															<td>53275532</td>
+															<td>15 May 2017</td>
+															<td><label class="badge badge-warning">In progress</label>
+															</td>
+														</tr>
+														<tr>
+															<td>John</td>
+															<td>53275533</td>
+															<td>14 May 2017</td>
+															<td><label class="badge badge-info">Fixed</label></td>
+														</tr>
+														<tr>
+															<td>Peter</td>
+															<td>53275534</td>
+															<td>16 May 2017</td>
+															<td><label class="badge badge-success">Completed</label>
+															</td>
+														</tr>
+														<tr>
+															<td>Dave</td>
+															<td>53275535</td>
+															<td>20 May 2017</td>
+															<td><label class="badge badge-warning">In progress</label>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6 d-flex align-items-stretch">
+									<div class="row">
+										<div class="col-md-12 grid-margin stretch-card">
+											<div class="card">
+												<div class="card-body">
+													<h4 class="card-title">Paragraph</h4>
+													<p class="card-description">
+														Write text in <code>&lt;p&gt;</code> tag
+													</p>
+													<p>
+														Lorem Ipsum is simply dummy text of the printing and typesetting
+														industry.
+														Lorem Ipsum has been the industry's standard dummy text ever
+														since the 1500s,
+														when an unknown printer took a galley not only five centuries,
+													</p>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-12 grid-margin stretch-card">
+											<div class="card">
+												<div class="card-body">
+													<h4 class="card-title">Icon size</h4>
+													<p class="card-description">
+														Add class <code>.icon-lg</code>, <code>.icon-md</code>,
+														<code>.icon-sm</code>
+													</p>
+													<div class="row">
+														<div class="col-md-4 d-flex align-items-center">
+															<div class="d-flex flex-row align-items-center">
+																<i class="ti-package icon-lg text-warning"></i>
+																<p class="mb-0 ml-1">
+																	Icon-lg
+																</p>
+															</div>
+														</div>
+														<div class="col-md-4 d-flex align-items-center">
+															<div class="d-flex flex-row align-items-center">
+																<i class="ti-package icon-md text-success"></i>
+																<p class="mb-0 ml-1">
+																	Icon-md
+																</p>
+															</div>
+														</div>
+														<div class="col-md-4 d-flex align-items-center">
+															<div class="d-flex flex-row align-items-center">
+																<i class="ti-package icon-sm text-danger"></i>
+																<p class="mb-0 ml-1">
+																	Icon-sm
+																</p>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6 grid-margin stretch-card">
+									<div class="card">
+										<div class="card-body">
+											<h4 class="card-title">Provious Transaction</h4>
+											<p class="card-description">
+												Add class <code>.table</code>
+											</p>
+											<div class="table-responsive">
+												<table class="table">
+													<thead>
+														<tr>
+															<th>Profile</th>
+															<th>VatNo.</th>
+															<th>Created</th>
+															<th>Status</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>Jacob</td>
+															<td>53275531</td>
+															<td>12 May 2017</td>
+															<td><label class="badge badge-danger">Pending</label></td>
+														</tr>
+														<tr>
+															<td>Messsy</td>
+															<td>53275532</td>
+															<td>15 May 2017</td>
+															<td><label class="badge badge-warning">In progress</label>
+															</td>
+														</tr>
+														<tr>
+															<td>John</td>
+															<td>53275533</td>
+															<td>14 May 2017</td>
+															<td><label class="badge badge-info">Fixed</label></td>
+														</tr>
+														<tr>
+															<td>Peter</td>
+															<td>53275534</td>
+															<td>16 May 2017</td>
+															<td><label class="badge badge-success">Completed</label>
+															</td>
+														</tr>
+														<tr>
+															<td>Dave</td>
+															<td>53275535</td>
+															<td>20 May 2017</td>
+															<td><label class="badge badge-warning">In progress</label>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- content-wrapper ends -->
+						<%- include("../partials/admin/_footer") %>
+					</div>
+					<!-- main-panel ends -->
+			</div>
+			<!-- page-body-wrapper ends -->
+	</div>
+
+	<%- include("../partials/admin/_scripts") %>

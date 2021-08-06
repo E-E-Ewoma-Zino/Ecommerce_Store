@@ -21,8 +21,6 @@ module.exports = (req, res) => {
 				});
 			}
 		});
-
-
 	} catch (err) {
 		console.error(":::", err);
 		_bird.message("danger", err);

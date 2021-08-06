@@ -1,5 +1,4 @@
-// all the order tracking dashboard route code goes here
-const _get = require(__dirname + "../../../../middleware/get");
+// all the order list dashboard route code goes here
 const _order = require(__dirname + "../../../../middleware/orders");
 const error500 = require(__dirname + "../../../error/controller/500");
 const _bird = require(__dirname + "../../../../middleware/messageBird");
@@ -13,7 +12,7 @@ module.exports = {
 					console.log(":::", err);
 				}
 				else {
-					res.render("admin/orderTracking", {
+					res.render("admin/order", {
 						bird: _bird.fly,
 						orders: orders
 					});

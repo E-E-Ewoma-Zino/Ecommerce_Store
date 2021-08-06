@@ -2,15 +2,16 @@
 const express = require("express");
 const upload = require(__dirname + "../../config/multer");
 const login = require(__dirname + "../../components/admin/controller/login");
+const orders = require(__dirname + "../../components/admin/controller/order");
 const products = require(__dirname + "../../components/admin/controller/products");
 const settings = require(__dirname + "../../components/admin/controller/settings");
 const category = require(__dirname + "../../components/admin/controller/category");
 const dashboard = require(__dirname + "../../components/admin/controller/dashboard");
-const orders = require(__dirname + "../../components/admin/controller/orderTracking");
 const addProduct = require(__dirname + "../../components/admin/controller/addProduct");
 const categoryAPI = require(__dirname + "../../components/admin/controller/categoryAPI");
 const productsAPI = require(__dirname + "../../components/admin/controller/productsAPI");
 const editproduct = require(__dirname + "../../components/admin/controller/edit_product");
+const orderdetails = require(__dirname + "../../components/admin/controller/orderDetails");
 
 // This router is for the home / routes
 const router = express.Router();
@@ -43,6 +44,10 @@ router.delete("/productsAPI", (req, res) => productsAPI.delete(req, res));
 // @desc    orders page
 // @route   GET /admin/orders
 router.get("/orders", (req, res) => orders.get(req, res));
+
+// @desc    orderdetails page
+// @route   GET /admin/orderdetails
+router.get("/orderdetails", (req, res) => orderdetails.get(req, res));
 
 // @desc    category page
 // @route   GET /admin/category

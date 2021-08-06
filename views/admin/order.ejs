@@ -17,7 +17,7 @@
 								<div class="col-md-12 grid-margin">
 									<div class="d-flex justify-content-between align-items-center">
 										<div>
-											<h4 class="font-weight-bold mb-0">RoyalUI Dashboard</h4>
+											<h4 class="font-weight-bold mb-0">User Orders</h4>
 										</div>
 										<div>
 											<button type="button" class="btn btn-primary btn-icon-text btn-rounded">
@@ -106,18 +106,16 @@
 														<tr>
 															<th>User</th>
 															<th>Product</th>
-															<th>Sale</th>
+															<th>Cost</th>
 															<th>Status</th>
 														</tr>
 													</thead>
 													<tbody>
 														<% orders.forEach(order => { %>
-															<tr>
+															<tr onclick="btnLink('/admin/orderdetails?q=<%= Math.floor(Math.random() * 99999999) %>&ci=<%= order._id %>&public=true', '<%= order._id %>')">
 																<td><%= order.user.firstname %></td>
-																<td>Photoshop</td>
-																<td class="text-danger"> 28.76% 
-																	<i class="ti-arrow-down"></i>
-																</td>
+																<td><%= order.cart.item.map(item => item.product.name) %></td>
+																<td class="">$<%= order.total %></td>
 																<td><label class="badge badge-danger">Pending</label></td>
 															</tr>
 														<% }); %> 

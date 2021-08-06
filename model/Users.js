@@ -35,12 +35,8 @@ const userSchema = new mongoose.Schema({
     company: {
         type: String
     },
-    cart: {
-        type: String
-    },
-    order: {
-        type: Array
-    },
+    cart: { type: mongoose.Schema.Types.ObjectId, ref: "Cart" },
+    order: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" },],
     zip: {
         type: String
     },

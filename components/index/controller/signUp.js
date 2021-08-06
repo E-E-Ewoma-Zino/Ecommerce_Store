@@ -52,8 +52,8 @@ module.exports = {
 	post(req, res) {
 
 		try {
+			// create a cart for the user
 			const newCart = new Cart();
-			newCart.save();
 
 			// get the data from the cart_LocalStorage
 			const cart_LS = req.body.cartData == "null" ? [] : JSON.parse(req.body.cartData);
@@ -80,6 +80,8 @@ module.exports = {
 				}
 				else {
 					passport.authenticate("local")(req, res, () => {
+						// save the new users cart
+						newCart.save();
 						// this part updates the cart with the data from the localStorage
 						for (let i = 0; i < cart_LS.length; i++) {
 							const item = cart_LS[i];
@@ -91,7 +93,6 @@ module.exports = {
 					});
 				}
 			});
-
 		} catch (err) {
 			console.error(":::", err);
 			_bird.message("danger", err);

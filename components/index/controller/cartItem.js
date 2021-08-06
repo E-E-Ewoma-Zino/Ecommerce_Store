@@ -1,3 +1,5 @@
+const logger = require("../../../middleware/logger");
+
 // all the cartItem route code goes here
 const _get = require(__dirname + "../../../../middleware/get");
 const cart = require(__dirname + "../../../../middleware/cart_DB");
@@ -12,10 +14,15 @@ module.exports = {
 		// USER, PRODUCT and ORDER
 		// first User with _get.CurrentUser()
 		// second product:
-
 		try {
-			if (req.isAuthenticated()) cart.userCart(req.user._id, (item) => {
-				res.send(item);
+			if (req.isAuthenticated()) cart.userCart(req.user._id, (err, item) => {
+				if (err) {
+					console.log(err);
+					_bird.message("danger", err);
+					error500(req, res);//501
+				}else{
+					res.send(item);
+				}
 			});
 			else res.send("No user loged in");
 
@@ -26,7 +33,6 @@ module.exports = {
 		}
 	},
 	post(req, res) {
-
 		// when a product is added to cart, we will get the 
 		// USER, PRODUCT and ORDER
 		// first User with _get.CurrentUser()
@@ -45,8 +51,8 @@ module.exports = {
 				// console.log(req.body);
 				let arr = [];
 				// if the postCartData from the cart_control sends an empty array do:
-				if (req.body.length == 0 || undefined || null) res.send([]);
-				for (let i = 0; i < req.body.length; i++) {
+				if (req.body.length == 0 || undefined || null)	res.send([]);
+				else	for (let i = 0; i < req.body.length; i++) {
 					const productId = req.body[i].productID;
 					_get.ProductByID(productId, (result) => {
 						// console.log(result);
@@ -55,7 +61,6 @@ module.exports = {
 					});
 				}
 			}
-
 		} catch (err) {
 			console.error(":::", err);
 			_bird.message("danger", err);

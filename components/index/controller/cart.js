@@ -10,14 +10,17 @@ module.exports = {
 		try {
 			// cart.setCart(req.query);
 			// res.send("OK");
-			if (req.isAuthenticated()) cart.userCart(req.user._id, (item) => {
-				if (!item) {
-					console.error(":::err in components/controller/cart.js -> ln: 15 \nfix it you lazy nigga!");
+			if (req.isAuthenticated()) cart.userCart(req.user._id, (error, item) => {
+				if (error) {
+					console.error(":::err", error);
+					_bird.message("danger", error);
+					error500(req, res);//501
 				} else {	
 					_get.Pages((err, page) => {
 						if (err) {
 							console.error(":::", err);
 						} else {
+							console.log(item);
 							res.render("layouts/cart", {
 								website: page.website,
 								login: req.isAuthenticated(),

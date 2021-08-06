@@ -17,7 +17,7 @@ module.exports = (req, res) => {
 						user: req.user,
 						bird: _bird.fly,
 						name: page.single.name,
-						breadcrumb: pages.single.breadcrumb,
+						breadcrumb: page.single.breadcrumb,
 						product: product
 					});
 				}
