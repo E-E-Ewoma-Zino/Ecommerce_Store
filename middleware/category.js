@@ -66,17 +66,15 @@ module.exports = {
 	},
 	// Arrange the array in acending order and populate the parent with the name
 	sortAndPopulate(callback) {
-		this.All((err, all) => {
-			if (!all.length) {
-				callback(null, []);
-				return;
+		Category.find({}).populate({path: "parents children products", select: ["name"]}).exec((err, categories)=>{
+			if(err){
+				console.log(":::", err);
+				callback(err, null);
 			}
-			populate(all, (err, family) => {
-				callback(null, sort(family));
-			});
-		})
-		// cb(null, sort(adams));
-
+			else{
+				callback(null, sort(categories));
+			}
+		});
 	},
 	// Add product to category
 	addProduct(productID, categoryList) {
@@ -123,24 +121,4 @@ function sort(arr) {
 	}
 
 	return arr;
-}
-
-// populate all
-function populate(list, cb) {
-	let family = [];
-
-	for (let i = 0; i < list.length; i++) {
-		const parent = list[i];
-		Category.findById({ _id: parent._id }).populate({ path: "parents children products", select: ["name"] }).exec((err, child) => {
-			if (err) {
-				console.log(err);
-				cb(err, null);
-			} else {
-				family.push(child);
-				if (i == list.length - 1) {
-					cb(null, family);
-				}
-			}
-		});
-	}
 }

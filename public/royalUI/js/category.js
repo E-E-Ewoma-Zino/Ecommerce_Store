@@ -1,17 +1,22 @@
 // 
-getAxios("/admin/categoryAPI", (err, data) => {
-	if (err) {
-		console.log(":::", err);
-		messager({
-			replace: ["success", "danger"],
-			message: "Please Refresh. Problem loading Pages."
-		});
-		return;
-	}
-	// console.log("res::: ", res.data);
-	// send in data or if data is undefine send in an empty array
-	displayCategory(data || []);
+prepareCategoryList((cb)=>{
+	displayCategory(cb || []);
 });
+
+// for preparing the categories for display and selection
+function prepareCategoryList(callback) {
+	getAxios("/admin/categoryAPI", (err, data) => {
+		if (err) {
+			console.log(":::", err);
+			messager({
+				replace: ["success", "danger"],
+				message: "Please Refresh. Problem loading Pages."
+			});
+			return;
+		}
+		callback(data);
+	});
+}
 
 
 // get the newCategory data and post to the server
@@ -58,10 +63,8 @@ function createNewCategory() {
 	});
 }
 
-// get the children then if clicked update it with the value
 const parentInputName = document.getElementById("inputParentName");
 const parentInputId = document.getElementById("inputParentId");
-const children = document.getElementsByClassName("children");
 // This is use to get both the name and the id of the categories the will be sent to the server
 const formCategoryName = document.getElementById("formCategoryName");
 const formCategoryId = document.getElementById("formCategoryId");
@@ -80,7 +83,7 @@ function empty() {
 	if (window.location.pathname !== "/admin/category") formCategoryName.value = "";
 }
 
-// print categories
+// print list of categories to be selected from
 function displayCategory(category) {
 	if (!category) {
 		console.log("Category is empty");
@@ -88,7 +91,7 @@ function displayCategory(category) {
 	}
 	let body = `<ul class="list-group">`;
 	category.forEach(cat => {
-		body += `<li class="children list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+		body += `<li class="list_of_categories list-group-item list-group-item-action d-flex justify-content-between align-items-center">
 		<div class="">
 		<!-- This check box is just to check if the category is checked or not easily and it also holds the category id -->
 			<input type="checkbox" id="${cat._id}" hidden/>
@@ -96,31 +99,34 @@ function displayCategory(category) {
 			${cat.parents.length ? ` <i class="tool-tip cursor-pointer ti-more" gloss="${cat.parents.slice().reverse().map(parent => parent.name + " ")}"></i> ` + cat.parents[0].name + ` <i class="ti-arrow-circle-right"></i> ` : ""}
 			<strong>${cat.name}</strong>
 		</div>
-		<input type="hidden" name="id" value="${cat._id}">
-		<input type="hidden" name="id" value="${cat.name}">
+		<input type="hidden" value="${cat._id}">
+		<input type="hidden" value="${cat.name}">
 		<span class="tool-tip tool-tip-left badge badge-primary badge-pill" gloss="${cat.name} has ${cat.products.length} ${cat.products.length > 1 ? "products" : "product"}">
 		${cat.products.length}
 		</span>
-	</li>`;
+		</li>`;
 	});
 	body += `</ul>`;
 	document.getElementById("categoryBody").innerHTML = body;
 
-	onCategoryClick(children);
+
+	// get the list_of_categories then if clicked, update it with the value
+	const li_list_of_categories = document.getElementsByClassName("list_of_categories");
+	onCategoryClick(li_list_of_categories);
 }
 
 // If a category in the listis clicked activate this function
-function onCategoryClick(children) {
-	for (let i = 0; i < children.length; i++) {
-		const child = children[i];
+function onCategoryClick(list_of_categories) {
+	for (let i = 0; i < list_of_categories.length; i++) {
+		const child = list_of_categories[i];
 		child.addEventListener("click", () => {
 
 			if (parentSection) {
 				// get name and id of the clicked element and put it in parent Input
-				// console.log(child.children[1].value);
-				childValue.id = child.children[1].value;
-				// console.log(child.children[2].value);
-				childValue.name = child.children[2].value;
+				// console.log(child.list_of_categories[1].value);
+				childValue.id = child.list_of_categories[1].value;
+				// console.log(child.list_of_categories[2].value);
+				childValue.name = child.list_of_categories[2].value;
 
 				parentInputName.value = "Parent -> " + childValue.name;
 				parentInputId.value = childValue.id;
@@ -189,7 +195,7 @@ function createCategoryControl(create, e) {
 			// console.log("res::: ", res.data);
 			// send in data or if data is undefine send in an empty array
 			displayCategory(data || []);
-			if (window.location.pathname === "/admin/category")	displayCategoryTable(data);
+			if (window.location.pathname === "/admin/category") displayCategoryTable(data);
 			empty();
 		});
 	} else {
@@ -251,12 +257,11 @@ function displayCategoryTable(categories) {
 		tr.innerHTML = tableBody({ index, ...category });
 		tbody.append(tr);
 	});
-	console.log("koko");
 }
 
 // on page load
 // Display category in product page
-getAxios("/admin/categoryAPI", (err, data) => {
+if (window.location.pathname === "/admin/category") getAxios("/admin/categoryAPI", (err, data) => {
 	if (err) {
 		console.log("err:::", err);
 	}

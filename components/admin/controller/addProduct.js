@@ -30,7 +30,7 @@ module.exports = {
 	post: async function (req, res) {
 
 		// console.log(req.files);
-		// console.log("::::::::::", req.body);
+		console.log("::::::::::", req.body);
 		// 
 		// 
 		let cat = req.body.category ? JSON.parse(req.body.category) : [];

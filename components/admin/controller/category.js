@@ -19,7 +19,6 @@ module.exports = {
 					});
 				}
 			});
-
 		} catch (err) {
 			console.error(":::::", err);
 			_bird.message("danger", err);

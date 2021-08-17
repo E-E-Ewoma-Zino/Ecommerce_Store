@@ -25,7 +25,7 @@ module.exports = {
 			}else{
 				callback(null, products);
 			}
-		})
+		});
 	},
 	// @desc	THIS SCRIPT GETS ALL THE PRODUCTS CATEGORY NAMES AND THEIR LENGTH
 	AllCategory: () => find_duplicate(allCategory),

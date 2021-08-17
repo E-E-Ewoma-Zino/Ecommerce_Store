@@ -6,6 +6,7 @@ module.exports = {
 		try {
 			_cat.sortAndPopulate((err, all) => {
 				if (err) {
+					console.log(":::", err);
 					res.send(err);
 				}
 				else {

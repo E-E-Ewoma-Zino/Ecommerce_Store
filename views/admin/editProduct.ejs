@@ -5,6 +5,7 @@
 	<div class="container-scroller">
 		<!-- nav -->
 		<%- include("../partials/admin/_header") %>
+		<%- include("../components/modal") %>
 
 			<div class="container-fluid page-body-wrapper">
 
@@ -19,9 +20,10 @@
 									<div class="d-flex justify-content-between align-items-center">
 										<div>
 											<h4 class="font-weight-bold mb-0"><img class="rounded-circle"
-												src="/<%= product.img.length ? product.img[0].path : "../aronoz/img/favicon.png" %>"
-													alt="<%= product.img.length && product.img[0].fileName %>" width="50vw" height="50vw">
-												Edit Product: <%= product.name %>
+													src="/<%= product.img.length ? product.img[0].path : " ../aronoz/img/favicon.png" %>"
+												alt="<%= product.img.length && product.img[0].fileName %>" width="50vw"
+													height="50vw">
+													Edit Product: <%= product.name %>
 
 											</h4>
 
@@ -89,16 +91,6 @@
 											<p class="card-description">
 												Describe your product here
 											</p>
-											<!--  -->
-											<div class="form-group">
-												<label for="">Category</label>
-												<input type="text" id="formCategoryName" class="form-control"
-													placeholder="Category" readonly>
-												<!-- This input takes the value for the product category -->
-												<input name="category" id="formCategoryId"
-													value="<%= product.categories %>" hidden>
-											</div>
-
 											<div class="form-group">
 												<label for="">Color</label>
 												<input type="text" name="color" class="form-control"
@@ -118,10 +110,12 @@
 													rows="7"><%= product.description %></textarea>
 											</div>
 											<!--  -->
-											<button type="submit" class="btn btn-primary mr-2">Update</button>
-											<button type="button" class="btn btn-light"
-												onclick="btnLink('/category/<%= product._id %>?preview=true', '<%= product._id %>' + 2)">View
+											<div class="d-flex justify-content-between">
+												<button type="submit" class="btn btn-primary mr-2">Update</button>
+												<button type="button" class="btn btn-light"
+												onclick="btnLink('/category/<%= product._id %>?preview=true', '<%= product._id %>' + 2)"><i class="ti-eye"></i>	View
 												Product</button>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -132,6 +126,17 @@
 											<p class="card-description">
 												Categorise your product as a parent or as a child
 											</p>
+											<!--  -->
+											<div class="form-group">
+												<label for="">Category</label>
+												<input type="text" id="formCategoryName" class="form-control"
+													placeholder="Category"
+													onclick="modal({type: 'info', message: 'Use the <strong>Category</strong> list below to select the categories a product belong.', title: 'Select a Product Category'})"
+													readonly>
+												<!-- This input takes the value for the product category -->
+												<input name="category" id="formCategoryId"
+													value="<%= product.categories %>" hidden>
+											</div>
 											<!--  -->
 											<div class="form-group">
 												<label for="exampleFormControlSelect2">Assign your product a
@@ -158,8 +163,8 @@
 													<input type="text" id="inputParentName"
 														class="form-control list-group-item"
 														placeholder="Add Parent (only if it is a subcategory)"
-														onclick="modal({type: 'info', message: 'Use the <strong>Category</strong> list above to select the parent.', title: 'Select a Parent'})" value="" readonly>
-													<%- include("../components/modal") %>
+														onclick="modal({type: 'info', message: 'Use the <strong>Category</strong> list above to select the parent.', title: 'Select a Parent'})"
+														value="" readonly />
 												</div>
 												<button type="button" class="btn btn-primary ml-2 "
 													onclick="createNewCategory()">Create New
@@ -206,10 +211,10 @@
 
 			<!-- page-body-wrapper ends -->
 	</div>
-	
+
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script src="/aronoz/js/axios.js"></script>
-	
+
 	<%- include("../partials/admin/_scripts") %>
-	<script src="/royalUI/js/editProduct.js"></script>
-	<script src="/royalUI/js/category.js"></script>
+		<script src="/royalUI/js/category.js"></script>
+		<script src="/royalUI/js/editProduct.js"></script>

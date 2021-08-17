@@ -20638,8 +20638,7 @@ ul li, ol li, dl li {
 .scroll {
 	max-height: 50vh;
 	overflow-y: scroll;
-	border-radius: 0.25rem;
-	border: 1px solid rgba(0, 0, 0, 0.125);
+	overflow-x:	hidden;
 }
 
 /* make create new category section hidden */
@@ -20765,4 +20764,18 @@ ul li, ol li, dl li {
 	visibility: hidden;
 	transform: scale(.1);
 	transition: all .4s;
+}
+
+/* style */
+.cursor-pointer{
+	cursor: pointer;
+}
+.my-justify{
+	justify-content: end;
+}
+/* media query for screens > 768px */
+@media (min-width: 768px) {
+	.my-justify{
+		justify-content: flex-end;
+	}
 }

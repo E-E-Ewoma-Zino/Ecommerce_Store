@@ -7,7 +7,7 @@ const logger = require(__dirname + "../../../../middleware/logger");
 const error500 = require(__dirname + "../../../error/controller/500");
 const _bird = require(__dirname + "../../../../middleware/messageBird");
 
-
+// just to a oid repeting this render
 function renderGet(res, bird, product) {
 	res.render("admin/editProduct", {
 		bird: bird.fly,
@@ -58,16 +58,22 @@ module.exports = {
 				}
 			});
 
+			logger.log("cat", req.body.category);
+
 			// update the categories
 			// get all the new categories
-			getNewCategories(req.params.productId, req.body.category, (newCategories)=>{
-				if (newCategories)	addTheNewCategories(req.params.productId, newCategories, (done)=>{
-					if(done) _bird.message("success", "Category Updated");
+			getNewCategories(req.params.productId, req.body.category, (newCategories) => {
+				logger.log("new cat", newCategories);
+				if (newCategories) addTheNewCategories(req.params.productId, newCategories, (done) => {
+					if (done) _bird.message("success", "Category Updated");
 				});
+				else {
+					logger.log("no new category");
+				}
 			});
 			// if any category is removed from the list delete it
 			removeDeletedCategories(req.params.productId, req.body.category, (answer) => {
-				logger.log("ans", answer);
+				logger.log("deleted", answer);
 			});
 
 			// updates the normal data in the product eg name , price etc...
@@ -135,11 +141,14 @@ function removeImage(productId, imgIndex, callback) {
 }
 // TODO: make function to add, remove a category from the product category list. Note it should 
 // 1. Be able to know if that new category list cantains an old category id
-function getNewCategories(productId, newCategories, callback) {
-	const onlyNew = [];
+function getNewCategories(productId, categories, callback) {
+	const onlyNewCategories = [];
 	_get.ProductByID(productId, (product) => {
-		for (let i = 0; i < JSON.parse(newCategories).length; i++) {
-			const newCategory = JSON.parse(newCategories)[i];
+		if (!product.categories.length) {
+			onlyNewCategories.push(...JSON.parse(categories));
+		}
+		for (let i = 0; i < JSON.parse(categories).length; i++) {
+			const newCategory = JSON.parse(categories)[i];
 			for (let j = 0; j < product.categories.length; j++) {
 				const category = product.categories[j];
 				if (newCategory == category) {
@@ -147,26 +156,27 @@ function getNewCategories(productId, newCategories, callback) {
 				}
 				else {
 					if (product.categories.length - 1 == j) {
-
-						onlyNew.push(newCategory);
+						onlyNewCategories.push(newCategory);
 					}
 				}
 			}
 		}
-		callback(onlyNew);
+		callback(onlyNewCategories);
 	});
 }
 // 2. Be able to add only the new category id in the category list
 function addTheNewCategories(productId, categories, callback) {
 	_get.ProductByID(productId, (product) => {
+		logger.log("oooooooooo", categories);
 		if (product) {
+			logger.log("wertyuijhgfdsdf\n", [...product.categories, ...categories]);
 			product.categories = [...product.categories, ...categories];
-			product.save((err)=>{
-				if(err){
+			product.save((err) => {
+				if (err) {
 					console.log("err:::", err);
 					_bird.message("danger", "Category Failed to Update New!");
 					callback(false);
-				}else{
+				} else {
 					callback(true);
 				}
 			});
@@ -176,10 +186,11 @@ function addTheNewCategories(productId, categories, callback) {
 // 3. Be able to delete if neccessary the category that is missing from the comperism between the old and new category list
 // Hint: You will have to compare both the old and the new category list to know how to update it
 function removeDeletedCategories(productId, newCategories, callback) {
+	logger.log("income", newCategories);
 	const missing = [];
 	_get.ProductByID(productId, (product) => {
-		// if the newCategories is empty then delete all category, because the is no category to add or that will remain
-		if(!JSON.parse(newCategories).length) product.categories = [];
+		// if the newCategories is empty then delete all category, because there is no category to add or that will remain
+		if (!JSON.parse(newCategories).length) product.categories = [];
 		// eles remove only the categories that were deleted
 		else for (let j = 0; j < product.categories.length; j++) {
 			const category = product.categories[j];
@@ -197,17 +208,16 @@ function removeDeletedCategories(productId, newCategories, callback) {
 				}
 			}
 		}
-		product.save((err)=>{
-			if(err){
+		product.save((err) => {
+			if (err) {
 				console.log("err:::", err);
 				_bird.message("danger", "Category Failed to Update!");
-			}else{
+			} else {
 				callback(missing);
 			}
 		});
 	});
 }
-
 
 // Update Products by id
 function updateById(productId, newData, callback) {

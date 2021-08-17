@@ -1,5 +1,6 @@
 <%- include("../partials/admin/_head") %>
 
+<%- include("../components/modal") %>
 
 	<div class="container-scroller">
 		<!-- nav -->
@@ -28,61 +29,89 @@
 								</div>
 							</div>
 							<div class="row">
+								<div class="col-md-12 grid-margin">
+									<div class="row d-flex justify-content-between align-items-center">
+										<div class="col-md-4 grid-margin">
+											<h3 class="font-weight-bold">NGN<%= Intl.NumberFormat("en-US").format(order.total) %> </h3>
+										</div>
+										<div class="col-md-8 grid-margin d-flex my-justify align-items-center">
+											<span class="mx-2"><%= JSON.stringify(order.createdAt).substr(1, 10) %></span>
+											<span class="mx-2"><label class="badge <%= order.flutterwave.status == "successful"? "badge-success": "badge-danger" %> rounded-sm "><%= order.flutterwave.status %></label></span>
+											<button type="button" class="btn btn-danger btn-icon-text btn-sm rounded-sm" onclick="modal({type: 'form', message: 'Do you want to <strong> Refund <%=order.details.firstname %> </strong>', title: 'Refund A Customer', method: {name: 'deleteItem', params: {url: '/'}}})">
+												<i class="ti-back-left btn-icon-prepend"></i>Refund customer
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12 grid-margin stretch-card">
+									<div class="card">
+										<div class="card-body">
+											<h4 class="card-title">Payment from <%= order.details.email %>
+											</h4>
+											<div class="row d-flex justify-content-md-between">
+												<div class="col d-flex flex-column justify-content-md-center my-2">
+													<span class="card-description mb-1">Transaction ID</span>
+													<span class="text-muted">
+														<%= order._id %>
+													</span>
+												</div>
+												<div class="col d-flex flex-column justify-content-md-center my-2">
+													<span class="card-description mb-1">Order ID</span>
+													<span class="text-muted">
+														<%= order._id %>
+													</span>
+												</div>
+												<div class="col d-flex flex-column justify-content-md-center my-2">
+													<span class="card-description mb-1">Payment Reference</span>
+													<span class="text-muted">
+														<%= order._id %>
+													</span>
+												</div>
+												<div class="col d-flex flex-column justify-content-md-center my-2">
+													<span class="card-description mb-1">Shipping Fee</span>
+													<span class="text-muted">NGN<%= order.shipping %></span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
 								<div class="col-md-6 d-flex align-items-stretch">
 									<div class="row">
 										<div class="col-md-12 grid-margin stretch-card">
 											<div class="card">
 												<div class="card-body">
-													<h4 class="card-title">Registration Details</h4>
-													<div class="template-demo">
-														<h4>
-															<small class="text-muted">
-																Full Name:
-															</small>
-															<small class="text-muted">
-																<%= order.details.firstname %> <%= order.details.lastname %> 
-															</small>
-														</h4>
-														<h4>
-															<small class="text-muted">
-																Email:
-															</small>
-															<small class="text-muted">
-																<a class="text-dark" href="mailto:<%= order.details.email %>"><%= order.details.email %></a> 
-															</small>
-														</h4>
-														<h4>
-															<small class="text-muted">
-																Phone:
-															</small>
-															<small class="text-muted">
-																<a class="text-dark" href="tel: <%= order.details.phoneNo %>"><%= order.details.phoneNo %></a>
-															</small>
-														</h4>
-														<h4>
-															<small class="text-muted">
-																City:
-															</small>
-															<small class="text-muted">
-																<%= order.details.city %>
-															</small>
-														</h4>
-														<h4>
-															<small class="text-muted">
-																Country:
-															</small>
-															<small class="text-muted">
-																<%= order.details.country %>
-															</small>
-														</h4>
-														<h4>
-															<small class="text-muted">
-																Shipping Address:
-															</small>
-															<small class="text-muted">
-																<%= order.details.address1 %>
-															</small>
-														</h4>
+													<h4 class="card-title">Customer Information</h4>
+													<div class="row d-flex justify-content-md-between">
+														<div class="col d-flex flex-column justify-content-md-center my-2">
+															<span class="card-description mb-1">Customer</span>
+															<span class="text-muted">
+																<%= order.details.firstname %>
+															</span>
+														</div>
+														<div class="col d-flex flex-column justify-content-md-center my-2">
+															<span class="card-description mb-1">Email Address</span>
+															<span class="text-muted">
+																<%= order.details.email %>
+															</span>
+														</div>
+													</div>
+													<div class="row d-flex justify-content-md-between">
+														<div class="col d-flex flex-column justify-content-md-center my-2">
+															<span class="card-description mb-1">Date</span>
+															<span class="text-muted">
+																<%= JSON.stringify(order.createdAt).substr(1, 10) %>
+															</span>
+														</div>
+														<div class="col d-flex flex-column justify-content-md-center my-2">
+															<span class="card-description mb-1">Phone Number</span>
+															<span class="text-muted">
+																<%= order.details.phoneNo %>
+															</span>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -90,41 +119,34 @@
 										<div class="col-md-12 grid-margin stretch-card">
 											<div class="card">
 												<div class="card-body">
-													<h4 class="card-title">Customer Details</h4>
-													<div class="template-demo">
-														<h4>
-															<small class="text-muted">
-																Full Name:
-															</small>
-															<small class="text-muted">
-																<%= order.user.firstname %> <%= order.user.lastname %> 
-															</small>
-														</h4>
-														<h4>
-															<small class="text-muted">
-																Email:
-															</small>
-															<small class="text-muted">
-																<a class="text-dark" href="mailto:<%= order.user.username %>"><%= order.user.username %></a> 
-															</small>
-															<% console.log(order.cart) %> 
-														</h4>
-														<h4>
-															<small class="text-muted">
-																Phone:
-															</small>
-															<small class="text-muted">
-																<a class="text-dark" href="tel: <%= order.user.phoneNo %>"><%= order.user.phoneNo %></a>
-															</small>
-														</h4>
-														<h4>
-															<small class="text-muted">
-																Address:
-															</small>
-															<small class="text-muted">
-																<%= order.user.address1 %>
-															</small>
-														</h4>
+													<h4 class="card-title">Shipping Information</h4>
+													<div class="row d-flex justify-content-md-between">
+														<div class="col d-flex flex-column justify-content-md-center cursor-pointer my-2" onclick="modal({type: 'info', message: '<%= order.details.address1 %>', title: 'Shipping Address'})">
+															<span class="card-description mb-1">Shipping Address</span>
+															<span class="text-muted">
+																<%= order.details.address1.length > 15? order.details.address1.substr(0, 15) + "...": order.details.address1 %>
+															</span>
+														</div>
+														<div class="col d-flex flex-column justify-content-md-center my-2">
+															<span class="card-description mb-1">City</span>
+															<span class="text-muted">
+																<%= order.details.city %>
+															</span>
+														</div>
+													</div>
+													<div class="row d-flex justify-content-md-between">
+														<div class="col d-flex flex-column justify-content-md-center my-2">
+															<span class="card-description mb-1">Country</span>
+															<span class="text-muted">
+																<%= order.country %>
+															</span>
+														</div>
+														<div class="col d-flex flex-column justify-content-md-center cursor-pointer my-2" onclick="modal({type: 'info', message: '<%= order.details.note %>', title: 'Note From Customer'})">
+															<span class="card-description mb-1">Note</span>
+															<span class="text-muted">
+																<%= order.details.note.length > 15? order.details.note.substr(0, 15) + "...": order.details.note %>
+															</span>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -135,53 +157,27 @@
 									<div class="card">
 										<div class="card-body">
 											<h4 class="card-title">Product details</h4>
-											<p class="card-description">
-												Add class <code>.table</code>
-											</p>
 											<div class="table-responsive">
 												<table class="table">
 													<thead>
 														<tr>
-															<th>Profile</th>
-															<th>VatNo.</th>
-															<th>Created</th>
-															<th>Status</th>
+															<th>Image.</th>
+															<th>Name</th>
+															<th>Price</th>
+															<th>Quantity</th>
+															<th>Avalable</th>
 														</tr>
 													</thead>
-													<tbody>
-														<tr>
-															<td>Jacob</td>
-															<td>53275531</td>
-															<td>12 May 2017</td>
-															<td><label class="badge badge-danger">Pending</label></td>
-														</tr>
-														<tr>
-															<td>Messsy</td>
-															<td>53275532</td>
-															<td>15 May 2017</td>
-															<td><label class="badge badge-warning">In progress</label>
-															</td>
-														</tr>
-														<tr>
-															<td>John</td>
-															<td>53275533</td>
-															<td>14 May 2017</td>
-															<td><label class="badge badge-info">Fixed</label></td>
-														</tr>
-														<tr>
-															<td>Peter</td>
-															<td>53275534</td>
-															<td>16 May 2017</td>
-															<td><label class="badge badge-success">Completed</label>
-															</td>
-														</tr>
-														<tr>
-															<td>Dave</td>
-															<td>53275535</td>
-															<td>20 May 2017</td>
-															<td><label class="badge badge-warning">In progress</label>
-															</td>
-														</tr>
+													<tbody class="scroll">
+														<% order.cart.item.forEach(item => { %>
+															<tr>
+																<td><img src="/<%= item.product.img[0].path %>" alt="<%= item.product.name %>"></td>
+																<td><%= item.product.name %></td>
+																<td><%= item.product.price %></td>
+																<td><%= item.quantity %></td>
+																<td><label class="badge <%= item.product.isAvaliable? "badge-success": "badge-danger" %> "><%= item.product.isAvaliable %></label></td>
+															</tr>
+														<% }); %> 
 													</tbody>
 												</table>
 											</div>
